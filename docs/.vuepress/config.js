@@ -36,6 +36,13 @@ module.exports = {
                 // 自动加.md 每个子选项的标题 是该md文件中的第一个h1/h2/h3标题
               ]
             },{
+              title:'ES6',
+              children:[
+                ['/font/ES6/let和const','let和const'],
+                ['/font/ES6/变量的解构赋值','变量的解构赋值'],
+                ['/font/ES6/字符串的扩展','字符串的扩展'],
+              ]
+            },{
               title: 'CSS',
               children:[
                 ['/font/CSS/test','']
@@ -53,7 +60,7 @@ module.exports = {
             }
           ]
       }, // 侧边栏配置
-      sidebarDepth: 2, // 侧边栏显示2级
+      sidebarDepth: 1, // 侧边栏显示2级
       
     },
     // head: [ // 注入到当前页面的 JS <head> 中的标签
