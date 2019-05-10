@@ -29,9 +29,9 @@ module.exports = {
             {
               title: 'JS',
               children: [
-                ['/font/JS/test','你好啊'], // 以docs为根目录来查找文件 
-                ['/font/JS/test2','终于噶好了'], // 以docs为根目录来查找文件 
-                ['/font/JS/美团网项目','美团网'], // 以docs为根目录来查找文件 
+                ['/font/JS/ECMAScript','ECMAScript'], // 以docs为根目录来查找文件 
+                 // 以docs为根目录来查找文件 
+                 // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
                 // 自动加.md 每个子选项的标题 是该md文件中的第一个h1/h2/h3标题
               ]
@@ -41,6 +41,9 @@ module.exports = {
                 ['/font/ES6/let和const','let和const'],
                 ['/font/ES6/变量的解构赋值','变量的解构赋值'],
                 ['/font/ES6/字符串的扩展','字符串的扩展'],
+                ['/font/ES6/正则的扩展','正则的扩展'],
+                ['/font/ES6/数值的扩展','数值的扩展'],
+                ['/font/ES6/函数的扩展','函数的扩展'],
               ]
             },{
               title: 'CSS',
