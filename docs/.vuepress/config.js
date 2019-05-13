@@ -45,6 +45,8 @@ module.exports = {
                 ['/font/ES6/数值的扩展','数值的扩展'],
                 ['/font/ES6/函数的扩展','函数的扩展'],
                 ['/font/ES6/数组的扩展','数组的扩展'],
+                ['/font/ES6/对象的扩展','对象的扩展'],
+                ['/font/ES6/Symbol','Symbol'],
               ]
             },{
               title: 'CSS',
