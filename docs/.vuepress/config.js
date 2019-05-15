@@ -47,6 +47,8 @@ module.exports = {
                 ['/font/ES6/数组的扩展','数组的扩展'],
                 ['/font/ES6/对象的扩展','对象的扩展'],
                 ['/font/ES6/Symbol','Symbol'],
+                ['/font/ES6/Set和Map数据结构','Set和Map数据结构'],
+                ['/font/ES6/Proxy','Proxy'],
               ]
             },{
               title: '浏览器网络',
