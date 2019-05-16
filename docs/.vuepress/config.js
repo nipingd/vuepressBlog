@@ -49,11 +49,14 @@ module.exports = {
                 ['/font/ES6/Symbol','Symbol'],
                 ['/font/ES6/Set和Map数据结构','Set和Map数据结构'],
                 ['/font/ES6/Proxy','Proxy'],
+                ['/font/ES6/Reflect','Reflect'],
+                ['/font/ES6/Promise','Promise'],
               ]
             },{
               title: '浏览器网络',
               children:[
-                ['/font/浏览器网络/URL到页面呈现过程总结','URL到页面呈现过程总结']
+                ['/font/浏览器网络/URL到页面呈现过程总结','URL到页面呈现过程总结'],
+                ['/font/浏览器网络/Web安全','Web安全'],
               ]
             },{
               title: 'CSS',
