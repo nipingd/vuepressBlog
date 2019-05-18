@@ -13,7 +13,7 @@ module.exports = {
         {text: 'HOME', link: '/' },
         {text: '前端', link: '/font/' },
         {text: '计算机', link: '/computer/' },
-        {text: '面试', link: '/font/' },
+        // {text: '面试', link: '/font/' },
         {text: '个人心得', link: 'https://github.com/nipingd'},
         {text: '关于我', 
          items: [
@@ -29,7 +29,9 @@ module.exports = {
             {
               title: 'JS',
               children: [
-                ['/font/JS/ECMAScript','ECMAScript'], // 以docs为根目录来查找文件 
+                ['/font/JS/apply、call与bind','apply、call与bind'], // 以docs为根目录来查找文件 
+                ['/font/JS/JS单线程、异步、同步','JS单线程、异步、同步'], // 以docs为根目录来查找文件 
+                ['/font/JS/常用正则表达式备忘录','常用正则表达式备忘录'], // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -51,6 +53,8 @@ module.exports = {
                 ['/font/ES6/Proxy','Proxy'],
                 ['/font/ES6/Reflect','Reflect'],
                 ['/font/ES6/Promise','Promise'],
+                ['/font/ES6/Iterator和for...of循环','Iterator和for...of循环'],
+                ['/font/ES6/Generator 函数','Generator 函数'],
               ]
             },{
               title: '浏览器网络',
@@ -76,7 +80,7 @@ module.exports = {
             }
           ]
       }, // 侧边栏配置
-      sidebarDepth: 1, // 侧边栏显示2级
+      sidebarDepth: 1, // 侧边栏显示1级
       
     },
     // head: [ // 注入到当前页面的 JS <head> 中的标签
