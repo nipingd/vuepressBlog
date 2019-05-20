@@ -56,13 +56,14 @@ module.exports = {
                 ['/font/ES6/Iterator和for...of循环','Iterator和for...of循环'],
                 ['/font/ES6/Generator 函数与异步','Generator 函数与异步'],
                 ['/font/ES6/async 函数','async 函数'],
+                ['/font/ES6/Class','Class'],
               ]
             },{
               title: '浏览器网络',
               children:[
                 ['/font/浏览器网络/URL到页面呈现过程总结','URL到页面呈现过程总结'],
                 ['/font/浏览器网络/Web安全','Web安全'],
-                ['/font/浏览器网络/Cookie 与 Session','Cookie 与 Session'],
+                ['/font/浏览器网络/Cookie、Session和Web Storage','Cookie、Session和Web Storage'],
               ]
             },{
               title: 'CSS',
