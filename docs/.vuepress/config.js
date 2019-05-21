@@ -32,6 +32,7 @@ module.exports = {
                 ['/font/JS/apply、call与bind','apply、call与bind'], // 以docs为根目录来查找文件 
                 ['/font/JS/JS单线程、异步、同步','JS单线程、异步、同步'], // 以docs为根目录来查找文件 
                 ['/font/JS/常用正则表达式备忘录','常用正则表达式备忘录'], // 以docs为根目录来查找文件 
+                ['/font/JS/Object.defineProperty与Proxy理解整理','Object.defineProperty与Proxy理解整理'], // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -57,6 +58,7 @@ module.exports = {
                 ['/font/ES6/Generator 函数与异步','Generator 函数与异步'],
                 ['/font/ES6/async 函数','async 函数'],
                 ['/font/ES6/Class','Class'],
+                ['/font/ES6/Module','Module'],
               ]
             },{
               title: '浏览器网络',
