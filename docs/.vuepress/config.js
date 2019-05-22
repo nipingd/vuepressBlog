@@ -33,6 +33,7 @@ module.exports = {
                 ['/font/JS/JS单线程、异步、同步','JS单线程、异步、同步'], // 以docs为根目录来查找文件 
                 ['/font/JS/常用正则表达式备忘录','常用正则表达式备忘录'], // 以docs为根目录来查找文件 
                 ['/font/JS/Object.defineProperty与Proxy理解整理','Object.defineProperty与Proxy理解整理'], // 以docs为根目录来查找文件 
+                ['/font/JS/柯里化','柯里化'], // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -59,6 +60,8 @@ module.exports = {
                 ['/font/ES6/async 函数','async 函数'],
                 ['/font/ES6/Class','Class'],
                 ['/font/ES6/Module','Module'],
+                ['/font/ES6/编程风格','编程风格'],
+                ['/font/ES6/读懂规格','读懂规格'],
               ]
             },{
               title: '浏览器网络',
@@ -66,16 +69,17 @@ module.exports = {
                 ['/font/浏览器网络/URL到页面呈现过程总结','URL到页面呈现过程总结'],
                 ['/font/浏览器网络/Web安全','Web安全'],
                 ['/font/浏览器网络/Cookie、Session和Web Storage','Cookie、Session和Web Storage'],
+                ['/font/浏览器网络/跨域实现','跨域实现'],
               ]
             },{
               title: 'CSS',
               children:[
-                ['/font/CSS/test','demo']
+                ['/font/CSS/CSS动画','CSS动画']
               ]
             }
           ],
           // docs文件夹下面的bar文件夹 这是第二组侧边栏 跟第一组侧边栏没关系
-          '/bar/': [
+          '/computer/': [
             '/bar/', 
             {
               title: '第二组侧边栏下拉框的标题1',
