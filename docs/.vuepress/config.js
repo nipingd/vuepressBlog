@@ -14,7 +14,7 @@ module.exports = {
         {text: '前端', link: '/font/' },
         {text: '计算机', link: '/computer/' },
         // {text: '面试', link: '/font/' },
-        {text: '个人心得', link: 'https://github.com/nipingd'},
+        {text: '个人学习笔记', link: '/other/'},
         {text: '关于我', 
          items: [
            {text:'instagram',link:'https://www.instagram.com/nipingd/'},
@@ -74,23 +74,32 @@ module.exports = {
             },{
               title: 'CSS',
               children:[
-                ['/font/CSS/CSS动画','CSS动画']
+                ['/font/CSS/CSS动画','CSS动画'],
+                ['/font/CSS/CSS技巧','CSS技巧'],
               ]
             }
           ],
           // docs文件夹下面的bar文件夹 这是第二组侧边栏 跟第一组侧边栏没关系
           '/computer/': [
-            '/bar/', 
             {
-              title: '第二组侧边栏下拉框的标题1',
+              title: '第二组',
               children: [
-                '/bar/simple/test' 
+                ['/computer/four','demo'], // 以docs为根目录来查找文件 
+               
               ]
             }
-          ]
+          ],
+          '/other/': [
+            // '/font/', // font文件夹的README.md 不是下拉框形式
+            {
+              title: '小程序',
+              children: [
+                ['/other/小程序学习笔记','小程序'], // 以docs为根目录来查找文件 
+              ]
+            },
+          ],
       }, // 侧边栏配置
       sidebarDepth: 1, // 侧边栏显示1级
-      
     },
     // head: [ // 注入到当前页面的 JS <head> 中的标签
     //     ['link', { rel: 'manifest', href: '/photo.jpg' }],
