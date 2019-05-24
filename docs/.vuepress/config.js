@@ -70,6 +70,8 @@ module.exports = {
                 ['/font/浏览器网络/Web安全','Web安全'],
                 ['/font/浏览器网络/Cookie、Session和Web Storage','Cookie、Session和Web Storage'],
                 ['/font/浏览器网络/跨域实现','跨域实现'],
+                ['/font/浏览器网络/浏览器缓存','浏览器缓存'],
+                ['/font/浏览器网络/页面性能优化','页面性能优化'],
               ]
             },{
               title: 'CSS',
