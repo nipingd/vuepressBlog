@@ -34,6 +34,9 @@ module.exports = {
                 ['/font/JS/常用正则表达式备忘录','常用正则表达式备忘录'], // 以docs为根目录来查找文件 
                 ['/font/JS/Object.defineProperty与Proxy理解整理','Object.defineProperty与Proxy理解整理'], // 以docs为根目录来查找文件 
                 ['/font/JS/柯里化','柯里化'], // 以docs为根目录来查找文件 
+                ['/font/JS/JS技巧','JS技巧'], // 以docs为根目录来查找文件 
+                ['/font/JS/闭包','闭包'], // 以docs为根目录来查找文件 
+                ['/font/JS/作用域与作用域链','作用域与作用域链'], // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件

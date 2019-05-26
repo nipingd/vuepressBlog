@@ -96,37 +96,41 @@ JSONP 的缺点是：它只支持 GET 请求，而不支持 POST 请求等其他
 
 **共同点**：都是保存在浏览器端、且同源的
 
-- ```
-  数据存储方面
-  ```
+::: tip 数据存储方面
 
-  - **cookie数据**始终在同源的http请求中携带（即使不需要），即cookie在浏览器和服务器间来回传递。cookie数据还有路径（path）的概念，可以限制cookie只属于某个路径下
-  - **sessionStorage和localStorage**不会自动把数据发送给服务器，仅在**本地保存**。
+- **cookie数据**始终在同源的http请求中携带（即使不需要），即cookie在浏览器和服务器间来回传递。cookie数据还有路径（path）的概念，可以限制cookie只属于某个路径下
+- **sessionStorage和localStorage**不会自动把数据发送给服务器，仅在**本地保存**。
 
-- ```
-  存储数据大小
-  ```
+:::
 
-  - 存储大小限制也不同，**cookie数据**不能超过4K，同时因为每次http请求都会携带cookie、所以cookie只适合保存很小的数据，如会话标识。
-  - **sessionStorage和localStorage**虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大
+::: tip 存储数据大小
 
-- ```
-  数据存储有效期
-  ```
+- 存储大小限制也不同，**cookie数据**不能超过4K，同时因为每次http请求都会携带cookie、所以cookie只适合保存很小的数据，如会话标识。
+- **sessionStorage和localStorage**虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大
 
-  - **sessionStorage**：仅在当前浏览器窗口关闭之前有效；
-  - **localStorage**：始终有效，窗口或浏览器关闭也一直保存，本地存储，因此用作持久数据；
-  - **cookie**：只在设置的cookie过期时间之前有效，即使窗口关闭或浏览器关闭
+:::
 
-- ```
-  作用域不同
-  ```
+::: tip 数据存储有效期
 
-  - **sessionStorage**不在不同的浏览器窗口中共享，即使是同一个页面；
-  - **localstorage**在所有`同源窗口`中都是共享的；也就是说只要浏览器不关闭，数据仍然存在
-  - **cookie**: 也是在所有`同源窗口`中都是共享的.也就是说只要浏览器不关闭，数据仍然存在
+- **sessionStorage**：仅在当前浏览器窗口关闭之前有效；
+- **localStorage**：始终有效，窗口或浏览器关闭也一直保存，本地存储，因此用作持久数据；
+- **cookie**：只在设置的cookie过期时间之前有效，即使窗口关闭或浏览器关闭
 
-> Web Storage拥有setItem、getItem、removeItem、clear等方法，不像cookie需要自己封装setCookie、getCookie等方法
+:::
+
+::: tip 作用域不同
+
+- **sessionStorage**不在不同的浏览器窗口中共享，即使是同一个页面；
+- **localstorage**在所有`同源窗口`中都是共享的；也就是说只要浏览器不关闭，数据仍然存在
+- **cookie**: 也是在所有`同源窗口`中都是共享的.也就是说只要浏览器不关闭，数据仍然存在
+
+:::
+
+::: tip
+
+Web Storage拥有setItem、getItem、removeItem、clear等方法，不像cookie需要自己封装setCookie、getCookie等方法
+
+:::
 
 ### sessionStorage与页面js数据对象的区别
 
@@ -134,67 +138,172 @@ JSONP 的缺点是：它只支持 GET 请求，而不支持 POST 请求等其他
 
 而sessionStorage只要同源的同窗口中，刷新页面或进入同源的不同页面，数据始终存在，也就是说只要浏览器不关闭，数据仍然存在()
 
-### cookie使用方法介绍
+## 8.cookie使用方法介绍
 
-先说一下，JavaScript原生的用法。
+#### 浏览器中的Cookie
 
-Cookie 以名/值对形式存储 例如username=John Doe，这里的数据是string类型，如要是其他格式注意进行格式转换。
+浏览器中的Cookie主要由以下几部分组成：
 
-JavaScript 可以使用 document.cookie 属性来创建 、读取、及删除 cookie。JavaScript 中，创建 cookie 如下所示：
+- 名称：Cookie唯一的名称，必须经过URL编码处理。（同名会出现覆盖的情况）
+- 值：必须经过URL编码处理。
+- 域（domain）：默认情况下cookie在当前域下有效，你也可以设置该值来确保对其子域是否有效。
+- 路径（path）：指定Cookie在哪些路径下有效，默认是当前路径下。
+- 失效时间（expires）：默认情况下，浏览器会话结束时会自动删除Cookie；也可以设置一个GMT格式的日期，指定具体的删除日期；如果设置的日期为以前的日期，那么Cookie会立即删除。
+- 安全标志（secure）：指定之后只允许Cookie发送给https协议。
 
-```javascript
-document.cookie="username=John Doe";
+浏览器在发送请求时，只会将名称与值添加到请求头的Cookie字段中，发送给服务端。
+
+浏览器提供了一个非常蹩脚的API来操作Cookie：
+
+```js
+document.cookie
 ```
 
-您还可以为 cookie 添加一个过期时间（以 UTC 或 GMT 时间）。默认情况下，cookie 在浏览器关闭时删除：
+通过上述方法可以对该Cookie进行写操作，每一次只能写入一条Cookie字符串：
 
-```javascript
-document.cookie="username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 GMT";
+```js
+document.cookie = 'a=1; secure; path=/'
 ```
 
-您可以使用 path 参数告诉浏览器 cookie 的路径。默认情况下，cookie 属于当前页面。
+通过该方法还可以进行Cookie的读操作：
 
-```javascript
-document.cookie="username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 GMT; path=/";
+```js
+document.cookie   // "a=1"
 ```
 
-#### 设置cookie
+由于上述方法操作Cookie非常的不直观，一般都会写一些函数来简化Cookie读取、设置和删除操作。
 
-```javascript
-function setCookie(cname,cvalue,exdays)
-{
-  var SetTime = new Date();                                         //设置过期时间
-  SetTime.setTime(SetTime.getTime()+(exdays*24*60*60*1000));        //设置过期时间
-  var expires = "expires="+SetTime.toGMTString();                   //设置过期时间
-  document.cookie = cname + "=" + cvalue + "; " + expires;          //创建一个cookie
-}
-```
+对于Cookie的设置操作中，需要以下几点：
 
-#### 读取cookie
+对于名称和值进行URL编码处理，也就是采用JavaScript中的encodeURIComponent()方法； expires要求传入GMT格式的日期，需要处理为更易书写的方式，比如：设置秒数的方式； 注意只有的属性名的secure；
 
-```javascript
-function getCookie(c_name)
-{
-if (document.cookie.length>0) 
-  {
-  c_start=document.cookie.indexOf(c_name + "=")
-  if (c_start!=-1)
-    { 
-    c_start=c_start + c_name.length+1 
-    c_end=document.cookie.indexOf(";",c_start)
-    if (c_end==-1) c_end=document.cookie.length
-    return unescape(document.cookie.substring(c_start,c_end))
-    } 
+每一段信息需要采用分号加空格。
+
+```js
+function setCookie (key, value, attributes) {  
+	if (typeof document === 'undefined') {    
+	return  
+}  
+    attributes = Object.assign({}, {    
+        path: '/'  
+    }, attributes)
+  	let { domain, path, expires, secure } = attributes
+ 	if (typeof expires === 'number') {    
+      expires = new Date(Date.now() + expires * 1000)  }  
+    if (expires instanceof Date) {    
+        expires = expires.toUTCString()  
+    } else {    
+        expires = ''  
+    }
+  	key = encodeURIComponent(key)  
+  	value = encodeURIComponent(value)
+  	let cookieStr = `${key}=${value}`
+  	if (domain) {    
+      cookieStr += `; domain=${domain}`  
   }
-return ""
+  	if (path) {    
+      cookieStr += `; path=${path}`  
+  }
+  	if (expires) {    
+      cookieStr += `; expires=${expires}`  
+  }
+  	if (secure) {    
+      cookieStr += `; secure`  
+  }
+  	return (document.cookie = cookieStr)
 }
 ```
 
-#### 删除cookie
+Cookie的读操作需要注意的是将名称与值进行URL解码处理，也就是调用JavaScript中的decodeURIComponent()方法：
 
-将cookie的有效时间改成昨天。
+```js
+function getCookie (name) {  
+if (typeof document === 'undefined') {    
+	return  
+}  
+let cookies = []  
+let jar = {}  
+document.cookie && (cookies = document.cookie.split('; '))
+  for (let i = 0, max = cookies.length; i < max; i++) {    
+      let [key, value] = cookies[i].split('=')    
+      key = decodeURIComponent(key)    
+      value = decodeURIComponent(value)    
+      jar[key] = value    
+      if (key === name) {      
+          break    
+      }  
+  }
+  return name ? jar[name] : jar
+}
+```
 
-### SessionStorage 和  localStorage用法
+最后一个清除的方法就更加简单了，只要将失效日期（expires）设置为过去的日期即可：
+
+```js
+function removeCookie (key) {   
+	setCookie(key, '', { expires: -1 }) 
+}
+```
+
+介绍Cookie基本操作的封装之后，还需要了解浏览器为了限制Cookie不会被恶意使用，规定了Cookie所占磁盘空间的大小以及每个域名下Cookie的个数。
+
+为了绕开单域名下Cookie个数的限制，开发人员还创造了一种称为subcookie的概念，这里就不在赘述了，可以参考【JavaScript高级程序设计第23章 p633】。
+
+#### 服务端的Cookie
+
+相比较浏览器端，服务端执行Cookie的写操作时，是将拼接好的Cookie字符串放入响应头的Set-Cookie字段中；执行Cookie的读操作时，则是解析HTTP请求头字段Cookie中的键值对。
+
+与浏览器最大的不同，在于服务端对于Cookie的安全性操碎了心
+
+signed
+
+当设置signed=true时，服务端会对该条Cookie字符串生成两个Set-Cookie响应头字段：
+
+```js
+Set-Cookie: lastTime=2019-03-05T14:31:05.543Z; path=/; httponly
+Set-Cookie: lastTime.sig=URXREOYTtMnGm0b7qCYFJ2Db400; path=/; httponly
+```
+
+这里通过再发送一条以.sig为后缀的名称以及对值进行加密的Cookie，来验证该条Cookie是否在传输的过程中被篡改。
+
+httpOnly
+
+服务端Set-Cookie字段中新增httpOnly属性，当服务端在返回的Cookie信息中含有httpOnly字段时，开发者是不能通过JavaScript来操纵该条Cookie字符串的。
+
+这样做的好处主要在于面对XSS（Cross-site scripting）攻击时，黑客无法拿到设置httpOnly字段的Cookie信息。
+
+此时，你会发现localStorage相比较Cookie，在XSS攻击的防御上就略逊一筹了。 sameSite
+
+在介绍这个新属性之前，首先你需要明白：当用户从http://a.com发起http://b.com的请求也会携带上Cookie，而从http://a.com携带过来的Cookie称为第三方Cookie。
+
+虽然第三方Cookie有一些好处，但是给CSRF（Cross-site request forgrey）攻击的机会。
+
+为了从根源上解决CSRF攻击，sameSite属性便闪亮登场了，它的取值有以下几种：
+
+- strict：浏览器在任何跨域请求中都不会携带Cookie，这样可以有效的防御CSRF攻击，但是对于有多个子域名的网站采用主域名存储用户登录信息的场景，每个子域名都需要用户重新登录，造成用户体验非常的差。
+- lax：相比较strict，它允许从三方网站跳转过来的时候使用Cookie。
+
+为了方便大家理解sameSite的实际效果，可以看这个例子：
+
+```js
+// a.com 服务端会在访问页面时返回如下
+Cookiecookies.set('foo', 'aaaaa')
+cookies.set('bar', 'bbbbb')
+cookies.set('name', 'cccccc')
+// b.com 服务端会在访问页面时返回如下
+Cookiecookies.set('foo', 'a', { sameSite: 'strict' })
+cookies.set('bar', 'b', { sameSite: 'lax' })
+cookies.set('baz', 'c')
+```
+
+如何现在用户在a.com中点击链接跳转到b.com，它的请求头是这样的：
+
+```js
+Request Headers 
+Cookie: bar=b; baz=c
+```
+
+## 9.SessionStorage 和  localStorage用法
 
 H5对于web storage的支持很友好，使用方法很简单
 
