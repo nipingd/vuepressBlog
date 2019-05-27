@@ -37,6 +37,7 @@ module.exports = {
                 ['/font/JS/JS技巧','JS技巧'], // 以docs为根目录来查找文件 
                 ['/font/JS/闭包','闭包'], // 以docs为根目录来查找文件 
                 ['/font/JS/作用域与作用域链','作用域与作用域链'], // 以docs为根目录来查找文件 
+                ['/font/JS/JS运行机制总结','JS运行机制总结'], // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -82,6 +83,16 @@ module.exports = {
               children:[
                 ['/font/CSS/CSS动画','CSS动画'],
                 ['/font/CSS/CSS技巧','CSS技巧'],
+              ]
+            },{
+              title: 'vue',
+              children:[
+                ['/font/vue/vue组件间通信六种方式','vue组件间通信六种方式'],
+              ]
+            },{
+              title: 'node',
+              children:[
+                ['/font/node/node知识','node知识'],
               ]
             }
           ],
