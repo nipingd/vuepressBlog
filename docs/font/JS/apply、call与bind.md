@@ -1,4 +1,4 @@
-### apply、call
+## apply、call
 
 在 javascript 中，call 和 apply 都是为了改变某个函数运行时的上下文（context）而存在的，换句话说，就是为了改变函数体内部 this 的指向。
 
@@ -35,7 +35,7 @@ JavaScript 中，某个函数的参数数量是不固定的，因此要说适用
 
 而不确定的时候用 apply，然后把参数 push 进数组传递进去。当参数数量不确定时，函数内部也可以通过 arguments 这个数组来遍历所有的参数。
 
-常用用法
+## 常用用法
 
 **1、数组之间追加**
 
@@ -88,7 +88,7 @@ function log(){
 };
 ```
 
-### **bind**
+## **bind**
 
 MDN的解释是：bind()方法会创建一个新函数，称为绑定函数，当调用这个绑定函数时，绑定函数会以创建它时传入 bind()方法的第一个参数作为 this，传入 bind() 方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。
 
@@ -108,7 +108,7 @@ console.log(this.bar); //1
 
 在Javascript中，多次 bind() 是无效的。更深层次的原因， bind() 的实现，相当于使用函数在内部包了一个 call / apply ，第二次 bind() 相当于再包住第一次 bind() ,故第二次以后的 bind 是无法生效的。
 
-### **apply、call、bind比较**
+## **apply、call、bind比较**
 
 ```js
 console.log(foo.getX.bind(obj)()); //81
