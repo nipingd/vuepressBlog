@@ -92,6 +92,8 @@ module.exports = {
               title: 'vue',
               children:[
                 ['/font/vue/vue组件间通信六种方式','vue组件间通信六种方式'],
+                ['/font/vue/vue开发技巧','vue开发技巧'],
+                ['/font/vue/slot与slot-scope','slot与slot-scope'],
               ]
             },{
               title: 'node',

@@ -513,7 +513,7 @@ MutationObserver可以用来实现microtask （它属于microtask，优先级小
 
 像以前的Vue源码中就是利用它来模拟nextTick的， 具体原理是，创建一个TextNode并监听内容变化， 然后要nextTick的时候去改一下这个节点的文本内容， 如下：（Vue的源码，未修改）
 
-```
+```js
 var counter = 1
 var observer = new MutationObserver(nextTickHandler)
 var textNode = document.createTextNode(String(counter))
@@ -525,7 +525,6 @@ timerFunc = () => {
     counter = (counter + 1) % 2
     textNode.data = String(counter)
 }
-复制代码
 ```
 
 [对应Vue源码链接](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2Fvuejs%2Fvue%2Fblob%2F9cfd63a7d08c1eba029c8bd7463b3047c3347826%2Fsrc%2Fcore%2Futil%2Fenv.js%23L86-L95)
