@@ -122,3 +122,158 @@ const purgecssResult = purgecss.purge();
 最终产生的`purgecssResult`结果如下，可以看到多余的`a`和`ul`标签的样式都没了	
 
 ![1560523017043](../../.vuepress/public/1560523017043.png)
+
+## 4 作用域插槽
+
+利用好作用域插槽可以做一些很有意思的事情，比如定义一个基础布局组件A，只负责布局，不管数据逻辑，然后另外定义一个组件B负责数据处理，布局组件A需要数据的时候就去B里面去取。假设，某一天我们的布局变了，我们只需要去修改组件A就行，而不用去修改组件B，从而就能充分复用组件B的数据处理逻辑，关于这块我之前写过一篇实际案例，可以点击[这里](https://juejin.im/post/5c2d7030f265da613a54236f)查看。
+
+这里涉及到的一个最重要的点就是父组件要去获取子组件里面的数据，之前是利用`slot-scope`，自vue 2.6.0起，提供了更好的支持 `slot` 和 `slot-scope` 特性的 API 替代方案。
+
+比如，我们定一个名为`current-user`的组件：
+
+```vue
+<span>
+  <slot>{{ user.lastName }}</slot>
+</span>
+```
+
+父组件引用`current-user`的组件，但想用名替代姓（老外名字第一个单词是名，后一个单词是姓）：
+
+```vue
+<current-user>
+  {{ user.firstName }}
+</current-user>
+```
+
+这种方式不会生效，因为`user`对象是子组件的数据，在父组件里面我们获取不到，这个时候我们就可以通过`v-slot` 来实现。
+
+首先在子组件里面，将`user`作为一个`<slot>`元素的特性绑定上去：
+
+```vue
+<span>
+  <slot v-bind:user="user">
+    {{ user.lastName }}
+  </slot>
+</span>
+```
+
+之后，我们就可以在父组件引用的时候，给`v-slot`带一个值来定义我们提供的插槽 prop 的名字：
+
+```vue
+<current-user>
+  <template v-slot:default="slotProps">
+    {{ slotProps.user.firstName }}
+  </template>
+</current-user>
+```
+
+这种方式还有缩写语法，可以查看[独占默认插槽的缩写语法](https://link.juejin.im?target=https%3A%2F%2Fcn.vuejs.org%2Fv2%2Fguide%2Fcomponents-slots.html%23%E7%8B%AC%E5%8D%A0%E9%BB%98%E8%AE%A4%E6%8F%92%E6%A7%BD%E7%9A%84%E7%BC%A9%E5%86%99%E8%AF%AD%E6%B3%95)，最终我们引用的方式如下：
+
+```vue
+<current-user v-slot="slotProps">
+  {{ slotProps.user.firstName }}
+</current-user>
+```
+
+相比之前`slot-scope`代码更清晰，更好理解。
+
+## 5 属性事件传递
+
+写过高阶组件的童鞋可能都会碰到过将加工过的属性向下传递的情况，如果碰到属性较多时，需要一个个去传递，非常不友好并且费时，有没有一次性传递的呢（比如react里面的`{...this.props}`）？答案就是`v-bind`和`v-on`。
+
+举个例子，假如有一个基础组件`BaseList`，只有基础的列表展示功能，现在我们想在这基础上增加排序功能，这个时候我们就可以创建一个高阶组件`SortList`。
+
+```vue
+<!-- SortList  -->
+<template>
+  <BaseList v-bind="$props" v-on="$listeners"> <!-- ... --> </BaseList>
+</template>
+
+<script>
+  import BaseList from "./BaseList";
+  // 包含了基础的属性定义
+  import BaseListMixin from "./BaseListMixin";
+  // 封装了排序的逻辑
+  import sort from "./sort.js";
+
+  export default {
+    props: BaseListMixin.props,
+    components: {
+      BaseList
+    }
+  };
+</script>
+```
+
+可以看到传递属性和事件的方便性，而不用一个个去传递
+
+## 6 函数式组件
+
+函数式组件，即无状态，无法实例化，内部没有任何生命周期处理方法，非常轻量，因而渲染性能高，特别适合用来只依赖外部数据传递而变化的组件。
+
+写法如下：
+
+1. 在`template`标签里面标明`functional`
+2. 只接受`props`值
+3. 不需要`script`标签
+
+```vue
+<!-- App.vue -->
+<template>
+  <div id="app">
+    <List
+      :items="['Wonderwoman', 'Ironman']"
+      :item-click="item => (clicked = item)"
+    />
+    <p>Clicked hero: {{ clicked }}</p>
+  </div>
+</template>
+
+<script>
+import List from "./List";
+
+export default {
+  name: "App",
+  data: () => ({ clicked: "" }),
+  components: { List }
+};
+</script>
+复制代码
+<!-- List.vue 函数式组件 -->
+<template functional>
+  <div>
+    <p v-for="item in props.items" @click="props.itemClick(item);">
+      {{ item }}
+    </p>
+  </div>
+</template>
+```
+
+## 7 监听组件的生命周期
+
+比如有父组件`Parent`和子组件`Child`，如果父组件监听到子组件挂载`mounted`就做一些逻辑处理，常规的写法可能如下：
+
+```vue
+// Parent.vue
+<Child @mounted="doSomething"/>
+
+// Child.vue
+mounted() {
+  this.$emit("mounted");
+}
+```
+
+这里提供一种特别简单的方式，子组件不需要任何处理，只需要在父组件引用的时候通过`@hook`来监听即可，代码重写如下：
+
+```vue
+<Child @hook:mounted="doSomething"/>
+```
+
+当然这里不仅仅是可以监听`mounted`，其它的生命周期事件，例如：`created`，`updated`等都可以，是不是特别方便~
+
+作者：skinner
+
+链接：https://juejin.im/post/5ce3b519f265da1bb31c0d5f
+
+来源：掘金
+

@@ -100,6 +100,11 @@ module.exports = {
               children:[
                 ['/font/node/node知识','node知识'],
               ]
+            },{
+              title: '其他',
+              children:[
+                ['/font/其他/webpack基础知识','webpack基础知识'],
+              ]
             }
           ],
           // docs文件夹下面的bar文件夹 这是第二组侧边栏 跟第一组侧边栏没关系
