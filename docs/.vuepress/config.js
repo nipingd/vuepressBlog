@@ -40,6 +40,7 @@ module.exports = {
                 ['/font/JS/JS运行机制总结','JS运行机制总结'], // 以docs为根目录来查找文件 
                 ['/font/JS/赋值、浅拷贝与深拷贝','赋值、浅拷贝与深拷贝'], // 以docs为根目录来查找文件 
                 ['/font/JS/构造函数、原型、继承和原型链','构造函数、原型、继承和原型链'], // 以docs为根目录来查找文件 
+                ['/font/JS/原生JS知识','原生JS知识'], // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -104,6 +105,7 @@ module.exports = {
               title: '其他',
               children:[
                 ['/font/其他/webpack基础知识','webpack基础知识'],
+                ['/font/其他/Nginx反向代理与负载均衡','Nginx反向代理与负载均衡'],
               ]
             }
           ],
