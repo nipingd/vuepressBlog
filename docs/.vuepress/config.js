@@ -88,6 +88,7 @@ module.exports = {
                 ['/font/CSS/CSS动画','CSS动画'],
                 ['/font/CSS/CSS技巧','CSS技巧'],
                 ['/font/CSS/BFC与清除浮动','BFC与清除浮动'],
+                ['/font/CSS/z-index','z-index'],
               ]
             },{
               title: 'vue',
