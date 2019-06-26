@@ -41,6 +41,7 @@ module.exports = {
                 ['/font/JS/赋值、浅拷贝与深拷贝','赋值、浅拷贝与深拷贝'], // 以docs为根目录来查找文件 
                 ['/font/JS/构造函数、原型、继承和原型链','构造函数、原型、继承和原型链'], // 以docs为根目录来查找文件 
                 ['/font/JS/原生JS知识','原生JS知识'], // 以docs为根目录来查找文件 
+                ['/font/JS/防抖与节流','防抖与节流'], 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -81,6 +82,7 @@ module.exports = {
                 ['/font/浏览器网络/页面性能优化','页面性能优化'],
                 ['/font/浏览器网络/网络基础','网络基础'],
                 ['/font/浏览器网络/前端路由','前端路由'],
+                ['/font/浏览器网络/chrome调试技巧','chrome调试技巧'],
               ]
             },{
               title: 'CSS',
@@ -116,7 +118,7 @@ module.exports = {
               title: '第二组',
               children: [
                 ['/computer/four','demo'], // 以docs为根目录来查找文件 
-               
+              
               ]
             }
           ],
