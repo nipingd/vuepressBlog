@@ -541,3 +541,317 @@ function deepClone(obj) { //递归拷贝
 }
 ```
 
+### 22. 防抖和节流的区别是什么？防抖和节流的实现。
+
+防抖和节流的作用都是防止函数多次调用。区别在于，假设一个用户一直触发这个函数，且每次触发函数的间隔小于设置的时间，防抖的情况下只会调用一次，而节流的情况会每隔一定时间调用一次函数。
+
+> 防抖(debounce): n秒内函数只会执行一次，如果n秒内高频事件再次被触发，则重新计算时间
+
+```js
+function debounce(func, wait, immediate = true) {
+    let timer;
+    // 延迟执行函数
+    const later = (context, args) => setTimeout(() => {
+        timer = null;// 倒计时结束
+        if (!immediate) {
+            func.apply(context, args);
+            //执行回调
+            context = args = null;
+        }
+    }, wait);
+    let debounced = function (...params) {
+        let context = this;
+        let args = params;
+        if (!timer) {
+            timer = later(context, args);
+            if (immediate) {
+                //立即执行
+                func.apply(context, args);
+            }
+        } else {
+            clearTimeout(timer);
+            //函数在每个等待时延的结束被调用
+            timer = later(context, args);
+        }
+    }
+    debounced.cancel = function () {
+        clearTimeout(timer);
+        timer = null;
+    };
+    return debounced;
+};
+```
+
+防抖的应用场景:
+
+- 每次 resize/scroll 触发统计事件
+- 文本输入的验证（连续输入文字后发送 AJAX 请求进行验证，验证一次就好）
+
+> 节流(throttle): 高频事件在规定时间内只会执行一次，执行一次后，只有大于设定的执行周期后才会执行第二次。
+
+```js
+//underscore.js
+function throttle(func, wait, options) {
+    var timeout, context, args, result;
+    var previous = 0;
+    if (!options) options = {};
+
+    var later = function () {
+        previous = options.leading === false ? 0 : Date.now() || new Date().getTime();
+        timeout = null;
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
+    };
+
+    var throttled = function () {
+        var now = Date.now() || new Date().getTime();
+        if (!previous && options.leading === false) previous = now;
+        var remaining = wait - (now - previous);
+        context = this;
+        args = arguments;
+        if (remaining <= 0 || remaining > wait) {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+            previous = now;
+            result = func.apply(context, args);
+            if (!timeout) context = args = null;
+        } else if (!timeout && options.trailing !== false) {
+            // 判断是否设置了定时器和 trailing
+            timeout = setTimeout(later, remaining);
+        }
+        return result;
+    };
+
+    throttled.cancel = function () {
+        clearTimeout(timeout);
+        previous = 0;
+        timeout = context = args = null;
+    };
+
+    return throttled;
+};
+```
+
+函数节流的应用场景有:
+
+- DOM 元素的拖拽功能实现（mousemove）
+- 射击游戏的 mousedown/keydown 事件（单位时间只能发射一颗子弹）
+- 计算鼠标移动的距离（mousemove）
+- Canvas 模拟画板功能（mousemove）
+- 搜索联想（keyup）
+- 监听滚动事件判断是否到页面底部自动加载更多：给 scroll 加了 debounce 后，只有用户停止滚动后，才会判断是否到了页面底部；如果是 throttle 的话，只要页面滚动就会间隔一段时间判断一次
+
+------
+
+### 23. 取数组的最大值（ES5、ES6）
+
+```js
+// ES5 的写法
+Math.max.apply(null, [14, 3, 77, 30]);
+
+// ES6 的写法
+Math.max(...[14, 3, 77, 30]);
+
+// reduce
+[14,3,77,30].reduce((accumulator, currentValue)=>{
+    return accumulator = accumulator > currentValue ? accumulator : currentValue
+});
+```
+
+------
+
+### 24. ES6新的特性有哪些？
+
+1. 新增了块级作用域(let,const)
+2. 提供了定义类的语法糖(class)
+3. 新增了一种基本数据类型(Symbol)
+4. 新增了变量的解构赋值
+5. 函数参数允许设置默认值，引入了rest参数，新增了箭头函数
+6. 数组新增了一些API，如 isArray / from / of 方法;数组实例新增了 entries()，keys() 和 values() 等方法
+7. 对象和数组新增了扩展运算符
+8. ES6 新增了模块化(import/export)
+9. ES6 新增了 Set 和 Map 数据结构
+10. ES6 原生提供 Proxy 构造函数，用来生成 Proxy 实例
+11. ES6 新增了生成器(Generator)和遍历器(Iterator)
+
+------
+
+### 25. setTimeout倒计时为什么会出现误差？
+
+setTimeout() 只是将事件插入了“任务队列”，必须等当前代码（执行栈）执行完，主线程才会去执行它指定的回调函数。要是当前代码消耗时间很长，也有可能要等很久，所以并没办法保证回调函数一定会在 setTimeout() 指定的时间执行。所以， setTimeout() 的第二个参数表示的是最少时间，并非是确切时间。
+
+HTML5标准规定了 setTimeout() 的第二个参数的最小值不得小于4毫秒，如果低于这个值，则默认是4毫秒。在此之前。老版本的浏览器都将最短时间设为10毫秒。另外，对于那些DOM的变动（尤其是涉及页面重新渲染的部分），通常是间隔16毫秒执行。这时使用 requestAnimationFrame() 的效果要好于 setTimeout();
+
+------
+
+### 26. 为什么 0.1 + 0.2 != 0.3 ?
+
+0.1 + 0.2 != 0.3 是因为在进制转换和进阶运算的过程中出现精度损失。
+
+下面是详细解释:
+
+JavaScript使用 Number 类型表示数字(整数和浮点数)，使用64位表示一个数字。
+
+![1562686904768](../../.vuepress/public/1562686904768.png)
+
+图片说明:
+
+- 第0位：符号位，0表示正数，1表示负数(s)
+- 第1位到第11位：储存指数部分（e）
+- 第12位到第63位：储存小数部分（即有效数字）f
+
+计算机无法直接对十进制的数字进行运算, 需要先对照 IEEE 754 规范转换成二进制，然后对阶运算。
+
+> 1.进制转换
+
+0.1和0.2转换成二进制后会无限循环
+
+```js
+0.1 -> 0.0001100110011001...(无限循环)
+0.2 -> 0.0011001100110011...(无限循环)
+```
+
+但是由于IEEE 754尾数位数限制，需要将后面多余的位截掉，这样在进制之间的转换中精度已经损失。
+
+> 2.对阶运算
+
+由于指数位数不相同，运算时需要对阶运算 这部分也可能产生精度损失。
+
+按照上面两步运算（包括两步的精度损失），最后的结果是
+
+0.0100110011001100110011001100110011001100110011001100
+
+结果转换成十进制之后就是 0.30000000000000004。
+
+### 27. promise 有几种状态, Promise 有什么优缺点 ?
+
+promise有三种状态: fulfilled, rejected, pending.
+
+> Promise 的优点:
+
+1. 一旦状态改变，就不会再变，任何时候都可以得到这个结果
+2. 可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数
+
+> Promise 的缺点:
+
+1. 无法取消 Promise
+2. 当处于pending状态时，无法得知目前进展到哪一个阶段
+
+------
+
+### 28. Promise构造函数是同步还是异步执行，then中的方法呢 ?promise如何实现then处理 ?
+
+Promise的构造函数是同步执行的。then 中的方法是异步执行的。
+
+promise的then实现，详见: [Promise源码实现](https://juejin.im/post/5c88e427f265da2d8d6a1c84)
+
+------
+
+### 29. Promise和setTimeout的区别 ?
+
+Promise 是微任务，setTimeout 是宏任务，同一个事件循环中，promise.then总是先于 setTimeout 执行。
+
+------
+
+### 30. 如何实现 Promise.all ?
+
+要实现 Promise.all,首先我们需要知道 Promise.all 的功能：
+
+1. 如果传入的参数是一个空的可迭代对象，那么此promise对象回调完成(resolve),只有此情况，是同步执行的，其它都是异步返回的。
+2. 如果传入的参数不包含任何 promise，则返回一个异步完成. promises 中所有的promise都“完成”时或参数中不包含 promise 时回调完成。
+3. 如果参数中有一个promise失败，那么Promise.all返回的promise对象失败
+4. 在任何情况下，Promise.all 返回的 promise 的完成状态的结果都是一个数组
+
+```
+Promise.all = function (promises) {
+    return new Promise((resolve, reject) => {
+        let index = 0;
+        let result = [];
+        if (promises.length === 0) {
+            resolve(result);
+        } else {
+            function processValue(i, data) {
+                result[i] = data;
+                if (++index === promises.length) {
+                    resolve(result);
+                }
+            }
+            for (let i = 0; i < promises.length; i++) {
+                //promises[i] 可能是普通值
+                Promise.resolve(promises[i]).then((data) => {
+                    processValue(i, data);
+                }, (err) => {
+                    reject(err);
+                    return;
+                });
+            }
+        }
+    });
+}
+```
+
+如果想了解更多Promise的源码实现，可以参考我的另一篇文章：[Promise的源码实现（完美符合Promise/A+规范）](https://juejin.im/post/5c88e427f265da2d8d6a1c84#heading-24)
+
+------
+
+### 31.如何实现 Promise.finally ?
+
+不管成功还是失败，都会走到finally中,并且finally之后，还可以继续then。并且会将值原封不动的传递给后面的then.
+
+```js
+Promise.prototype.finally = function (callback) {
+    return this.then((value) => {
+        return Promise.resolve(callback()).then(() => {
+            return value;
+        });
+    }, (err) => {
+        return Promise.resolve(callback()).then(() => {
+            throw err;
+        });
+    });
+}
+```
+
+------
+
+### 32. 什么是函数柯里化？实现 sum(1)(2)(3) 返回结果是1,2,3之和
+
+函数柯里化是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。
+
+```js
+function sum(a) {
+    return function(b) {
+        return function(c) {
+            return a+b+c;
+        }
+    }
+}
+console.log(sum(1)(2)(3)); // 6
+```
+
+引申：实现一个curry函数，将普通函数进行柯里化:
+
+```js
+function curry(fn, args = []) {
+    return function(){
+        let rest = [...args, ...arguments];
+        if (rest.length < fn.length) {
+            return curry.call(this,fn,rest);
+        }else{
+            return fn.apply(this,rest);
+        }
+    }
+}
+//test
+function sum(a,b,c) {
+    return a+b+c;
+}
+let sumFn = curry(sum);
+console.log(sumFn(1)(2)(3)); //6
+console.log(sumFn(1)(2, 3)); //6
+```
+
+
+作者：刘小夕链接：https://juejin.im/post/5cab0c45f265da2513734390来源：掘金著作权归作者所有。
