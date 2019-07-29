@@ -43,6 +43,7 @@ module.exports = {
                 ['/font/JS/原生JS知识','原生JS知识'], // 以docs为根目录来查找文件 
                 ['/font/JS/防抖与节流','防抖与节流'], 
                 ['/font/JS/类型转换比较问题','类型转换比较问题'], 
+                ['/font/JS/JS中有趣的事实','JS中有趣的事实'], 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
