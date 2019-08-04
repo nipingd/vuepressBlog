@@ -855,3 +855,6 @@ console.log(sumFn(1)(2, 3)); //6
 
 
 作者：刘小夕链接：https://juejin.im/post/5cab0c45f265da2513734390来源：掘金著作权归作者所有。
+
+NOSCRIPT标签用来定义在脚本未被执行时的替代内容。也可以用在检测浏览器是否支持脚本，若不支持脚本则可以显示NOSCRIPT标签里的innerText
+

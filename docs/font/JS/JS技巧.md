@@ -663,3 +663,100 @@ https://www.npmjs.com/package/babel-plugin-transform-optional-chaining
 译者：@chorer 作者：@Milos Protic
 译文：https://chorer.github.io/2019/06/24/Trs-更好的JavaScript条件式和匹配标准技巧/
 原文：https://devinduct.com/blogpost/35/tips-and-tricks-for-better-javascript-conditionals-and-match-criteria
+
+## 13.数组去重
+
+```js
+const j = [...new Set([1, 2, 3, 3])]
+>> [1, 2, 3]
+```
+
+## 14.数组清洗
+
+洗掉数组中一些无用的值，如`0, undefined, null, false`等
+
+```js
+myArray    
+	.map(item => {       
+		// ...    
+	})    
+	// Get rid of bad values    
+	.filter(Boolean);
+```
+
+## 15.创建空对象 
+
+我们可以使用对象字面量`{}`来创建空对象，但这样创建的对象有隐式原型`__proto__`和一些对象方法比如常见的`hasOwnProperty`，下面这个方法可以创建一个纯对象。
+
+```js
+let dict = Object.create(null);
+
+// dict.__proto__ === "undefined"
+// No object properties exist until you add them
+```
+
+## 16.合并对象
+
+JS中我们经常会有合并对象的需求，比如常见的给用传入配置覆盖默认配置，通过ES6扩展运算符就能快速实现。
+
+```js
+const person = { name: 'David Walsh', gender: 'Male' };
+const tools = { computer: 'Mac', editor: 'Atom' };
+const attributes = { handsomeness: 'Extreme', hair: 'Brown', eyes: 'Blue' };
+
+const summary = {...person, ...tools, ...attributes};
+/*
+Object {  "computer": "Mac",  "editor": "Atom",  "eyes": "Blue",  "gender": "Male",  "hair": "Brown",  "handsomeness": "Extreme",  "name": "David Walsh",}
+*/
+```
+
+## 17.设置函数必传参数 
+
+借助ES6支持的默认参数特性，我们可以将默认参数设置为一个执行抛出异常代码函数返回的值，这样当我们没有传参时就会抛出异常终止后面的代码运行。
+
+```js
+const isRequired = () => { throw new Error('param is required'); };
+
+const hello = (name = isRequired()) => { console.log(`hello ${name}`) };
+// This will throw an error because no name is provided
+hello();
+
+// This will also throw an error
+hello(undefined);
+
+// These are good!
+hello(null);
+hello('David');
+```
+
+## 18.解构别名 
+
+ES6中我们经常会使用对象结构获取其中的属性，但有时候会想重命名属性名，以避免和作用域中存在的变量名冲突，这时候可以为解构属性名添加别名。
+
+```js
+const obj = { x: 1 };
+
+// Grabs obj.x as { x }
+const { x } = obj;
+
+// Grabs obj.x as as { otherName }
+const { x: otherName } = obj;
+```
+
+## 19.获取查询字符串参数 
+
+以前获取URL中的字符串参数我们需要通过函数写正则匹配，现在通过`URLSearchParams`API即可实现。
+
+```js
+// Assuming "?post=1234&action=edit"
+var urlParams = new URLSearchParams(window.location.search);
+
+console.log(urlParams.has('post')); // true
+console.log(urlParams.get('action')); // "edit"
+console.log(urlParams.getAll('action')); // ["edit"]
+console.log(urlParams.toString()); // "?post=1234&action=edit"
+console.log(urlParams.append('active', '1')); // "?post=1234&action=edit&active=1"
+```
+
+文章转载自公众号：前端新视界，作者 奔跑的小胡
+
