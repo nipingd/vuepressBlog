@@ -760,3 +760,81 @@ console.log(urlParams.append('active', '1')); // "?post=1234&action=edit&active=
 
 文章转载自公众号：前端新视界，作者 奔跑的小胡
 
+## 20.取整：代替正数的`Math.floor()`，代替负数的`Math.ceil()`
+
+```js
+const num1 = ~~ 1.69;
+const num2 = 1.69 | 0;
+const num3 = 1.69 >> 0;
+// num1 num2 num3 => 1 1 1
+```
+
+## 21.转数值：只对`null、""、false、数值字符串`有效
+
+```js
+const num1 = +null;
+const num2 = +"";
+const num3 = +false;
+const num4 = +"169";
+// num1 num2 num3 num4 => 0 0 0 169
+```
+
+## 22.判断奇偶
+
+```js
+const OddEven = num => !!(num & 1) ? "odd" : "even";
+const num = OddEven(2);
+// num => "even"
+```
+
+## 23.惰性载入函数：函数内判断分支较多较复杂时可大大节约资源开销
+
+```js
+ function Func() { 
+     if (a === b) { 
+         console.log("x"); 
+     } else { 
+         console.log("y"); 
+     } 
+ } 
+ // 换成 
+ function Func() {
+     if (a === b) {
+         Func = function() {
+             console.log("x");
+         }
+     } else {
+         Func = function() {
+             console.log("y");
+         }
+     }
+     return Func();
+ }
+```
+
+## 24.!与!!
+
+！可将变量转换成boolean类型，null、undefined和空字符串取反都为false，其余都为true。
+
+```js
+!null=true
+
+!undefined=true
+
+!''=true
+
+!100=false
+
+!'abc'=false
+```
+
+！！常常用来做类型判断，在第一步!（变量）之后再做逻辑取反运算
+
+```js
+if(!!a){
+    //a有内容才执行的代码...  
+}
+```
+
+“！”是逻辑与运算，并且可以与任何变量进行逻辑与将其转化为布尔值，“!!”则是逻辑与的取反运算，尤其后者在判断类型时代码简洁高效，省去了多次判断null、undefined和空字符串的冗余代码。
+
