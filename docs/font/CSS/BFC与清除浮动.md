@@ -20,6 +20,7 @@ BFC 的原理，其实也就是 BFC 的渲染规则（能说出以下四点就�
 - 方法3：定位中：只要posiiton的值不是 static或者是relative即可，**可以是`absolute`或`fixed`，**也就生成了一个BFC。
 - 方法4：display为inline-block, table-cell, table-caption, flex, inline-flex
 - 方法5：body根元素
+- 方法6(新方法):display : `flow-root` 
 
 ## 四、清除浮动
 
