@@ -299,7 +299,7 @@ $direction: left;
 }
 ```
 
-### 7. 从 html 元素继承 box-sizing
+## 7. 从 html 元素继承 box-sizing
 
 在大多数情况下我们在设置元素的 `border` 和 `padding` 并不希望改变元素的 `width,height` 值，这个时候我们就可以为该元素设置 `box-sizing:border-box;`。
 
@@ -328,7 +328,7 @@ html {
 
 > 既然是内联关键 CSS，也就说明我们只会将少部分的 CSS 代码直接写入 HTML 中。至于内联哪些 CSS 你可以使用 Critical。
 
-### 9. 文字超出省略、文字两端对齐
+## 9. 文字超出省略、文字两端对齐
 
 需求中我们也经常遇到这样的需求，这里直接提供方案。
 
@@ -402,3 +402,157 @@ div:after{
 
 来源：掘金
 
+## 10.注意外边距折叠
+
+与其他大多数属性不同，上下的垂直外边距margin在同时存在时会发生外边距折叠。这意味着当一个元素的下边缘接触到另一个元素的上边缘时，只会保留两个margin值中较大的那个。例如：
+
+HTML
+
+```html
+<div class="square red"></div>
+<div class="square blue"></div>
+```
+
+CSS
+
+```css
+.square {
+    width: 80px;
+    height: 80px;
+}
+.red {
+    background-color: #F44336;
+    margin-bottom: 40px;
+}
+.blue {
+    background-color: #2196F3;
+    margin-top: 30px;
+}
+```
+
+![1565363029358](../../.vuepress/public/1565363029358.png)
+
+红色方块与蓝色方块的上下间距是40px，而不是70px。解决外边距折叠的方法有很多种，对于初学者来说最简单的就是所有元素只使用一个方向上的margin，比如上下的外边距我们统统使用margin-bottom。
+
+## 11.重置元素的CSS样式
+
+尽管这些年来有了很大的改善，但是不同浏览器对于各种元素的默认样式仍然存在很大的差异。解决这个问题的最佳办法是在CSS开头为所有的元素设置通用的CSS Reset重置代码，这样你是在没有任何默认内外边距的基础上进行布局，于是所产生的效果也就是统一的。
+
+网络上已经有成熟的CSS代码库为我们解决浏览器不一致问题，例如normalize.css、minireset和ress，你可以在你的项目中引用它们。如果你不想使用第三方代码库，你可以使用下面的样式来进行一个非常基本的CSS reset：
+
+```css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+```
+
+上面的代码看起来有些霸道，将所有元素的内外边距都设置为0了，而正是没有了这些默认内外边距的影响，使得我们后面的CSS设置会更加的容易。同时box-sizing: border-box也是一个很棒的设置，我们紧接着就会介绍它。
+
+## 12.所有元素设置为Border-box
+
+大多数初学者都不知道box-sizing这个属性，但实际上它非常重要。box-sizing属性有两个值：
+
+- content-box（默认） - 当我们设置一个元素的宽度或高度时，就是设置它的内容的大小。所有的padding和边框值都不包含。例如，一个div的宽度设置为100，padding为10，于是这个元素将占用120像素（100+2*10）。
+- border-box - padding与边框包含在元素的宽度或高度中，一个设置为width: 100px和box-sizing:
+  border-box的div元素，他的总宽度就是100px，无论它的内边距和边框有多少。
+
+将所有元素都设置为border-box，可以更轻松的改变元素的大小，而不必担心padding或者border值会将元素撑开变形或者换行显示。
+
+## 13.将图片作为背景
+
+当给页面添加图片时，尤其需要图片是响应式的时候，最好使用background属性来引入图片，而不是<img>标签。
+
+这看起来使用图片会更复杂，但实际上它会使设置图片的样式变得更加容易。有了background-size, background-position和其它的属性，保持或改变图片原始尺寸和宽高比会更方便。
+
+举个例子
+HTML
+
+```html
+<section>
+    <p>Img element</p>
+    <img src="https://tutorialzine.com/media/2016/08/bicycle.jpg" alt="bicycle"/>
+</section>
+
+<section>
+    <p>Div with background image</p>
+    <div></div>
+</section>
+```
+
+CSS
+
+```css
+img {
+    width: 300px;
+    height: 200px;
+}
+
+div {
+    width: 300px;
+    height: 200px;
+    background: url('https://tutorialzine.com/media/2016/08/bicycle.jpg');
+    background-position: center center;
+    background-size: cover;
+}
+
+section{
+    float: left;
+    margin: 15px;
+}
+```
+
+![1565363095065](../../.vuepress/public/1565363095065.png)
+
+background引入图片的一个缺点是页面的Web可访问性会受到轻微的影响，因为屏幕阅读器和搜索引擎无法正确地获取到图像。这个问题可以通过CSS object-fit属性解决，到目前为止除了IE浏览器其他的浏览器都可以使用object-fit(如下)。
+
+每个属性值的具体含义如下（自己理解的白话文，官方释义见官网）：
+
+- **fill**: 中文释义“填充”。默认值。替换内容拉伸填满整个content box, 不保证保持原有的比例。
+- **contain**: 中文释义“包含”。保持原有尺寸比例。保证替换内容尺寸一定可以在容器里面放得下。因此，此参数可能会在容器内留下空白。
+- **cover**: 中文释义“覆盖”。保持原有尺寸比例。保证替换内容尺寸一定大于容器尺寸，宽度和高度至少有一个和容器一致。因此，此参数可能会让替换内容（如图片）部分区域不可见。
+- **none**: 中文释义“无”。保持原有尺寸比例。同时保持替换内容原始尺寸大小。
+- **scale-down**: 中文释义“降低”。就好像依次设置了**none**或**contain**, 最终呈现的是尺寸比较小的那个。
+
+## 14.短横线命名
+
+当class或者ID包含多个单词时，应使用连字符（-），CSS不区分大小写，因此不能使用驼峰式命名。同样，CSS中也不建议使用下划线连接的命名方式。
+
+```css
+/*  正确     */
+.footer-column-left { }
+
+/*  错误  */
+.footerColumnLeft { }
+
+.footer_column_left { }
+```
+
+当涉及到命名时，您还可以考虑BEM，它遵循一组原则，提供基于组件并增加一致性的开发方法。
+
+## 15.不要重复设置
+
+大多数CSS属性的值都是从DOM树中向上一级的元素继承的，因此才被命名为级联样式表。以font属性为例-它总是从父级继承的，您不必为页面上的每个元素都单独设置。
+
+只需将要设置的字体样式添加到html或body元素中，然后让它们自动向下继承。
+
+```css
+html {
+    font: normal 16px/1.4 sans-serif;
+}
+```
+
+然后我们就可以统一的一次改变页面上所有的文字样式了。当然，CSS中并不是所有的属性都是可继承的，对于这些属性我们仍然需要在每个元素上单独设置。
+
+::: tip 附：可继承属性
+
+所有元素可继承：visibility和cursor。 
+
+内联元素可继承：[letter-spacing](https://www.baidu.com/s?wd=letter-spacing&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Ykm1m4PHwhPjf1PWczujDk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EnHDLn1bknjmsn1cdn104Pjc4rf)、[word-spacing](https://www.baidu.com/s?wd=word-spacing&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Ykm1m4PHwhPjf1PWczujDk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EnHDLn1bknjmsn1cdn104Pjc4rf)、[white-space](https://www.baidu.com/s?wd=white-space&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Ykm1m4PHwhPjf1PWczujDk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EnHDLn1bknjmsn1cdn104Pjc4rf)、[line-height](https://www.baidu.com/s?wd=line-height&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Ykm1m4PHwhPjf1PWczujDk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EnHDLn1bknjmsn1cdn104Pjc4rf)、color、font、[font-family](https://www.baidu.com/s?wd=font-family&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Ykm1m4PHwhPjf1PWczujDk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EnHDLn1bknjmsn1cdn104Pjc4rf)、font-size、font-style、font-variant、[font-weight](https://www.baidu.com/s?wd=font-weight&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Ykm1m4PHwhPjf1PWczujDk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EnHDLn1bknjmsn1cdn104Pjc4rf)、[text-decoration](https://www.baidu.com/s?wd=text-decoration&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Ykm1m4PHwhPjf1PWczujDk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EnHDLn1bknjmsn1cdn104Pjc4rf)、text-transform、direction。 
+
+终端块状元素可继承：text-indent和text-align。 
+
+列表元素可继承：list-style、list-style-type、list-style-position、list-style-image。  
+
+:::
