@@ -29,7 +29,7 @@ module.exports = {
             {
               title: 'JS',
               children: [
-                ['/font/JS/apply、call与bind','apply、call与bind'], // 以docs为根目录来查找文件 
+                ['/font/JS/this、new、apply、call与bind','this、new、apply、call与bind'], // 以docs为根目录来查找文件 
                 ['/font/JS/JS单线程、异步、同步','JS单线程、异步、同步'], // 以docs为根目录来查找文件 
                 ['/font/JS/常用正则表达式备忘录','常用正则表达式备忘录'], // 以docs为根目录来查找文件 
                 ['/font/JS/Object.defineProperty与Proxy理解整理','Object.defineProperty与Proxy理解整理'], // 以docs为根目录来查找文件 
@@ -97,6 +97,7 @@ module.exports = {
                 ['/font/CSS/CSS技巧','CSS技巧'],
                 ['/font/CSS/BFC与清除浮动','BFC与清除浮动'],
                 ['/font/CSS/z-index','z-index'],
+                ['/font/CSS/CSS零散知识整理','CSS零散知识整理'],
               ]
             },{
               title: 'vue',

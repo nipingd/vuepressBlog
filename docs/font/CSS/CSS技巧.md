@@ -556,3 +556,65 @@ html {
 列表元素可继承：list-style、list-style-type、list-style-position、list-style-image。  
 
 :::
+
+## 16.使用transform属性来创建动画
+
+最好使用transform()函数来创建元素的位移或大小动画，尽量不要直接改变元素的width，height以及left/top/bottom/right属性值。
+
+下面的例子中，我们给.ball元素添加了一个从左向右的移动动画。推荐使用transform: translateX()函数来代替left属性。
+
+```css
+.ball {
+    left: 50px;
+    transition: 0.4s ease-out;
+}
+
+/* 不建议 */
+.ball.slide-out {
+    left: 500px;
+}
+
+/* 建议 */
+.ball.slide-out {
+    transform: translateX(450px);
+}
+```
+
+transform以及它的所有函数（translate, rotate, scale等）几乎没有浏览器兼容性问题，可以随意使用。
+
+## 17.使用text-transform转换字母为大写
+
+> 本条适用于英文环境，不适合中文
+
+在HTML中，可以将某个单词全部写为大写字母来表达强调的含义。比如：
+
+```html
+<h3>Employees MUST wear a helmet!</h3>
+```
+
+如果你需要将某段文字全部转化为大写，我们可以在HTML中正常书写，然后通过CSS来转化。这样可以保持上下文内容的一致性。
+
+```html
+<div class="movie-poster">Star Wars: The Force Awakens</div>
+```
+
+
+
+```css
+.movie-poster {
+    text-transform: uppercase;
+}
+```
+
+## 18.em, rem与px
+
+设置元素与文本的大小应该用哪种单位，em，rem，还是px？一直以来都有很多的争论。事实是，这三种选择都是可行的，都有其利弊。
+
+在什么时候在什么项目使用哪种单位是没有一个定论的，开发人员的习惯不同，项目的要求不同，都可能会使用不同的单位。然而，虽然没有固定的规则，但是每种单位还是有一些要注意的地方的：
+
+- em - **设置元素为1em，其大小与父元素的font-size属性有关**。这个单位用于媒体查询中，特别适用于响应式开发，但是由于em单位在每一级中都是相对于父元素进行计算的，所以要得出某个子元素em单位对应的px值，有时候是很麻烦的。
+- rem - **相对于html元素的font-size大小计算**，rem使得统一改变页面上的所有标题和段落文本大小变得非常容易。
+- px - **像素单位是最精确的，但是不适用于自适应的设计**。px单位是可靠的，并且易于理解，我们可以精细的控制元素的大小和移动到1px。
+
+最重要的是，不要害怕尝试，尝试所有方法，看看最适合什么。有时候，em和rem可以节省很多工作，尤其是在构建响应式页面时。
+
