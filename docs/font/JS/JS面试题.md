@@ -348,7 +348,7 @@ getFooX(); // 90
 
 下面的转载自：http://www.codeceo.com/article/25-essential-javascript-interview-questions.html
 
-## 9.下面的代码将输出什么到控制台，为什么？
+## 9.:star:下面的代码将输出什么到控制台，为什么？
 
 ```js
 (function(){
@@ -423,7 +423,7 @@ inner func:  self.foo = bar
 
 这种技术的另一个特点是，允许一个易于引用的（假设更短的）别名用于全局变量。
 
-## 12.在JavaScript源文件的开头包含 `use strict` 有什么意义和好处？
+## 12.:star:在JavaScript源文件的开头包含 `use strict` 有什么意义和好处？
 
 对于这个问题，既简要又最重要的答案是，`use strict` 是一种在**JavaScript代码运行时自动实行更严格解析和错误处理**的方法。那些被忽略或默默失败了的代码错误，会产生错误或抛出异常。通常而言，这是一个很好的做法。
 
@@ -550,7 +550,7 @@ function isInteger(x) { return parseInt(x, 10) === x; }
 false
 ```
 
-## 16.写一个简单的函数（少于80个字符），要求返回一个布尔值指明字符串是否为回文结构。
+## 16.:star:写一个简单的函数（少于80个字符），要求返回一个布尔值指明字符串是否为回文结构。
 
 下面这个函数在 `str` 是回文结构的时候返回true，否则，返回false。
 
@@ -569,7 +569,7 @@ console.log(isPalindrome("levels"));                  // logs 'false'
 console.log(isPalindrome("A car, a man, a maraca"));  // logs 'true'
 ```
 
-## 17.写一个 `sum`方法，在使用下面任一语法调用时，都可以正常工作。
+## 17.:star:写一个 `sum`方法，在使用下面任一语法调用时，都可以正常工作。
 
 ```js
 console.log(sum(2,3));   // Outputs 5
@@ -610,7 +610,7 @@ function sum(x, y) {
 
 :smile:**当调用一个函数的时候，JavaScript不要求参数的数目匹配函数定义中的参数数量。如果传递的参数数量大于函数定义中参数数量，那么多余参数将简单地被忽略。另一方面，如果传递的参数数量小于函数定义中的参数数量，那么缺少的参数在函数中被引用时将会给一个 `undefined`值。**所以，在上面的例子中，简单地检查第2个参数是否未定义，就可以相应地确定函数被调用以及进行的方式。
 
-## 18.请看下面的代码片段：
+## 18.:star:请看下面的代码片段：
 
 ```js
 for (var i = 0; i < 5; i++) {
@@ -662,7 +662,7 @@ for (var i = 0; i < 5; i++) {
 });
 ```
 
-## 19.下面的代码将输出什么到控制台，为什么？
+## 19.:star:下面的代码将输出什么到控制台，为什么？
 
 ```js
 var arr1 = "john".split('');
@@ -691,7 +691,7 @@ console.log("array 2: length=" + arr2.length + " last=" + arr2.slice(-1));
 
 和Python一样，JavaScript标榜数组方法调用中的负数下标，例如 `slice()` 可作为引用数组末尾元素的方法：例如，**-1下标表示数组中的最后一个元素，等等。**
 
-## 20.下面的代码将输出什么到控制台，为什么？
+## 20.:star:下面的代码将输出什么到控制台，为什么？
 
 ```js
 console.log(1 +  "2" + "2");
@@ -823,7 +823,7 @@ for (var i = 0; i < 5; i++) {
 
 这就会按预期输出0，1，2，3，和4到控制台。
 
-## 24.以下代码行将输出什么到控制台？
+## 24.:star:以下代码行将输出什么到控制台？
 
 ```js
 console.log("0 || 1 = "+(0 || 1));
@@ -929,7 +929,7 @@ function Traverse(p_element,p_callback) {
 
 来源：掘金著作权归作者所有。
 
-## 28. new的实现原理是什么？
+## 28. :star:new的实现原理是什么？
 
 ::: tip `new` 的实现原理:
 
@@ -958,7 +958,7 @@ function _new() {
 }
 ```
 
-## 29. 如何正确判断this的指向？
+## 29. :star:如何正确判断this的指向？
 
 如果用一句话说明 this 的指向，那么即是: 谁调用它，this 就指向谁。
 
@@ -1093,7 +1093,7 @@ let info2 = obj.info.call(person);
 info2(); //28
 ```
 
-## 30.实现一个深拷贝
+## 30.:star:实现一个深拷贝
 
 #### 深拷贝实现
 
@@ -1142,3 +1142,1085 @@ function deepClone(obj, hash = new WeakMap()) { //递归拷贝
 }
 ```
 
+## 31. :star:call/apply/bind 的实现原理是什么？
+
+call 和 apply 的功能相同，都是改变 `this` 的执行，并立即执行函数。区别在于传参方式不同。
+
+- `func.call(thisArg, arg1, arg2, ...)`：第一个参数是 `this` 指向的对象，其它参数依次传入。
+- `func.apply(thisArg, [argsArray])`：第一个参数是 `this` 指向的对象，第二个参数是数组或类数组。
+
+一起思考一下，如何模拟实现 `call` ？
+
+首先，我们知道，函数都可以调用 `call`，说明 `call` 是函数原型上的方法，所有的实例都可以调用。即: `Function.prototype.call`。
+
+- 在 `call` 方法中获取调用`call()`函数
+- 如果第一个参数没有传入，那么默认指向 `window / global`(非严格模式)
+- 传入 `call` 的第一个参数是 this 指向的对象，根据隐式绑定的规则，我们知道 `obj.foo()`, `foo()`中的 `this` 指向 `obj`;因此我们可以这样调用函数 `thisArgs.func(...args)`
+- 返回执行结果
+
+```js
+Function.prototype.call = function() {
+    let [thisArg, ...args] = [...arguments];
+    if (!thisArg) {
+        //context为null或者是undefined
+        thisArg = typeof window === 'undefined' ? global : window;
+    }
+    //this的指向的是当前函数 func (func.call)
+    thisArg.func = this;
+    //执行函数
+    let result = thisArg.func(...args);
+    delete thisArg.func; //thisArg上并没有 func 属性，因此需要移除
+    return result;
+}
+```
+
+bind 的实现思路和 `call` 一致，仅参数处理略有差别。如下：
+
+```js
+Function.prototype.apply = function(thisArg, rest) {
+    let result; //函数返回结果
+    if (!thisArg) {
+        //context为null或者是undefined
+        thisArg = typeof window === 'undefined' ? global : window;
+    }
+    //this的指向的是当前函数 func (func.call)
+    thisArg.func = this;
+    if(!rest) {
+        //第二个参数为 null / undefined 
+        result = thisArg.func();
+    }else {
+        result = thisArg.func(...rest);
+    }
+    delete thisArg.func; //thisArg上并没有 func 属性，因此需要移除
+    return result;
+}
+```
+
+![1565509645457](../../.vuepress/public/1565509645457.png)
+
+图来自：https://www.imooc.com/read/38/article/477
+
+## 32.:star: 如何让 (a == 1 && a == 2 && a == 3) 的值为true？
+
+> 1. 利用隐式类型转换
+
+`==` 操作符在左右数据类型不一致时，会先进行隐式转换。
+
+`a == 1 && a == 2 && a == 3` 的值意味着其不可能是基本数据类型。因为如果 a 是 null 或者是 undefined bool类型，都不可能返回true。
+
+因此可以推测 a 是复杂数据类型，JS 中复杂数据类型只有 `object`，回忆一下，Object 转换为原始类型会调用什么方法？
+
+- 如果部署了 `[Symbol.toPrimitive]` 接口，那么调用此接口，若返回的不是基本数据类型，抛出错误。
+- 如果没有部署 `[Symbol.toPrimitive]` 接口，那么根据要转换的类型，先调用 `valueOf` / `toString`
+  1. 非Date类型对象，`hint` 是 `default` 时，调用顺序为：`valueOf` >>> `toString`，即`valueOf`返回的不是基本数据类型，才会继续调用 `valueOf`，如果`toString` 返回的还不是基本数据类型，那么抛出错误。
+  2. 如果 `hint` 是 `string`(Date对象的hint默认是string) ，调用顺序为：`toString` >>> `valueOf`，即`toString` 返回的不是基本数据类型，才会继续调用 `valueOf`，如果`valueOf` 返回的还不是基本数据类型，那么抛出错误。
+  3. 如果 `hint` 是 `number`，调用顺序为： `valueOf` >>> `toString`
+
+```js
+//部署 [Symbol.toPrimitive] / valueOf/ toString 皆可
+//一次返回1，2，3 即可。
+let a = {
+    [Symbol.toPrimitive]: (function(hint) {
+            let i = 1;
+            //闭包的特性之一：i 不会被回收
+            return function() {
+                return i++;
+            }
+    })()
+}
+```
+
+> 1. 利用数据劫持(Proxy/Object.definedProperty)
+
+```js
+let i = 1;
+let a = new Proxy({}, {
+    i: 1,
+    get: function () {
+        return () => this.i++;
+    }
+});
+```
+
+> 1. 数组的 `toString` 接口默认调用数组的 `join` 方法，重新 `join` 方法
+
+```js
+let a = [1, 2, 3];
+a.join = a.shift;
+```
+
+## 33. :star:ES5有几种方式可以实现继承？分别有哪些优缺点？
+
+ES5 有 6 种方式可以实现继承，分别为：
+
+##### 1. 原型链继承
+
+原型链继承的基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法。
+
+```js
+function SuperType() {
+    this.name = 'Yvette';
+    this.colors = ['pink', 'blue', 'green'];
+}
+SuperType.prototype.getName = function () {
+    return this.name;
+}
+function SubType() {
+    this.age = 22;
+}
+SubType.prototype = new SuperType();
+SubType.prototype.getAge = function() {
+    return this.age;
+}
+SubType.prototype.constructor = SubType;
+let instance1 = new SubType();
+instance1.colors.push('yellow');
+console.log(instance1.getName()); //'Yvette'
+console.log(instance1.colors);//[ 'pink', 'blue', 'green', 'yellow' ]
+
+let instance2 = new SubType();
+console.log(instance2.colors);//[ 'pink', 'blue', 'green', 'yellow' ]
+```
+
+> 缺点：
+
+1. 通过原型来实现继承时，原型会变成另一个类型的实例，原先的实例属性变成了现在的原型属性，该原型的引用类型属性会被所有的实例共享。
+2. 在创建子类型的实例时，没有办法在不影响所有对象实例的情况下给超类型的构造函数中传递参数。
+
+##### 2. 借用构造函数
+
+**借用构造函数**的技术，其基本思想为:
+
+在子类型的构造函数中调用超类型构造函数。
+
+```js
+function SuperType(name) {
+    this.name = name;
+    this.colors = ['pink', 'blue', 'green'];
+}
+function SubType(name) {
+    SuperType.call(this, name);
+}
+let instance1 = new SubType('Yvette');
+instance1.colors.push('yellow');
+console.log(instance1.colors);//['pink', 'blue', 'green', yellow]
+
+let instance2 = new SubType('Jack');
+console.log(instance2.colors); //['pink', 'blue', 'green']
+```
+
+> 优点:
+
+1. 可以向超类传递参数
+2. 解决了原型中包含引用类型值被所有实例共享的问题
+
+> 缺点:
+
+1. 方法都在构造函数中定义，函数复用无从谈起，另外超类型原型中定义的方法对于子类型而言都是不可见的。
+
+##### 3. 组合继承(原型链 + 借用构造函数)
+
+组合继承指的是将原型链和借用构造函数技术组合到一块，从而发挥二者之长的一种继承模式。基本思路：
+
+使用原型链实现对原型属性和方法的继承，通过借用构造函数来实现对实例属性的继承，既通过在原型上定义方法来实现了函数复用，又保证了每个实例都有自己的属性。
+
+```js
+function SuperType(name) {
+    this.name = name;
+    this.colors = ['pink', 'blue', 'green'];
+}
+SuperType.prototype.sayName = function () {
+    console.log(this.name);
+}
+function SuberType(name, age) {
+    SuperType.call(this, name);
+    this.age = age;
+}
+SuberType.prototype = new SuperType();
+SuberType.prototype.constructor = SuberType;
+SuberType.prototype.sayAge = function () {
+    console.log(this.age);
+}
+let instance1 = new SuberType('Yvette', 20);
+instance1.colors.push('yellow');
+console.log(instance1.colors); //[ 'pink', 'blue', 'green', 'yellow' ]
+instance1.sayName(); //Yvette
+
+let instance2 = new SuberType('Jack', 22);
+console.log(instance2.colors); //[ 'pink', 'blue', 'green' ]
+instance2.sayName();//Jack
+```
+
+> 缺点:
+
+- 无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
+
+> 优点:
+
+- 可以向超类传递参数
+- 每个实例都有自己的属性
+- 实现了函数复用
+
+##### 4. 原型式继承
+
+原型继承的基本思想：
+
+借助原型可以基于已有的对象创建新对象，同时还不必因此创建自定义类型。
+
+```js
+function object(o) {
+    function F() { }
+    F.prototype = o;
+    return new F();
+}
+```
+
+在 `object()` 函数内部，先穿甲一个临时性的构造函数，然后将传入的对象作为这个构造函数的原型，最后返回了这个临时类型的一个新实例，从本质上讲，`object()` 对传入的对象执行了一次浅拷贝。
+
+ECMAScript5通过新增 `Object.create()`方法规范了原型式继承。这个方法接收两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象(可以覆盖原型对象上的同名属性)，在传入一个参数的情况下，`Object.create()` 和 `object()` 方法的行为相同。
+
+```js
+var person = {
+    name: 'Yvette',
+    hobbies: ['reading', 'photography']
+}
+var person1 = Object.create(person);
+person1.name = 'Jack';
+person1.hobbies.push('coding');
+var person2 = Object.create(person);
+person2.name = 'Echo';
+person2.hobbies.push('running');
+console.log(person.hobbies);//[ 'reading', 'photography', 'coding', 'running' ]
+console.log(person1.hobbies);//[ 'reading', 'photography', 'coding', 'running' ]
+```
+
+在没有必要创建构造函数，仅让一个对象与另一个对象保持相似的情况下，原型式继承是可以胜任的。
+
+> 缺点:
+
+同原型链实现继承一样，包含引用类型值的属性会被所有实例共享。
+
+##### 5. 寄生式继承
+
+寄生式继承是与原型式继承紧密相关的一种思路。寄生式继承的思路与寄生构造函数和工厂模式类似，即创建一个仅用于封装继承过程的函数，该函数在内部已某种方式来增强对象，最后再像真地是它做了所有工作一样返回对象。
+
+```js
+function createAnother(original) {
+    var clone = object(original);//通过调用函数创建一个新对象
+    clone.sayHi = function () {//以某种方式增强这个对象
+        console.log('hi');
+    };
+    return clone;//返回这个对象
+}
+var person = {
+    name: 'Yvette',
+    hobbies: ['reading', 'photography']
+};
+
+var person2 = createAnother(person);
+person2.sayHi(); //hi
+```
+
+基于 `person` 返回了一个新对象 -—— `person2`，新对象不仅具有 `person` 的所有属性和方法，而且还有自己的 `sayHi()` 方法。在考虑对象而不是自定义类型和构造函数的情况下，寄生式继承也是一种有用的模式。
+
+> 缺点：
+
+- 使用寄生式继承来为对象添加函数，会由于不能做到函数复用而效率低下。
+- 同原型链实现继承一样，包含引用类型值的属性会被所有实例共享。
+
+##### 6. 寄生组合式继承
+
+所谓寄生组合式继承，即通过借用构造函数来继承属性，通过原型链的混成形式来继承方法，基本思路：
+
+不必为了指定子类型的原型而调用超类型的构造函数，我们需要的仅是超类型原型的一个副本，本质上就是使用寄生式继承来继承超类型的原型，然后再将结果指定给子类型的原型。寄生组合式继承的基本模式如下所示：
+
+```js
+function inheritPrototype(subType, superType) {
+    var prototype = object(superType.prototype); //创建对象
+    prototype.constructor = subType;//增强对象
+    subType.prototype = prototype;//指定对象
+}
+```
+
+- 第一步：创建超类型原型的一个副本
+- 第二步：为创建的副本添加 `constructor` 属性
+- 第三步：将新创建的对象赋值给子类型的原型
+
+至此，我们就可以通过调用 `inheritPrototype` 来替换为子类型原型赋值的语句：
+
+```js
+function SuperType(name) {
+    this.name = name;
+    this.colors = ['pink', 'blue', 'green'];
+}
+//...code
+function SuberType(name, age) {
+    SuperType.call(this, name);
+    this.age = age;
+}
+SuberType.prototype = new SuperType();
+inheritPrototype(SuberType, SuperType);
+//...code
+```
+
+> 优点:
+
+只调用了一次超类构造函数，效率更高。避免在`SuberType.prototype`上面创建不必要的、多余的属性，与其同时，原型链还能保持不变。
+
+因此寄生组合继承是引用类型最理性的继承范式。
+
+## 34.:star: 隐藏页面中的某个元素的方法有哪些？
+
+> 隐藏类型
+
+屏幕并不是唯一的输出机制，比如说屏幕上看不见的元素（隐藏的元素），其中一些依然能够被读屏软件阅读出来（因为读屏软件依赖于可访问性树来阐述）。为了消除它们之间的歧义，我们将其归为三大类：
+
+- 完全隐藏：元素从渲染树中消失，不占据空间。
+- 视觉上的隐藏：屏幕中不可见，占据空间。
+- 语义上的隐藏：读屏软件不可读，但正常占据空。
+
+> 完全隐藏
+
+##### 1.`display` 属性
+
+```css
+display: none;
+```
+
+##### 2.hidden 属性
+
+HTML5 新增属性，相当于 `display: none`
+
+```html
+<div hidden>
+</div>
+```
+
+> 视觉上的隐藏
+
+##### 1.利用 `position` 和 盒模型 将元素移出可视区范围
+
+1. 设置 `posoition` 为 `absolute` 或 `fixed`，�通过设置 `top`、`left` 等值，将其移出可视区域。
+
+```css
+position:absolute;
+left: -99999px;
+```
+
+1. 设置 `position` 为 `relative`，通过设置 `top`、`left` 等值，将其移出可视区域。
+
+```css
+position: relative;
+left: -99999px;
+height: 0
+```
+
+1. 设置 margin 值，将其移出可视区域范围（可视区域占位）。
+
+```css
+margin-left: -99999px;
+height: 0;
+```
+
+##### 2.利用 transfrom
+
+1. 缩放
+
+```css
+transform: scale(0);
+height: 0;
+```
+
+1. 移动 `translateX`, `translateY`
+
+```css
+transform: translateX(-99999px);
+height: 0
+```
+
+1. 旋转 `rotate`
+
+```css
+transform: rotateY(90deg);
+```
+
+##### 3.设置其大小为0
+
+1. 宽高为0，字体大小为0：
+
+```css
+height: 0;
+width: 0;
+font-size: 0;
+```
+
+1. 宽高为0，超出隐藏:
+
+```css
+height: 0;
+width: 0;
+overflow: hidden;
+```
+
+##### 4.设置透明度为0
+
+```css
+opacity: 0;
+```
+
+##### 5.`visibility`属性
+
+```css
+visibility: hidden;
+```
+
+##### 6.层级覆盖，`z-index` 属性
+
+```css
+position: relative;
+z-index: -999;
+```
+
+再设置一个层级较高的元素覆盖在此元素上。
+
+##### 7.clip-path 裁剪
+
+```css
+clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+```
+
+> 语义上的隐藏
+
+##### aria-hidden 属性
+
+读屏软件不可读，占据空间，可见。
+
+```css
+<div aria-hidden="true">
+</div>
+```
+
+### 35.:star: let、const、var 的区别有哪些？
+
+| 声明方式 | 变量提升 | 暂时性死区 | 重复声明 | 块作用域有效 | 初始值 | 重新赋值 |
+| -------- | -------- | ---------- | -------- | ------------ | ------ | -------- |
+| var      | 会       | 不存在     | 允许     | 不是         | 非必须 | 允许     |
+| let      | 不会     | 存在       | 不允许   | 是           | 非必须 | 允许     |
+| const    | 不会     | 存在       | 不允许   | 是           | 必须   | 不允许   |
+
+1.let/const 定义的变量不会出现变量提升，而 var 定义的变量会提升。
+
+2.相同作用域中，let 和 const 不允许重复声明，var 允许重复声明。
+
+3.const 声明变量时必须设置初始值
+
+4.const 声明一个只读的常量，这个常量不可改变。
+
+这里有一个非常重要的点即是：在JS中，复杂数据类型，存储在栈中的是堆内存的地址，存在栈中的这个地址是不变的，但是存在堆中的值是可以变得。有没有相当常量指针/指针常量~
+
+```js
+const a = 20;
+const b = {
+    age: 18,
+    star: 500
+}
+```
+
+一图胜万言，如下图所示，不变的是栈内存中 a 存储的 20，和 b 中存储的 0x0012ff21（瞎编的一个数字）。而 {age: 18, star: 200} 是可变的。
+
+![1565513112530](../../.vuepress/public/1565513112530.png)
+
+### 36. :star:说一说你对JS执行上下文栈和作用域链的理解？
+
+在开始说明JS上下文栈和作用域之前，我们先说明下JS上下文以及作用域的概念。
+
+#### [JS执行上下文](https://tc39.github.io/ecma262/?nsukey=rQHqMrFpKq6JJN%2F%2FOeubPCslaSTSRyuc%2FXCznnIDze1SGzwva5SZtzixJ13p2gAlxua95Xa7fraZXwj5tyLRDK33%2BpNhyfKR%2FxyzhWNyB%2FqaIlsDGyQBckNoHQGPveOB24M%2BcK%2FgF8Tg1ehUGLWiCvumxdgcQwZOWj2BGfD3n%2FY%3D#sec-execution-contexts)
+
+执行上下文就是当前 JavaScript 代码被解析和执行时所在环境的抽象概念， JavaScript 中运行任何的代码都是在执行上下文中运行。
+
+> 执行上下文类型分为：
+
+- 全局执行上下文
+- 函数执行上下文
+
+执行上下文创建过程中，需要做以下几件事:
+
+1. 创建变量对象：首先初始化函数的参数arguments，提升函数声明和变量声明。
+2. 创建作用域链（Scope Chain）：在执行期上下文的创建阶段，作用域链是在变量对象之后创建的。
+3. 确定this的值，即 ResolveThisBinding
+
+#### 作用域
+
+**作用域**负责收集和维护由所有声明的标识符（变量）组成的一系列查询，并实施一套非常严格的规则，确定当前执行的代码对这些标识符的访问权限。—— 摘录自《你不知道的JavaScript》(上卷)
+
+作用域有两种工作模型：词法作用域和动态作用域，JS采用的是**词法作用域**工作模型，词法作用域意味着作用域是由书写代码时变量和函数声明的位置决定的。(`with` 和 `eval` 能够修改词法作用域，但是不推荐使用，对此不做特别说明)
+
+> 作用域分为：
+
+- 全局作用域
+- 函数作用域
+- 块级作用域
+
+#### JS执行上下文栈(后面简称执行栈)
+
+执行栈，也叫做调用栈，具有 **LIFO** (后进先出) 结构，用于存储在代码执行期间创建的所有执行上下文。
+
+> 规则如下：
+
+- 首次运行JavaScript代码的时候,会创建一个全局执行的上下文并Push到当前的执行栈中，每当发生函数调用，引擎都会为该函数创建一个新的函数执行上下文并Push当前执行栈的栈顶。
+- 当栈顶的函数运行完成后，其对应的函数执行上下文将会从执行栈中Pop出，上下文的控制权将移动到当前执行栈的下一个执行上下文。
+
+以一段代码具体说明：
+
+```js
+function fun3() {
+    console.log('fun3')
+}
+
+function fun2() {
+    fun3();
+}
+
+function fun1() {
+    fun2();
+}
+
+fun1();
+```
+
+`Global Execution Context` (即全局执行上下文)首先入栈，过程如下：
+
+![1565514922756](../../.vuepress/public/1565514922756.png)
+
+#### 作用域链
+
+作用域链就是从当前作用域开始一层一层向上寻找某个变量，直到找到全局作用域还是没找到，就宣布放弃。这种一层一层的关系，就是作用域链。
+
+如：
+
+```js
+var a = 10;
+function fn1() {
+    var b = 20;
+    console.log(fn2)
+    function fn2() {
+        a = 20
+    }
+    return fn2;
+}
+fn1()();
+```
+
+fn2作用域链 = [fn2作用域, fn1作用域，全局作用域]
+
+![1565514961365](../../.vuepress/public/1565514961365.png)
+
+### 13. 防抖函数的作用是什么？请实现一个防抖函数
+
+> 防抖函数的作用
+
+防抖函数的作用就是控制函数在一定时间内的执行次数。防抖意味着N秒内函数只会被执行一次，如果N秒内再次被触发，则**重新**计算延迟时间。
+
+**举例说明：** 小思最近在减肥，但是她非常吃吃零食。为此，与其男朋友约定好，如果10天不吃零食，就可以购买一个包(不要问为什么是包，因为**包治百病**)。但是如果中间吃了一次零食，那么就要重新计算时间，直到小思坚持10天没有吃零食，才能购买一个包。所以，管不住嘴的小思，没有机会买包(悲伤的故事)... 这就是 **防抖**。
+
+> 防抖函数实现
+
+1. 事件第一次触发时，`timer` 是 `null`，调用 `later()`，若 `immediate` 为`true`，那么立即调用 `func.apply(this, params)`；如果 `immediate` 为 `false`，那么过 `wait` 之后，调用 `func.apply(this, params)`
+2. 事件第二次触发时，如果 `timer` 已经重置为 `null`(即 `setTimeout` 的倒计时结束)，那么流程与第一次触发时一样，若 `timer` 不为 `null`(即 setTimeout 的倒计时未结束)，那么清空定时器，重新开始计时。
+
+```
+function debounce(func, wait, immediate = true) {
+    let timeout, result;
+    // 延迟执行函数
+    const later = (context, args) => setTimeout(() => {
+        timeout = null;// 倒计时结束
+        if (!immediate) {
+            //执行回调
+            result = func.apply(context, args);
+            context = args = null;
+        }
+    }, wait);
+    let debounced = function (...params) {
+        if (!timeout) {
+            timeout = later(this, params);
+            if (immediate) {
+                //立即执行
+                result = func.apply(this, params);
+            }
+        } else {
+            clearTimeout(timeout);
+            //函数在每个等待时延的结束被调用
+            timeout = later(this, params);
+        }
+        return result;
+    }
+    //提供在外部清空定时器的方法
+    debounced.cancel = function () {
+        clearTimeout(timer);
+        timer = null;
+    };
+    return debounced;
+};
+```
+
+`immediate` 为 true 时，表示函数在每个等待时延的开始被调用。`immediate` 为 false 时，表示函数在每个等待时延的结束被调用。
+
+> 防抖的应用场景
+
+1. 搜索框输入查询，如果用户一直在输入中，没有必要不停地调用去请求服务端接口，等用户停止输入的时候，再调用，设置一个合适的时间间隔，有效减轻服务端压力。
+2. 表单验证
+3. 按钮提交事件。
+4. 浏览器窗口缩放，resize事件(如窗口停止改变大小之后重新计算布局)等。
+
+### 37. :star:节流函数的作用是什么？有哪些应用场景，请实现一个节流函数
+
+> 节流函数的作用
+
+节流函数的作用是规定一个单位时间，在这个单位时间内最多只能触发一次函数执行，如果这个单位时间内多次触发函数，只能有一次生效。
+
+> 节流函数实现
+
+```js
+function throttle(func, wait, options = {}) {
+    var timeout, context, args, result;
+    var previous = 0;
+    var later = function () {
+        previous = options.leading === false ? 0 : (Date.now() || new Date().getTime());
+        timeout = null;
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
+    };
+
+    var throttled = function () {
+        var now = Date.now() || new Date().getTime();
+        if (!previous && options.leading === false) previous = now;
+        //remaining 为距离下次执行 func 的时间
+        //remaining > wait，表示客户端系统时间被调整过
+        var remaining = wait - (now - previous);
+        context = this;
+        args = arguments;
+        //remaining 小于等于0，表示事件触发的间隔时间大于设置的 wait
+        if (remaining <= 0 || remaining > wait) {
+            if (timeout) {
+                //清空定时器
+                clearTimeout(timeout);
+                timeout = null;
+            }
+            //重置 previous
+            previous = now;
+            //执行函数
+            result = func.apply(context, args); 
+            if (!timeout) context = args = null;
+        } else if (!timeout && options.trailing !== false) {
+            timeout = setTimeout(later, remaining);
+        }
+        return result;
+    };
+
+    throttled.cancel = function () {
+        clearTimeout(timeout);
+        previous = 0;
+        timeout = context = args = null;
+    };
+
+    return throttled;
+}
+```
+
+禁用第一次首先执行，传递 `{leading: false}` ；想禁用最后一次执行，传递 `{trailing: false}`
+
+> 节流的应用场景
+
+1. 按钮点击事件
+2. 拖拽事件
+3. onScoll
+4. 计算鼠标移动的距离(mousemove)
+
+## 38. 什么是闭包？闭包的作用是什么？
+
+##### 闭包的定义
+
+《JavaScript高级程序设计》:
+
+> 闭包是指有权访问另一个函数作用域中的变量的函数
+
+《JavaScript权威指南》：
+
+> 从技术的角度讲，所有的JavaScript函数都是闭包：它们都是对象，它们都关联到作用域链。
+
+《你不知道的JavaScript》
+
+> 当函数可以记住并访问所在的词法作用域时，就产生了闭包，即使函数是在当前词法作用域之外执行。
+
+##### 创建一个闭包
+
+```js
+function foo() {
+    var a = 2;
+    return function fn() {
+        console.log(a);
+    }
+}
+let func = foo();
+func(); //输出2
+```
+
+闭包使得函数可以继续访问定义时的词法作用域。拜 fn 所赐，在 foo() 执行后，foo 内部作用域不会被销毁。
+
+##### 闭包的作用
+
+1. 能够访问函数定义时所在的词法作用域(阻止其被回收)。
+2. 私有化变量
+
+```js
+function base() {
+    let x = 10; //私有变量
+    return {
+        getX: function() {
+            return x;
+        }
+    }
+}
+let obj = base();
+console.log(obj.getX()); //10
+```
+
+1. 模拟块级作用域
+
+```js
+var a = [];
+for (var i = 0; i < 10; i++) {
+    a[i] = (function(j){
+        return function () {
+            console.log(j);
+        }
+    })(i);
+}
+a[6](); // 6
+```
+
+1. 创建模块
+
+```js
+function coolModule() {
+    let name = 'Yvette';
+    let age = 20;
+    function sayName() {
+        console.log(name);
+    }
+    function sayAge() {
+        console.log(age);
+    }
+    return {
+        sayName,
+        sayAge
+    }
+}
+let info = coolModule();
+info.sayName(); //'Yvette'
+```
+
+模块模式具有两个必备的条件(来自《你不知道的JavaScript》)
+
+- 必须有外部的封闭函数，该函数必须至少被调用一次(每次调用都会创建一个新的模块实例)
+- 封闭函数必须返回至少**一个**内部函数，这样内部函数才能在私有作用域中形成闭包，并且可以访问或者修改私有的状态。
+
+## 39. 实现 Promise.all 方法
+
+在实现 Promise.all 方法之前，我们首先要知道 Promise.all 的功能和特点，因为在清楚了 Promise.all 功能和特点的情况下，我们才能进一步去写实现。
+
+> Promise.all 功能
+
+`Promise.all(iterable)` 返回一个新的 Promise 实例。此实例在 `iterable` 参数内所有的 `promise` 都 `fulfilled` 或者参数中不包含 `promise` 时，状态变成 `fulfilled`；如果参数中 `promise` 有一个失败`rejected`，此实例回调失败，失败原因的是第一个失败 `promise` 的返回结果。
+
+```js
+let p = Promise.all([p1, p2, p3]);
+```
+
+p的状态由 p1,p2,p3决定，分成以下；两种情况：
+
+（1）只有p1、p2、p3的状态都变成 `fulfilled`，p的状态才会变成 `fulfilled`，此时p1、p2、p3的返回值组成一个数组，传递给p的回调函数。
+
+（2）只要p1、p2、p3之中有一个被 `rejected`，p的状态就变成 `rejected`，此时第一个被reject的实例的返回值，会传递给p的回调函数。
+
+> Promise.all 的特点
+
+Promise.all 的返回值是一个 promise 实例
+
+- 如果传入的参数为空的可迭代对象，`Promise.all` 会 **同步** 返回一个已完成状态的 `promise`
+- 如果传入的参数中不包含任何 promise,`Promise.all` 会 **异步** 返回一个已完成状态的 `promise`
+- 其它情况下，`Promise.all` 返回一个 **处理中（pending）** 状态的 `promise`.
+
+> Promise.all 返回的 promise 的状态
+
+- 如果传入的参数中的 promise 都变成完成状态，`Promise.all` 返回的 `promise` 异步地变为完成。
+- 如果传入的参数中，有一个 `promise` 失败，`Promise.all` 异步地将失败的那个结果给失败状态的回调函数，而不管其它 `promise` 是否完成
+- 在任何情况下，`Promise.all` 返回的 `promise` 的完成状态的结果都是一个数组
+
+> Promise.all 实现
+
+```js
+Promise.all = function (promises) {
+    //promises 是可迭代对象，省略参数合法性检查
+    return new Promise((resolve, reject) => {
+        //Array.from 将可迭代对象转换成数组
+        promises = Array.from(promises);
+        if (promises.length === 0) {
+            resolve([]);
+        } else {
+            let result = [];
+            let index = 0;
+            for (let i = 0;  i < promises.length; i++ ) {
+                //考虑到 i 可能是 thenable 对象也可能是普通值
+                Promise.resolve(promises[i]).then(data => {
+                    result[i] = data;
+                    if (++index === promises.length) {
+                        //所有的 promises 状态都是 fulfilled，promise.all返回的实例才变成 fulfilled 态
+                        resolve(result);
+                    }
+                }, err => {
+                    reject(err);
+                    return;
+                });
+            }
+        }
+    });
+}
+```
+
+## 40.:star: 请实现一个 flattenDeep 函数，把嵌套的数组扁平化
+
+例如:
+
+```js
+flattenDeep([1, [2, [3, [4]], 5]]); //[1, 2, 3, 4, 5]
+```
+
+> 利用 Array.prototype.flat
+
+ES6 为数组实例新增了 `flat` 方法，用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数组没有影响。
+
+`flat` 默认只会 “拉平” 一层，如果想要 “拉平” 多层的嵌套数组，需要给 `flat` 传递一个整数，表示想要拉平的层数。
+
+```js
+function flattenDeep(arr, deepLength) {
+    return arr.flat(deepLength);
+}
+console.log(flattenDeep([1, [2, [3, [4]], 5]], 3));
+```
+
+当传递的整数大于数组嵌套的层数时，会将数组拉平为一维数组，JS能表示的最大数字为 `Math.pow(2, 53) - 1`，因此我们可以这样定义 `flattenDeep` 函数
+
+```js
+function flattenDeep(arr) {
+    //当然，大多时候我们并不会有这么多层级的嵌套
+    return arr.flat(Math.pow(2,53) - 1); 
+}
+console.log(flattenDeep([1, [2, [3, [4]], 5]]));
+```
+
+> 利用 reduce 和 concat
+
+```js
+function flattenDeep(arr){
+    return arr.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
+}
+console.log(flattenDeep([1, [2, [3, [4]], 5]]));
+```
+
+> 使用 stack 无限反嵌套多层嵌套数组
+
+```js
+function flattenDeep(input) {
+    const stack = [...input];
+    const res = [];
+    while (stack.length) {
+        // 使用 pop 从 stack 中取出并移除值
+        const next = stack.pop();
+        if (Array.isArray(next)) {
+            // 使用 push 送回内层数组中的元素，不会改动原始输入 original input
+            stack.push(...next);
+        } else {
+            res.push(next);
+        }
+    }
+    // 使用 reverse 恢复原数组的顺序
+    return res.reverse();
+}
+console.log(flattenDeep([1, [2, [3, [4]], 5]]));
+```
+
+## 41. :star:请实现一个 uniq 函数，实现数组去重
+
+例如:
+
+```js
+uniq([1, 2, 3, 5, 3, 2]);//[1, 2, 3, 5]
+```
+
+> 法1: 利用ES6新增数据类型 `Set`
+
+`Set`类似于数组，但是成员的值都是唯一的，没有重复的值。
+
+```js
+function uniq(arry) {
+    return [...new Set(arry)];
+}
+```
+
+> 法2: 利用 `indexOf`
+
+```js
+function uniq(arry) {
+    var result = [];
+    for (var i = 0; i < arry.length; i++) {
+        if (result.indexOf(arry[i]) === -1) {
+            //如 result 中没有 arry[i],则添加到数组中
+            result.push(arry[i])
+        }
+    }
+    return result;
+}
+```
+
+> 法3: 利用 `includes`
+
+```js
+function uniq(arry) {
+    var result = [];
+    for (var i = 0; i < arry.length; i++) {
+        if (!result.includes(arry[i])) {
+            //如 result 中没有 arry[i],则添加到数组中
+            result.push(arry[i])
+        }
+    }
+    return result;
+}
+```
+
+> 法4：利用 `reduce`
+
+```js
+function uniq(arry) {
+    return arry.reduce((prev, cur) => prev.includes(cur) ? prev : [...prev, cur], []);
+}
+```
+
+> 法5：利用 `Map`
+
+```js
+function uniq(arry) {
+    let map = new Map();
+    let result = new Array();
+    for (let i = 0; i < arry.length; i++) {
+        if (map.has(arry[i])) {
+            map.set(arry[i], true);
+        } else {
+            map.set(arry[i], false);
+            result.push(arry[i]);
+        }
+    }
+    return result;
+}
+```
+
+### 19. :star:可迭代对象有哪些特点
+
+ES6 规定，默认的 `Iterator` 接口部署在数据结构的 `Symbol.iterator` 属性，换个角度，也可以认为，一个数据结构只要具有 `Symbol.iterator` 属性(`Symbol.iterator` 方法对应的是遍历器生成函数，返回的是一个遍历器对象)，那么就可以其认为是可迭代的。
+
+::: tip 可迭代对象的特点
+
+- 具有 `Symbol.iterator` 属性，`Symbol.iterator()` 返回的是一个遍历器对象
+- 可以使用 `for ... of` 进行循环
+- 通过被 `Array.from` 转换为数组
+
+::: tip
+
+```js
+let arry = [1, 2, 3, 4];
+let iter = arry[Symbol.iterator]();
+console.log(iter.next()); //{ value: 1, done: false }
+console.log(iter.next()); //{ value: 2, done: false }
+console.log(iter.next()); //{ value: 3, done: false }
+```
+
+::: tip 原生具有 `Iterator` 接口的数据结构：
+
+- Array
+- Map
+- Set
+- String
+- TypedArray
+- 函数的 arguments 对象
+- NodeList 对象
+
+:::
+
+### 20.:star: JSONP 的原理是什么？
+
+尽管浏览器有同源策略，但是 `<script>` 标签的 `src` 属性不会被同源策略所约束，可以获取任意服务器上的脚本并执行。`jsonp` 通过插入 `script` 标签的方式来实现跨域，参数只能通过 `url` 传入，仅能支持 `get` 请求。
+
+::: tip 实现原理:
+
+- Step1: 创建 callback 方法
+- Step2: 插入 script 标签
+- Step3: 后台接受到请求，解析前端传过去的 callback 方法，返回该方法的调用，并且数据作为参数传入该方法
+- Step4: 前端执行服务端返回的方法调用
+
+:::
+
+> jsonp源码实现
+
+```js
+function jsonp({url, params, callback}) {
+    return new Promise((resolve, reject) => {
+        //创建script标签
+        let script = document.createElement('script');
+        //将回调函数挂在 window 上
+        window[callback] = function(data) {
+            resolve(data);
+            //代码执行后，删除插入的script标签
+            document.body.removeChild(script);
+        }
+        //回调函数加在请求地址上
+        params = {...params, callback} //wb=b&callback=show
+        let arrs = [];
+        for(let key in params) {
+            arrs.push(`${key}=${params[key]}`);
+        }
+        script.src = `${url}?${arrs.join('&')}`;
+        document.body.appendChild(script);
+    });
+}
+```
+
+> 使用:
+
+```js
+function show(data) {
+    console.log(data);
+}
+jsonp({
+    url: 'http://localhost:3000/show',
+    params: {
+        //code
+    },
+    callback: 'show'
+}).then(data => {
+    console.log(data);
+});
+```
+
+> 服务端代码(node):
+
+```js
+//express启动一个后台服务
+let express = require('express');
+let app = express();
+
+app.get('/show', (req, res) => {
+    let {callback} = req.query; //获取传来的callback函数名，callback是key
+    res.send(`${callback}('Hello!')`);
+});
+app.listen(3000);
+```

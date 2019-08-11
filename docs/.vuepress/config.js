@@ -81,7 +81,7 @@ module.exports = {
               children:[
                 ['/font/浏览器网络/URL到页面呈现过程总结','URL到页面呈现过程总结'],
                 ['/font/浏览器网络/Web安全','Web安全'],
-                ['/font/浏览器网络/Cookie、Session和Web Storage','Cookie、Session和Web Storage'],
+                ['/font/浏览器网络/Cookie、Session和Web Storage、token','Cookie、Session和Web Storage、token'],
                 ['/font/浏览器网络/跨域实现','跨域实现'],
                 ['/font/浏览器网络/浏览器缓存','浏览器缓存'],
                 ['/font/浏览器网络/页面性能优化','页面性能优化'],
@@ -97,7 +97,7 @@ module.exports = {
                 ['/font/CSS/CSS技巧','CSS技巧'],
                 ['/font/CSS/BFC与清除浮动','BFC与清除浮动'],
                 ['/font/CSS/z-index','z-index'],
-                ['/font/CSS/CSS零散知识整理','CSS零散知识整理'],
+                ['/font/CSS/CSS零散知识整理','CSS零散知识整理  '],
               ]
             },{
               title: 'vue',
