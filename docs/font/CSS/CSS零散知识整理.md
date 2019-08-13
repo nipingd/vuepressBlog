@@ -1,3 +1,5 @@
+文章转载自公众号：前端下午茶，作者 SHERlocked93
+
 ## 1. 层叠上下文 (Stacking Context)
 
 **层叠上下文** (堆叠上下文, Stacking Context)，是 HTML 中一个三维的概念。在 CSS2.1 规范中，每个元素的位置是三维的，当元素发生层叠，这时它可能覆盖了其他元素或者被其他元素覆盖；排在 `z` 轴越靠上的位置，距离屏幕观察者越近。
@@ -251,4 +253,526 @@
 所以这个例子中从低到到显示的顺序：`黄->红->绿->蓝`
 
 ![1565452440142](../../.vuepress/public/1565452440142.png)
+
+
+
+以下内容：
+
+作者：幻灵尔依
+
+链接：https://juejin.im/post/5ce607a7e51d454f6f16eb3d
+
+来源：掘金著作权归作者所有。
+
+## 8.流
+
+**“流”又叫文档流，是css的一种基本定位和布局机制**。流是html的一种抽象概念，暗喻这种排列布局方式好像水流一样自然自动。“流体布局”是html默认的布局机制，如你写的html不用css，默认自上而下（块级元素如`div`）从左到右（内联元素如`span`）堆砌的布局方式。
+
+## 9.块级元素和内联元素
+
+这个大家肯定都知道。
+
+块级元素是指单独撑满一行的元素，如`div、ul、li、table、p、h1`等元素。这些元素的display值默认是`block、table、list-item`等。
+
+内联元素又叫行内元素，指只占据它对应标签的边框所包含的空间的元素，这些元素如果父元素宽度足够则并排在一行显示的，如`span、a、em、i、img、td`等。这些元素的display值默认是`inline、inline-block、inline-table、table-cell`等。
+
+实际开发中，我们经常把`display`计算值为`inline` `inline-block` `inline-table` `table-cell`的元素叫做内联元素，而把`display`计算值为`block`的元素叫做块级元素。
+
+## 10.:star:width: auto 和 height: auto
+
+`width`、`height`的默认值都是`auto`。
+
+对于块级元素，流体布局之下`width: auto`自适应撑满父元素宽度。这里的撑满并不同于`width: 100%`的固定宽度，而是像水一样能够根据`margin`不同而自适应父元素的宽度。
+
+对于内联元素，`width: auto`则呈现出包裹性，即由子元素的宽度决定。
+
+无论内联元素还是块级元素，`height: auto`都是呈现包裹性，即高度由子级元素撑开。
+
+注意父元素`height: auto`会导致子元素`height: 100%`百分比失效。
+
+css的属性非常有意思，正常流下，如果块级元素的`width`是个固定值，`margin`是`auto`，则`margin`会撑满剩下的空间；如果`margin`是固定值，`width`是`auto`，则`width`会撑满剩下的空间。这就是流体布局的根本所在。
+
+## 11.外在盒子和内在盒子
+
+外在盒子是决定元素排列方式的盒子，即决定盒子具有块级特性还是内联特性的盒子。外在盒子负责结构布局。
+
+内在盒子是决定元素内部一些属性是否生效的盒子。内在盒子负责内容显示。
+
+如 `display: inline-table;` 外在盒子就是`inline`，内在盒子就是`table`。外在盒子决定了元素要像内联元素一样并排在一排显示，内在盒子则决定了元素可以设置宽高、垂直方向的margin等属性。如下图
+
+![1565616627041](../../.vuepress/public/1565616627041.png)
+
+右侧的table和左侧的文字在一行排列（外在盒子inline的表现特征），同时有拥有自定义宽度111px（内在盒子table可以设置宽高）。
+
+## 12.:star:css权重和超越`!important`
+
+曾经有道面试题把我难住了：
+
+```css
+// 假设下面样式都作用于同一个节点元素`span`，判断下面哪个样式会生效
+body#god div.dad span.son {width: 200px;}
+body#god span#test {width: 250px;}
+```
+
+可怜当时做了三年前端的我竟然还不知道css有权重😓
+
+css选择器权重列表如下：
+
+| 权重值  | 选择器                                                       |
+| ------- | ------------------------------------------------------------ |
+| 1,0,0,0 | 内联样式：style=""                                           |
+| 0,1,0,0 | ID选择器：`#idName{...}`                                     |
+| 0,0,1,0 | 类、伪类、属性选择器：`.className{...}` / `:hover{...}` / `[type="text"] ={...}` |
+| 0,0,0,1 | 标签、伪元素选择器：`div{...}` / `:after{...}`               |
+| 0,0,0,0 | 通用选择器（*）、子选择器（>）、相邻选择器（+）、同胞选择器（~） |
+
+::: danger
+
+注意这样的比较是错误的！！！：第一个样式权重计算是`(body+div+span=3) + (#god+.dad+.son=120) = 123`;第二个样式权重计算是`(body+span=2) + (#god+#test=200) = 202`，`202 > 123`所以最终计算结果是取`width: 250px;`。 
+
+:::
+
+中文社区坑人的文章真的是数不胜数啊，如果不是掘友`@collins是个爱哭的鼻涕虫`提出怀疑，我可能永远也不会知道这是错误的比较方式！感谢`@collins是个爱哭的鼻涕虫`！
+
+如果按照上面错误的比较方式，则十一个class选择器的权重高于一个ID选择器。但经测试并非如此：[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Fgigab%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+
+![1565702833859](../../.vuepress/public/1565702833859.png)
+
+可以看到十一个class选择器的样式并没有覆盖一个id选择器的样式，因为：
+
+> 当两个权值进行比较的时候，是从高到低逐级将等级位上的权重值（如 权值 1,0,0,0、0,1,0,0、0,0,1,0、0,0,0,1 对应--> 第一等级权重值，第二等级权重值，第三等级权重值，第四等级权重值）来进行比较的，而不是简单的 1000*个数 + 100*个数 + 10*个数 + 1*个数 的总和来进行比较的，换句话说，低等级的选择器，个数再多（只要不超过256个，因为css权重256进制，我打赌世界上没有一个样式会写256个class的）也不会越等级超过高等级的选择器的优先级的。
+
+::: tip 正确规则：
+
+1. 先从高等级进行比较，高等级相同时，再比较低等级的，以此类推；
+2. 完全相同的话，就采用 后者优先 原则；
+
+:::
+
+因此上面那道的面试题比较应该是在第二等级id选择器的比较就结束了：(#god + #test = 0,2,0,0) > (#god = 0,1,0,0)；而上图种例子中两个权重分别是：(#test = 0,1,0,0) > (.test....test10 = 0,0,11,0)，也是在第二等级id选择器的比较时就结束了。所以以后比较权重，就先比较id选择器个数，如果id一样多，再比较class选择器个数。哇，感觉这是一道专坑中文社区的面试题啊。
+
+在css中，`!important`的权重相当的高。如果出现了`!important`，则不管权重如何都取有`!important`的属性值。**但是宽高有例外情况，由于宽高会被`max-width`/`min-width`覆盖，所以`!important`会失效。**
+
+```css
+width: 100px!important;
+min-width: 200px;
+```
+
+上面代码计算之后会被引擎解析成：
+
+```css
+width: 200px;
+```
+
+## 13.:star:盒模型（盒尺寸）
+
+元素的内在盒子是由`margin box`、`border box`、`padding box`、`content box`组成的，这四个盒子由外到内构成了盒模型。
+
+IE模型： `box-sizing: border-box`  此模式下，元素的宽度计算为`border+padding+content`的宽度总和。
+
+w3c标准模型）： `box-sizing: content-box` 此模式下，元素的宽度计算为`content`的宽度。
+
+由于`content-box`在计算宽度的时候不包含`border pading`很烦人，而且又是默认值，业内一般采用以下代码重置样式：
+
+```css
+:root {
+  box-sizing: border-box;    
+}
+* {
+  box-sizing: inherit;
+}
+```
+
+## 14.内联盒模型
+
+内联元素是指外在盒子是内联盒子的元素。从表现来说，内联元素的典型特征就是可以和文字在一行显示。文字也是内联元素。图片、按钮、输入框、下拉框等替换元素也是内联元素。内联盒模型是指内联元素包含的几个盒子，理解记忆下面的几个概念对css的深入学习极其重要。
+
+1. 内容区域：本质上是字符盒子。在浏览器中，文字选中状态的背景色就是内容区域。
+2. 内联盒子：内联盒子就是指元素的外在盒子是内联的，会和其他内联盒子排成一行。
+3. 行框盒子：由内联元素组成的每一行都是一个行框盒子。如果一行里面没有内联元素如一个空的`div`标签，则不会形成行框盒子。行框盒子由一个个内联盒子组成，如果换行，那就是两个行框盒子。比如一个包含了很多字符的换行的的`p`标签，每一行都存在一个行框盒子。值得注意的是，如果给元素设置`display: inline-block`，则创建了一个独立的行框盒子。`line-height`是作用在行框盒子上的，并最终决定高度。
+4. 包含盒子：就是包含块。多行文字组成一个包含块，一个包含块有若干个行框盒子。
+5. 幽灵空白节点：内联元素的每个行框盒子前面有一个“空白节点”，这个“空白节点”不占据任何宽度，无法选中获取，但是又实实在在存在，表现就如同文本节点一样（本文中大量例子会用字母x模拟幽灵空白节点）。
+
+## 15.替换元素
+
+替换元素是指内容可以替换的元素，实际上就是`content box`可以被替换的元素。如存在`src=""`属性的`<img> <audio> <video> <iframe>`元素和可以输入文本的`<input> <select> <textarea>`元素等。
+
+所有替换元素都是内联元素，默认`display`属性是`inline`或`inline-block`（除了`input[type="hidden"]`默认`display: none;`）。
+
+**替换元素有自己默认的样式**、尺寸（根据浏览器不同而不同），而且其`vertical-align`属性默认是`bottom`（非替换元素默认值是`baseline`）。
+
+## 16.:star:盒模型四大金刚
+
+### content
+
+对于非替换元素如`div`,其`content`就是div内部的元素。 而对于替换元素，其`content`就是可替换部分的内容。
+
+CSS中的`content`属性主要用于伪元素`:before/:after`中，除了做字体库或少写个div，对于一般开发来说并无卵用。
+
+### padding
+
+`padding`是四大金刚中最稳定的了，少见有什么异常。尽管如此还是有些需要注意的地方：
+
+1. 大部分情况下我们会将元素重置为`box-sizing: border-box`，宽高的计算是包含了`padding`的，给人一种`padding`也是`content box`一部分的感觉，好像`line-height`属性也作用于`padding`上。但实际上，:smile:**元素真正的内容的宽高只是`content box`的宽高**，而`line-height`属性是不作用于`padding`的。
+
+   ![1565703599600](../../.vuepress/public/1565703599600.png)
+
+2. `padding`不可为负值，但是可以为百分比值。为百分比时水平和垂直方向的`padding`都是相对于父级元素宽度计算的。将一个`div`设为`padding: 100%`就能得到一个正方形，`padding: 10% 50%`可以得到一个宽高比 5:1 的矩形。
+
+   ```css
+   body {
+     width: 400px;
+   }
+   .box {
+     padding: 10% 50%;
+   }
+   ```
+
+   ![1565704099633](../../.vuepress/public/1565704099633.png)
+
+3. `padding`配合`background-clip`属性，可以制作一些特殊形状：
+
+```css
+/*三道杠*/
+.icon1 {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 12px;
+  height: 10px;
+  padding: 2px 0;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  background: currentColor; /*注意如果此处背景颜色属性用缩写的话，需要放到其他背景属性的前面，否则会覆盖前面的属性值（此处为background-clip）为默认值*/
+  background-clip: content-box;
+}
+/*双层圆点*/
+.icon2 {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  padding: 2px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background-color: currentColor;
+  background-clip: content-box;
+}
+
+```
+
+
+预览如下：（:ox:**currentColor是css中为数不多的变量，指当前文字的颜色值，非常好用**）（孤陋寡闻）
+
+![1565704141816](../../.vuepress/public/1565704141816.png)
+
+### margin
+
+1. 作为外边距，`margin`属性并不会参与盒子宽度的计算，但通过设置`margin`为负值，却能改变元素水平方向的尺寸：
+
+```css
+<div>asdf</div>
+<style>
+  div {
+    margin: 0 -100px;
+  }
+</style>
+```
+
+此时`div`元素的宽度是比父级元素的宽度大`200px`的。但是这种情况只会发生在元素是流布局的时候，即元素`width`是默认的`auto`并且可以撑满一行的时候。如果元素设定了宽度，或者元素设置了`float: left` / `position: absolute`这样的属性改变了流体布局，那么`margin`为负也无法改变元素的宽度了。
+
+1. 块级元素的垂直方向会发生`margin`合并，存在以下三种场景：
+
+::: tip 场景
+
+- 相邻兄弟元素之间`margin`合并；
+- 父元素`margin-top`和子元素`margin-top`，父元素`margin-bottom`和子元素`margin-bottom`；
+- 空块级元素自身的`margin-top`和`margin-botom`合并，例子如下。
+
+:::
+
+要阻止`margin`合并，可以：1. 把元素放到`bfc`中；2. 设置`border`或`padding`阻隔`margin`；3.  用内联元素（如文字）阻隔；4. 给父元素设定高度。
+
+2. `margin`的百分比值跟`padding`一样，垂直方向的`margin`和水平方向上的一样都是相对于父元素宽度计算的。
+
+```css
+<div class="box">
+  <div></div>
+</div>
+<style>
+  .box{
+    overflow: hidden;
+    background-color: lightblue;
+  }
+  .box > div{
+    margin: 50%;
+  }
+</style>
+```
+
+此时 .box 是一个宽高比 2:1 的矩形，因为空块级元素自身的垂直方向的`margin`发生了合并。
+
+这里父元素设置`overflow: hidden`是利用 `bfc` 的特性阻止子元素的`margin`和父元素合并，换成其他 `bfc` 特性或者设置 `1px` 的 `border` / `padding`都是可以达到效果的。
+
+3. `margin: auto`能在块级元素设定宽高之后自动填充剩余宽高。`margin: auto`自动填充触发的前提条件是元素在对应的水平或垂直方向具有自动填充特性，显然默认情况下块级元素的高度是不具备这个条件的。典型应用是块级元素水平局中的实现：
+
+```css
+display: block;
+width: 200px;
+margin: 0 auto;
+```
+
+`auto`的特性是，如果两侧都是`auto`，则两侧均分剩余宽度；如果一侧`margin`是固定的，另一侧是`auto`，则这一侧`auto`为剩余宽度。栗子：
+
+
+![1565705327169](../../.vuepress/public/1565705327169.png)
+
+这个特性鲜为人知，且很实用。
+
+**除了水平方向，垂直方向的`margin`也能实现垂直居中，但是需要元素在垂直方向具有自动填充特性，而这个特性可以利用`position`实现：**
+
+```css
+position: absolute;
+left: 0; right: 0; top: 0; bottom: 0;
+width: 200px;
+height: 200px;
+margin: auto;
+```
+
+### border
+
+`border`主要作用是做边框。`border-style`属性的值有`none/solid/dashed/dotted/double`等，基本看名字就能猜出什么来了:
+
+![1565705630512](../../.vuepress/public/1565705630512.png)
+
+`border-width`属性的默认值是`3px`，是为了照顾小弟`border-style: double`，你懂的。值得注意的是，`border-color`默认是跟随字体的颜色，相当于默认设置了`border-color: currentColor`一样。
+
+`border`另一广受欢迎的功能就是图形构建，特别是做应用广泛的三角形，其原理可看下图的1-3：
+
+```css
+div{
+  float: left;
+  margin: 20px;
+}
+div:nth-child(1){
+  width: 20px;
+  height: 20px;
+  border: 20px solid;
+  border-color: blue red orange green;
+}
+div:nth-child(2){
+  width: 20px;
+  height: 20px;
+  border: 20px solid;
+  border-color: blue transparent transparent transparent;
+}
+div:nth-child(3){
+  border: 20px solid;
+  border-color: blue transparent transparent transparent;
+}
+div:nth-child(4){
+  border-style: solid;
+  border-width: 40px 20px;
+  border-color: blue transparent transparent transparent;
+}
+div:nth-child(5){
+  border-style: solid;
+  border-width: 40px 20px;
+  border-color: blue red transparent transparent;
+}
+```
+
+
+![1565705652445](../../.vuepress/public/1565705652445.png)
+
+其实就是将其他三个边框的颜色设置透明，并把宽高设为 0 。图中4-5两个图形，是通过调整边框宽度和颜色调整三角形的形状，把最后一个图的红色改为蓝色，则是一个直角三角形了。
+
+## 17.:star:好基友`line-height`和`vertical-align`
+
+`line-height`和`vertical-align`是控制元素垂直对齐的两大属性，也是最难理解搞懂的属性。
+
+### 字母 x 的角色
+
+在内联元素的垂直方向对齐中，基线是最为重要的概念。`line-height`定义的就是两基线之间的距离，`vertical-align`的默认值就是基线。基线的定义则是字母 x 的下边缘。
+
+css中有个概念叫`x-height`，指的是小写字母 x 的高度。`vertical-align: middle`对齐的就是基线往上1/2`x-height`高度的地方，可以理解为近似字母 x 的交叉点。
+
+css中除了`px/em/rem`等，还有个单位是`ex`。指的就是小写字母x的高度，即`x-height`。用处不大，不再介绍。
+
+### line-height
+
+- `line-height`各类属性值
+
+`normal`： 默认值`normal`其实是类型为数值的变量，根据浏览器和字体'font-family'不同而不同，一般约为 :yum:1.2 。
+
+数值和百分比：最终会被计算为带单位的值，具体计算方法就是乘以字体大小`font-size`。
+
+长度值：就是`100px`这样带单位的值。
+
+这几类值的继承特性不同：`line-height`是数值的元素的子元素继承的就是这个数值，百分比/长度值继承的都是计算后得出的带单位的值（px）。
+
+- `line-height`的作用：
+
+`line-height`属性用于设置多行元素的空间量，如多行文本的间距。
+
+**对块级元素来说，`line-height`决定了:yum:行框盒子的最小高度。**注意是行框盒子的最小高度，而不是块级元素的实际高度。（图中两个`div`行高一样，`div.one` 的背景色区域就是行框盒子的高度，而 `div.two` 的背景区域则是实际高度，其行框盒子高度和 `div.one` 是一样的。）
+
+
+![1565711161712](../../.vuepress/public/1565711161712.png)
+
+- 对于非替代的 inline 元素，它用于计算行框盒子的高度。此时内联元素的行框盒子的高度完全由`line-height`决定，不受其他任何属性的影响。
+
+![1565711177075](../../.vuepress/public/1565711177075.png)
+
+- `line-height`实现垂直居中的本质：行距
+
+行距是指一行文本和相邻文本之间的距离。:smile:行距 = `line-height` — `font-size`。行距具有上下等分的机制：意思就是文字上下的行距是一样的，各占一半，这也是`line-height`能让内联元素垂直居中的原因。下图中字母x上下行距各占一半，共同撑起了`div`。
+
+下图中和上图唯一不同之处就是多了个`display: inline-block`的`span`元素，但是此处的`span`元素并没有影响`div`元素的高度，而只是靠着`vertical-align: middle`属性将自身中心点对齐了字母x的交叉点实现垂直居中而已。`div`元素的高度仍然和上图一模一样，由字母x和行距共同撑起。此时如果删除字母x，`div`的高度不变，因为`span`元素的行框盒子前会产生幽灵空白节点，而幽灵空白节点+行高也能撑起`div`。
+
+![1565711260628](../../.vuepress/public/1565711260628.png)
+
+- 内联元素的大值特性
+
+```css
+<div class="box">
+  <span>asdf</span>
+</div>
+```
+
+样式1：此时 .box 高度是多少？
+
+```css
+.box {
+  line-height: 100px;
+  background: lightgreen;
+}
+.box span {
+  line-height: 30px;
+}
+```
+
+样式2：此时 .box 高度是多少？
+
+```css
+.box {
+  line-height: 30px;
+  background: lightgreen;
+}
+.box span {
+  line-height: 100px;
+}
+```
+
+:star:先说结论：无论内联元素的`line-height`如何设置，最终父元素的高度都是数值大的那个`line-height`决定的。
+
+样式1中，`span`元素的行框盒子前存在一个幽灵空白节点，而这个幽灵空白节点的行高是100px；样式2中，幽灵空白节点的行高是30px，但是这时span元素的行高是100px。两种情况其实一样，取大值而已。
+
+### vertical-align
+
+- `vertical-align`的属性值
+
+线类： 如`baseline（默认值）` `top` `middle` `bottom`（`baseline`使元素的基线与父元素的基线对齐，`middle`使元素的中部与父元素的基线往上`x-height`的一半对齐。`top` `bottom`使元素及其后代元素的底部与整行或整块的底部对齐。）
+
+文本类： `text-top` `text-bottom`（使元素的顶部与父元素的字体顶部对齐。）
+
+上标下标： `sub` `super`（使元素的基线与父元素的下标基线对齐。）
+
+数值： `20px` `2em` （默认值`baseline`相当于数值的 0 。使元素的基线对齐到父元素的基线之上的给定长度，数值正值是基线往上偏移，负值是往下偏移，借此可以实现元素垂直方向精确对齐。）
+
+百分比： `20%` （使元素的基线对齐到父元素的基线之上的给定百分比，该百分比是line-height属性的百分比。）
+
+- `vertical-align` 的作用前提
+
+**vertical-align属性起作用的前提必须是作用在内联元素上。** 即`display`计算值为`inline` `inline-block` `inline-table` `table-cell`的元素。所以如果元素设置了`float: left`或者`position: absolute`，则其`vertical-align`属性不能生效，因为此时元素的`display`计算值为`block`了。
+
+- 好基友`line-height`、`vertical-align`和第三者幽灵空白节点的爱恨情仇
+
+有时候会遇见下面这样高度和设置不一致的情况：
+
+![1565711453416](../../.vuepress/public/1565711453416.png)
+
+`div`的实际高度比设定的行高大了，为什么呢？
+
+内联元素的默认对齐方式是`baseline`，所以此时此时`span`元素的基线是和父元素的基线相对齐的，而此时父元素的基线在哪呢？
+
+父元素的基线其实就是行框盒子前的幽灵空白节点的基线。把幽灵空白节点具象化为字母`x`可能容易理解些：
+
+由于`div`行高是`30px`，所以字母`x`和`span`元素的高度都是`30px`。但是字母x的`font-size`较小，`span`元素的`font-size`较大，而行高一样的情况下`font-size`越大基线的位置越偏下，所以两者的基线不在同一水平线上。如下图左边部分：
+
+![1565711860550](../../.vuepress/public/1565711860550.png)
+
+由于内联元素默认基线对齐，所以字母`x`和`span`元素发生了位移以使基线对齐，导致`div`高度变大。而此时字母`x`的半行距比`span`元素的半行距大，大出的部分就是`div`的高度增加的部分。
+
+- `display: inline-block`基线的不同之处
+
+先看例子，图中`span`元素设置了`display: inline-block`和宽高，从而撑起了父元素`div`的高度，但`span`本身并无`margin`属性，那为什么底部和`div`下边缘之间会有空隙呢？[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Fmesif%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565711878443](../../.vuepress/public/1565711878443.png)
+
+这就要说到`inline-block`的不同之处了。一个设置了`display: inline-block`的元素：
+
+1. 如果元素内部没有内联元素，则该元素基线就是该元素下边缘；
+2. 如果元素设置了`overflow`为`hidden auto scroll`，则其基线就是该元素下边缘；
+3. 如果元素内部还有内联元素，则其基线就是内部最后一行内联元素的基线。
+
+知道了这点，那么再回到上面的例子：
+
+原来是第三者幽灵空白节点搞的鬼。此时`span`的行框盒子前，还存在一个幽灵空白节点。由于`span`元素默认基线对齐，所以`span`元素的基线也就是其下边缘是和幽灵空白节点的基线对齐的。从而导致幽灵空白节点基线下面的半行距撑高了`div`元素，造成空隙。如下图：
+
+![1565711915696](../../.vuepress/public/1565711915696.png)
+
+如果`span`元素中存在内联元素呢？
+
+![1565711939623](../../.vuepress/public/1565711939623.png)
+
+可以看到，此时`span`元素下边缘的空隙没了，因为此时`span`元素的基线是内部最后一行内联元素的基线。
+
+值得一提的是，由于替换元素内部不可能再有别的元素，所以其基线位置永远位于下边缘。
+
+- 解决问题
+
+间隙产生本质上是由基线对齐引发的错位造成的，源头上是`vertical-align`和`line-height`共同造成的，所以要想解决这个问题，只要直接或间接改造两个属性中的一个就行了：
+
+1. 给元素设置块状化`display: block`使`vertical-align`属性失效；
+2. 尝试不同的`vertical-align`值如`bottom/middle/top`；
+3. 直接修改`line-height`值；
+4. 如果`line-height`为相对值如`1.4`，设置`font-size: 0`间接改变`line-height`。
+
+- 弹框dialog
+
+下面是张鑫旭大佬推荐的利用`vertical-align`实现的水平垂直居中弹框，能够理解的话就说明你已经完全掌握了好基友和第三者的关系了。
+
+```css
+<div class="container">
+  <div class="dialog">自适应弹出层</div>
+</div>
+<style>
+.container{
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background-color: rgba(0, 0, 0, .15);
+  text-align: center;
+  font-size: 0;
+  white-space: nowrap;
+  overflow: auto;
+}
+.container:after{
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+.dialog{
+  display: inline-block;
+  width: 400px;
+  height: 400px;
+  vertical-align: middle;
+  text-align: left;
+  font-size: 14px;
+  white-space: normal;
+  background: white;
+}
+</style>
+```
+
 
