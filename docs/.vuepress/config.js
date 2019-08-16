@@ -21,8 +21,8 @@ module.exports = {
            {text:'github',link:'https://github.com/nipingd'}
          ]
       },
-      ],
-      sidebar:{
+    ],
+        sidebar:{
         // docs文件夹下面的font文件夹 文档中md文件 书写的位置(命名随意)
         '/font/': [
             // '/font/', // font文件夹的README.md 不是下拉框形式

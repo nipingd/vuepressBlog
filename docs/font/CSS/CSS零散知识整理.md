@@ -775,4 +775,326 @@ css中除了`px/em/rem`等，还有个单位是`ex`。指的就是小写字母x�
 </style>
 ```
 
+## 18.:star:流的破坏
+
+现在UI框架横行的年代，我们的css写的越来越少了。这对于很多老鸟来说是件好事，但是对于初入前端的小白却未必。因为写的少了，就少了很多练手和总结的机会，对于很多样式理解就不透彻。本章介绍的`float`、`position` 和`BFC`对于前端页面布局非常重要，希望诸位看官们静下心来仔细研读。
+
+### `float`属性的特性
+
+`float`属性应该是css世界最令人意外的属性了，倒不是因为他的表现，而是他的设计初衷竟然只是为了实现“文字环绕图片”的效果。只不过因为`float`属性的一些特性，才导致其被到处使用以致于产生了诸多不利于维护的页面。 
+
+::: tip 下面看看`float`属性的特性：
+
+1. 包裹性：即此时元素`width`会像`height`一样由子元素决定，而不是默认撑满父元素。
+2. 块状化并格式化上下文：这个就是后面会讲的BFC特性。块状是指元素设置`float: left`之后，其`display`的计算值就成了`block`。格式化上下文是指会创建一个BFC，这个后面会讲。
+3. 没有任何`margin`合并；
+4. 脱离文档流：`float`设计的初衷就是为了“文字环绕”效果，为了让文字环绕图片，就需要具备两个条件。第一是元素高度坍塌，第二是行框盒子不可与浮动元素重叠。而元素高度坍塌就导致元素后面的非浮动块状元素会和其重叠，于是他就像脱离文档流了。
+
+:::
+
+前三个特性都是正能量满满，但是最后一个特性却给我们开发者带来了很多麻烦，需要用到`clear`来清除浮动。
+
+### `clear`的作用和不足
+
+大家都知道`clear: both`可以清除前面浮动元素的浮动，但实际上，他并不是真的清除了浮动。
+
+`clear`的定义是：元素盒子的边不能与前面的浮动元素相邻。也就是虽然浮动元素高度坍塌，但是设置了`clear: both`的元素却将其高度视为仍然占据位置。
+
+`clear`只能作用于块级元素，并且其并不能解决后面元素可能发生的文字环绕问题。
+
+### BFC：块级格式化上下文
+
+- 概念
+
+BFC是一个独立的渲染区域，只有`Block-level box`参与， 它规定了内部的`Block-level Box`如何布局，并且与这个区域外部毫不相干。 BFC 就好像一个结界，结界里面的东西不能影响外面的布局，也就是说，**BFC的子元素再翻江倒海，都不会影响外面的元素。** 所以：
+
+1. BFC本身不会发生`margin`重叠。
+2. BFC可以彻底解决子元素浮动带来的的高度坍塌和文字环绕问题。
+
+::: tip BFC的创建方法
+
+1. 根元素；
+2. 浮动元素 (`float`不为`none`的元素)；
+3. 绝对定位元素 (元素的`position`为`absolute`或`fixed`)；
+4. `inline-blocks`(元素的 `display: inline-block`)；
+5. 表格单元格(元素的`display: table-cell`，`HTML`表格单元格默认属性)；
+6. `overflow`的值不为`visible`的元素；
+7. 弹性盒 `flex boxes` (元素的`display: flex`或`inline-flex`)；
+
+:::
+
+BFC包含创建该上下文元素的所有子元素，但不包括创建了新BFC的子元素的内部元素。
+
+::: tip 特性
+
+1. 内部的盒会在垂直方向一个接一个排列（可以看作BFC中有一个的常规流）；
+2. Box垂直方向的距离由`margin`决定。属于同一个BFC的两个相邻Box的`margin`会发生重叠；
+3. 每一个盒子的左外边距应该和包含块的左边缘相接触。即使存在浮动也是如此，除非子盒子形成了一个新的BFC。
+4. BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素，反之亦然；
+5. 计算BFC的高度时，考虑BFC所包含的所有元素，连浮动元素也参与计算；
+6. BFC的区域不会与`float box`重叠；
+
+:::
+
+乍一看还挺多的，但真正要注意并用心理解的只有 3 4 6 。
+
+特性 1 中内部的盒是指块级盒。因为`<html>`根元素也是BFC，所以我们平常写的`div p`都是独自占一行。
+
+特性 2 `<html>`是BFC，所以里面的元素垂直方向的`margin`会发生折叠。但是，直接子孙元素与该BFC上下边界`margin`不能折叠，保证了BFC内部的元素不会影响外部的元素。两个上下相邻的BFC之间折不折叠要看具体情况，如`display: inline-block` `float: left`不会折叠，而`overflow: hidden`则会折叠。
+
+特性 3 完全解读：
+
+> In a block formatting context, each box's left outer edge touches the left edge of the containing block (for right-to-left formatting, right edges touch). This is true even in the presence of floats (although a box's line boxes may shrink due to the floats), unless the box establishes a new block formatting context (in which case the box itself may become narrower due to the floats). 
+
+网上很多翻译成“每个元素的`margin box`的左边， 与包含块`border box`的左边相接触”的，这样的翻译是不准确甚至错误的，曾给我造成莫大的困惑和迷茫（这翻译太坑爹了一度让我怀疑人生）。正确的翻译是“每一个盒子的左外边距应该和包含块的左边缘相接触”。
+
+第一，包含块未必就是父级元素。对于`position: absolute`来说，包含块是指第一个`positoin`不为`static`的祖先元素。
+
+第二，BFC中的盒子应该与其自身的包含块相接触，而非与BFC盒子本身相接触。
+
+第三，BFC中的盒子是与其包含块的 `left edge` 相接触，而不是包含块的 `left-border` 相接触。`left edge` 正确的翻译为左边缘。左边缘可能是`content box`的左边缘（非绝对定位如`position: relative` `float: left`），也可能是`padding box`的左边缘（如绝对定位`position: absolute` `position: fixed`）。
+
+理解了上面三点，其实特性 3 就是普通的流布局和定位布局默认贴着“左侧”思想的总结。
+
+
+![1565791810941](../../.vuepress/public/1565791810941.png)
+
+如图，`aside`元素的`margin box`的左边距和BFC元素的左边缘相接触。并且由于`float box`高度坍塌，`main`占据了`body`全部空间并且和包含块BFC盒子左边缘相接触（特性3“即使存在浮动也是如此”）。
+
+特性 4 正是BFC存在的意义。它规定了BFC子元素无论`margin-top: -10000px` `float: left` 等都不会影响到BFC外部的元素的布局。所以BFC是最好的清除浮动的方式，连浮动的文字环绕问题都能解决。
+
+特性 5 BFC计算高度时包含浮动元素的高度。可以利用BFC此特性解决浮动元素高度坍塌的问题。
+
+特性 6 ：利用特性6实现自适应两栏布局。此时`main`宽度是自适应的。
+
+![1565791828969](../../.vuepress/public/1565791828969.png)
+
+### 绝对定位`position: absolute`
+
+- 定义
+
+和浮动元素一样，绝对定位也具有块状化、BFC、包裹性、脱离文档流、没有`margin`合并的特性。
+
+但和浮动不同的是，绝对定位是完全的脱离文档流。大家还记得浮动产生的目的就是为了实现文字环绕效果，所以浮动元素虽然脱离了文档流，但是后面的文字还是会环绕在浮动元素周围。而绝对定位一但产生，就不会再对周围元素产生任何影响。
+
+而且两者包含块不同，浮动元素包含块只能是父级元素，绝对定位的包含块则是距离最近的`position`不为`static`的祖先元素。
+
+- 无依赖绝对定位
+
+大多数用到绝对定位的时候，都是存在包含块和`left/top`等方向属性的。但其实`position: absolute`是非常独立的css属性，其样式和行为表现不依赖任何css属性就可以完成。
+
+![1565832460760](../../.vuepress/public/1565832460760.png)
+
+可以看出，无依赖的`position: absolute`元素定位的位置和其本身无定位属性时候的位置和`display`的值有关。如果元素在没有`position`的情况下是内联元素，则和内联元素在同一行显示；如果元素在没有`position`属性的情况下是块级元素，则换行显示。
+
+无依赖绝对定位的实用性虽然还行，但是其功能却完全可以用`left/top`实现。所以了解即可，如果有兴趣可以自行尝试。
+
+- 绝对定位和`overflow: hidden`
+
+其实一句话就可以表示两者之间的关系：当`overflow: hidden`元素在绝对定位元素和其包含块之间的时候，绝对定位元素不会被剪裁。
+
+以下两种绝对定位元素不会被剪裁:
+
+```html
+<div style="overflow: hidden;">
+  <img src="big.jpg" style="position: absolute;">
+</div>
+<div style="position: relative;">
+  <div style="overflow: hidden;">
+    <img src="big.jpg" style="position: absolute;">
+  </div>    
+</div>
+```
+
+以下两种绝对定位元素会被剪裁：
+
+```html
+<div style="overflow: hidden; position: relative;">
+  <img src="big.jpg" style="position: absolute;">
+</div>
+<div style="overflow: hidden;">
+  <div style="position: relative;">
+    <img src="big.jpg" style="position: absolute;">
+  </div>    
+</div>
+```
+
+- `position: absolute`的流体特性
+
+当绝对定位元素的水平方向(`left/right`)或垂直方向(`top/bottom`)的两个定位属性同时存在的时候，绝对元素在该方向上便具有了流体特性。此时的`width/height`属性具有自动撑满的特性，和一个正常流的`div`元素的`width`属性别无二致。如图，设置了固定`margin`值的元素，宽高`auto`能够自动适应剩余空间：
+
+![1565832793672](../../.vuepress/public/1565832793672.png)
+
+同样的，设置了固定宽高的元素，如果`margin: auto`，则`margin`平分剩余空间导致垂直水平居中：
+
+![1565832814230](../../.vuepress/public/1565832814230.png)
+
+# 19.:star:层叠规则
+
+层叠规则是指当网页中的元素发生层叠时侯的遵循的规则。
+
+## 层叠上下文
+
+层叠上下文好像是一个结界，层叠上下文内的元素如果跟层叠上下文外的元素发生层叠，则比较该层叠上下文和外部元素的层叠上下文的层叠水平高低。
+
+**创建一个层叠上下文的方法就是给position值为relative/aboslute/fixed的元素设置z-index不为auto的值。**
+
+层叠上下文内元素的层叠水平如下图：
+
+![1565832962522](../../.vuepress/public/1565832962522.png)
+
+1. 最底层的`border/background`是指当前层叠上下文元素的边框和背景色。`z-index`为负值的元素在其之上。
+
+:yum:如下图所示`.dad`元素默认设置`z-index: auto`，没有创建层叠上下文，此时其就是一个普通的块级盒子，所以设置了`z-index: -1`的`.son`元素跑到了爸爸身后看不见了。
+
+而由于`.mom`设置了`z-index: 0`，创建出了一个层叠上下文，所以`.son`元素就算设置了`z-index: -1`也跑不出老妈的视线。[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Flitay%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565833341118](../../.vuepress/public/1565833341118.png)
+
+2. 当块级元素和内联元素发生层叠，内联元素居于块级元素之上。如下图：[地址](https://link.juejin.im/?target=http%3A%2F%2Fjs.jirengu.com%2Fgafof%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565833383126](../../.vuepress/public/1565833383126.png)
+
+3. 普通定位元素层叠水平在普通元素之上。普通定位元素是指`z-index`为`auto`的定位元素。下图`span`就是普通定位元素：[地址](https://link.juejin.im/?target=http%3A%2F%2Fjs.jirengu.com%2Fxisoz%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565833406750](../../.vuepress/public/1565833406750.png)
+
+## CSS3新增层叠上下文
+
+CSS3带来了很多新属性，其中很不惹人注意的一点就是增加了很多会自动创建层叠上下文的属性：
+
+1. 元素的`opacity`值不为`1`，也就是透明元素；
+2. 元素的`transform`值不为`none`；
+3. 元素的`filter`值不为`none`；
+4. 元素的设置`-webkit-overflow-scrolling: touch`；
+5. `z-index`不为`auto`的弹性盒子的子元素；
+6. 元素的`isolation`值为`isolate`；
+7. 元素的`mix-blend-mode`值不为`normal`；
+8. 元素的`will-change`值为`opacity/transform/filter/isolation/mix-blend-mode`中的一个。
+
+这些属性大都不支持`z-index`，所以他们都默认`z-index: auto`，跟普通定位元素层叠水平一样，所以如果发生层叠会后来居上：[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Fqivik%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565833467398](../../.vuepress/public/1565833467398.png)
+
+但是弹性盒子`display: flex`不同，弹性盒子的子元素支持设置`z-index`，且设置了数值的`z-index`也会自动创建层叠上下文。如下图，可以看到设置了`z-index: 0`的元素层叠水平更高。[地址](https://link.juejin.im/?target=http%3A%2F%2Fjs.jirengu.com%2Fkavaw%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565833781833](../../.vuepress/public/1565833781833.png)
+
+# 20.:star:弹性布局
+
+弹性布局是指`display: flex`或`display: inline-flex`的布局。注意，设为弹性布局以后，子元素的`float、clear、vertical-align`属性都会失效。参见阮一峰大佬的 [Flex 布局教程](https://link.juejin.im/?target=http%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2015%2F07%2Fflex-grammar.html)。
+
+主要属性应用如下：
+
+![1565833944165](../../.vuepress/public/1565833944165.png)
+
+# 21.:star:网格布局
+
+网格布局（Grid）是最强大的 CSS 布局方案。注意，设为网格布局以后，容器子元素（项目）的`float、display: inline-block、display: table-cell、vertical-align和column-*等`设置都将失效。参见阮一峰大佬的[CSS Grid 网格布局教程](https://link.juejin.im?target=http%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2019%2F03%2Fgrid-layout-tutorial.html)。
+
+
+![1565834048450](../../.vuepress/public/1565834048450.png)
+
+# 22.:star:文本控制
+
+以下css属性为文本相关。
+
+### `::first-letter` 应用实例
+
+`::first-letter`选中首个字符：[地址](https://link.juejin.im/?target=http%3A%2F%2Fjs.jirengu.com%2Fyunas%2F1%2Fedit)
+
+![1565834170566](../../.vuepress/public/1565834170566.png)
+
+### :star:`text-transform` 应用
+
+假设有个输入框只能输入大写字母，那么如下设置，输入小写字母出现的却是大写字母，可用于身份证输入框或验证码输入框等：
+
+```css
+  input {
+    text-transform: uppercase;
+  }
+```
+
+### :star:`white-space` 空白处理
+
+我们都知道如果在`html`中输入多个空白符，默认会被当成一个空白符处理，实际上就是这个属性控制的：[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Fdanim%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+1. normal：合并空白符和换行符；
+2. nowrap：合并空白符，但不许换行；
+3. pre：不合并空白符，并且只在有换行符的地方换行；
+4. pre-wrap：不合并空白符，允许换行符换行和文本自动换行；
+
+
+![1565834488631](../../.vuepress/public/1565834488631.png)
+
+### `text-align: justify`（本文重点例子!）
+
+`text-align: justify`为两端对齐。除了实现文字的两端对齐，还能用来做一些两端对齐的布局。（注意下面例子自己测试时需要保证每行三个方块！！！）下面介绍个两端对齐布局的实例：[地址](https://link.juejin.im/?target=http%3A%2F%2Fjs.jirengu.com%2Fjihay%2F1%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565834856857](../../.vuepress/public/1565834856857.png)
+
+由于`text-align: justify`最后一行是左对齐，所以利用了三个空的`i`标签模拟最后一行。虽然实现了两端对齐，但是最后一行却出现间隙。根据之前的经验应该是`vertical-align`和`line-height`搞的鬼，我们给`i`标签加上`outline`并用字母 x 模拟幽灵空白节点，现形：[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Fjihay%2F2%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565834874051](../../.vuepress/public/1565834874051.png)
+
+上图分析：首先第一个`i`标签基线与第二行的`span`标签中的数字的基线对其，所以其位置在中间。其次最后一行的`i`标签基线对齐幽灵空白节点字母x的基线，没有错位，所以此时最后一行的间隙高度就是字母x的高度。所以很容易想到把幽灵空白节点的行高设为 0 来解决问题：[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Fjihay%2F3%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+
+![1565834900274](../../.vuepress/public/1565834900274.png)
+
+然而间隙虽然缩小了，但是还是存在。此时由于行高为 0 ，幽灵空白节点也就是字母x在页面中占用的真实位置其实是红线所示。也就是说虽然字母 x 还显示在页面上，但是其真实高度已经为0，此时其中线、上边缘线、下边缘线合一，都在红线位置，其真实位置自然也就在红线位置。然而其基线却不会改变，在字母 x 下边缘。
+
+此时`i`标签的基线发生错位，位移到下面与幽灵空白节点基线对齐，导致产生了间隙。
+
+所以只需要再改变`i`标签的对齐方式，就能彻底清除间隙：[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Fjihay%2F4%2Fedit%3Fhtml%2Ccss%2Coutput)
+
+![1565834917851](../../.vuepress/public/1565834917851.png)
+
+此时`i`标签的基线对齐其幽灵空白节点的下边缘线，没有了错位，也就没有了间隙。
+
+如果改为`vertical-align: top`是一样的，因为合一了。但是`vertical-align: middle`却不行，因为此`middle`的位置是基线往上 1/2 个`e-height`的地方。
+
+好吧本例结束了，没想到解释起来这么复杂。好好理解此例加深对`vertical-align`和`line-height`的理解。
+
+# 23.:star:元素的显示与隐藏
+
+元素的显示隐藏方法很多，不同方法的在不同的场景下页面效果不一，对页面的性能也有不同的影响。
+
+### 元素隐藏方法总结：
+
+1. 如果希望元素不可见、不占据空间、资源会加载、DOM 可访问： `display: none`；
+2. 如果希望元素不可见、不能点击、但占据空间、资源会加载，可以使用： `visibility: hidden`；
+3. 如果希望元素不可见、不占据空间、显隐时可以又`transition`淡入淡出效果：[地址](https://link.juejin.im?target=http%3A%2F%2Fjs.jirengu.com%2Fguyin%2F2%2Fedit%3Fhtml%2Ccss%2Cjs%2Coutput)
+
+```
+div{
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .5s linear;
+  background: cyan;
+}
+div.active{
+  visibility: visible;
+  opacity: 1;
+}
+复制代码
+```
+
+:yum:这里使用`visibility: hidden`而不是`display: none`，是因为`display: none`会影响css3的`transition`过渡效果。 但是`display: none`并不会影响css`animation`动画的效果。
+
+4. 如果希望元素不可见、可以点击、占据空间，可以使用： `opacity: 0`；
+
+5. 如果希望元素不可见、可以点击、不占据空间，可以使用： `opacity: 0; position: abolute;`；
+
+6. 如果希望元素不可见、不能点击、占据空间，可以使用： `position: relative; z-index: -1;`；
+
+7. 如果希望元素不可见、不能点击、不占据空间，可以使用： `position: absolute ; z-index: -1;`；
+
+### :star:`display: none`与`visibility: hidden`的区别
+
+1. `display: none`的元素不占据任何空间，`visibility: hidden`的元素空间保留；
+2. `display: none`会影响css3的`transition`过渡效果，`visibility: hidden`不会；
+3. `display: none`隐藏产生重绘 ( repaint ) 和回流 ( relfow )，`visibility: hidden`只会触发重绘；（回流重绘知识点参考：[真正理解重绘和回流](https://link.juejin.im?target=https%3A%2F%2Fsegmentfault.com%2Fa%2F1190000018181862)）
+4. 株连性：`display: none`的节点和子孙节点元素全都不可见，`visibility: hidden`的节点的子孙节点元素可以设置 `visibility: visible`显示。`visibility: hidden`属性值具有继承性，所以子孙元素默认继承了`hidden`而隐藏，但是当子孙元素重置为`visibility: visible`就不会被隐藏。
 
