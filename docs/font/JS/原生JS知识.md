@@ -858,6 +858,8 @@ console.log(sumFn(1)(2, 3)); //6
 
 NOSCRIPT标签用来定义在脚本未被执行时的替代内容。也可以用在检测浏览器是否支持脚本，若不支持脚本则可以显示NOSCRIPT标签里的innerText
 
+以下来自：https://juejin.im/post/5cbd1e33e51d45789161d053
+
 ## 33.说一说JS异步发展史
 
 异步最早的解决方案是回调函数，如事件的回调，setInterval/setTimeout中的回调。但是回调函数有一个很常见的问题，就是回调地狱的问题(稍后会举例说明);
@@ -1554,3 +1556,792 @@ console.log(obj + 200); //400
 ```
 
 如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[JS 类型转换的规则是什么？](https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F16)
+
+## 40.简述下对 webWorker 的理解？
+
+HTML5则提出了 Web Worker 标准，表示js允许多线程，但是子线程完全受主线程控制并且不能操作dom，只有主线程可以操作dom，所以js本质上依然是单线程语言。
+
+web worker就是在js单线程执行的基础上开启一个子线程，进行程序处理，而不影响主线程的执行，当子线程执行完之后再回到主线程上，在这个过程中不影响主线程的执行。子线程与主线程之间提供了数据交互的接口postMessage和onmessage，来进行数据发送和接收。
+
+```js
+var worker = new Worker('./worker.js'); //创建一个子线程
+worker.postMessage('Hello');
+worker.onmessage = function (e) {
+    console.log(e.data); //Hi
+    worker.terminate(); //结束线程
+};
+
+//worker.js
+onmessage = function (e) {
+    console.log(e.data); //Hello
+    postMessage("Hi"); //向主进程发送消息
+};
+```
+
+仅是最简示例代码，项目中通常是将一些耗时较长的代码，放在子线程中运行。
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[简述下对 webWorker 的理解](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F17)
+
+## 41.ES6模块和CommonJS模块的差异？
+
+::: tip 差异
+
+
+1. ES6模块在编译时，就能确定模块的依赖关系，以及输入和输出的变量。
+
+   CommonJS 模块，运行时加载。
+
+2. ES6 模块自动采用严格模式，无论模块头部是否写了 `"use strict";`
+
+3. require 可以做动态加载，import 语句做不到，import 语句必须位于顶层作用域中。
+
+4. ES6 模块中顶层的 this 指向 undefined，CommonJS 模块的顶层 this 指向当前模块。
+
+5. CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
+
+:::
+
+CommonJS 模块输出的是值的拷贝，也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。如：
+
+```js
+//name.js
+var name = 'William';
+setTimeout(() => name = 'Yvette', 200);
+module.exports = {
+    name
+};
+//index.js
+const name = require('./name');
+console.log(name); //William
+setTimeout(() => console.log(name), 300); //William
+```
+
+对比 ES6 模块看一下:
+
+ES6 模块的运行机制与 CommonJS 不一样。JS 引擎对脚本静态分析的时候，遇到模块加载命令 import ，就会生成一个只读引用。等到脚本真正执行时，再根据这个只读引用，到被加载的那个模块里面去取值。
+
+```js
+//name.js
+var name = 'William';
+setTimeout(() => name = 'Yvette', 200);
+export { name };
+//index.js
+import { name } from './name';
+console.log(name); //William
+setTimeout(() => console.log(name), 300); //Yvette
+```
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[ES6模块和CommonJS模块的差异？](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F18)
+
+## 42.浏览器事件代理机制的原理是什么？
+
+在说浏览器事件代理机制原理之前，我们首先了解一下事件流的概念，早期浏览器，IE采用的是事件冒泡事件流，而Netscape采用的则是事件捕获。"DOM2级事件"把事件流分为三个阶段，捕获阶段、目标阶段、冒泡阶段。现代浏览器也都遵循此规范。
+
+
+![1566005423447](../../.vuepress/public/1566005423447.png)
+
+::: tip 那么事件代理是什么呢？
+
+事件代理又称为事件委托，在祖先级DOM元素绑定一个事件，当触发子孙级DOM元素的事件时，利用事件冒泡的原理来触发绑定在祖先级DOM的事件。因为事件会从目标元素一层层冒泡至document对象。
+
+:::
+
+::: tip 为什么要事件代理？
+
+1. 添加到页面上的事件数量会影响页面的运行性能，如果添加的事件过多，会导致网页的性能下降。采用事件代理的方式，可以大大减少注册事件的个数。
+2. 事件代理的当时，某个子孙元素是动态增加的，不需要再次对其进行事件绑定。
+3. 不用担心某个注册了事件的DOM元素被移除后，可能无法回收其事件处理程序，我们只要把事件处理程序委托给更高层级的元素，就可以避免此问题。
+
+:::
+
+> 如将页面中的所有click事件都代理到document上:
+
+addEventListener 接受3个参数，分别是要处理的事件名、处理事件程序的函数和一个布尔值。布尔值默认为false。表示冒泡阶段调用事件处理程序，若设置为true，表示在捕获阶段调用事件处理程序。
+
+```js
+document.addEventListener('click', function (e) {
+    console.log(e.target);
+    /**
+    * 捕获阶段调用调用事件处理程序，eventPhase是 1; 
+    * 处于目标，eventPhase是2 
+    * 冒泡阶段调用事件处理程序，eventPhase是 1；
+    */ 
+    console.log(e.eventPhase);
+    
+});
+```
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[浏览器事件代理机制的原理是什么？](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F19)
+
+## 43.js如何自定义事件？
+
+> 自定义 DOM 事件(不考虑IE9之前版本)
+
+自定义事件有三种方法,一种是使用 `new Event()`, 另一种是 `createEvent('CustomEvent')` , 另一种是 `new customEvent()`
+
+1. 使用 `new Event()`
+
+获取不到 `event.detail`
+
+```js
+let btn = document.querySelector('#btn');
+let ev = new Event('alert', {
+    bubbles: true,    //事件是否冒泡;默认值false
+    cancelable: true, //事件能否被取消;默认值false
+    composed: false
+});
+btn.addEventListener('alert', function (event) {
+    console.log(event.bubbles); //true
+    console.log(event.cancelable); //true
+    console.log(event.detail); //undefined
+}, false);
+btn.dispatchEvent(ev);
+```
+
+2. 使用 `createEvent('CustomEvent')` (DOM3)
+
+要创建自定义事件，可以调用 `createEvent('CustomEvent')`，返回的对象有 initCustomEvent 方法，接受以下四个参数:
+
+- type: 字符串，表示触发的事件类型，如此处的'alert'
+- bubbles: 布尔值： 表示事件是否冒泡
+- cancelable: 布尔值，表示事件是否可以取消
+- detail: 任意值，保存在 event 对象的 detail 属性中
+
+```js
+let btn = document.querySelector('#btn');
+let ev = btn.createEvent('CustomEvent');
+ev.initCustomEvent('alert', true, true, 'button');
+btn.addEventListener('alert', function (event) {
+    console.log(event.bubbles); //true
+    console.log(event.cancelable);//true
+    console.log(event.detail); //button
+}, false);
+btn.dispatchEvent(ev);
+```
+
+3. 使用 `new customEvent()` (DOM4)
+
+使用起来比 `createEvent('CustomEvent')`  更加方便
+
+```js
+var btn = document.querySelector('#btn');
+/*
+ * 第一个参数是事件类型
+ * 第二个参数是一个对象
+ */
+var ev = new CustomEvent('alert', {
+    bubbles: 'true',
+    cancelable: 'true',
+    detail: 'button'
+});
+btn.addEventListener('alert', function (event) {
+    console.log(event.bubbles); //true
+    console.log(event.cancelable);//true
+    console.log(event.detail); //button
+}, false);
+btn.dispatchEvent(ev);
+```
+
+> 自定义非 DOM 事件(观察者模式)
+
+EventTarget类型有一个单独的属性handlers，用于存储事件处理程序（观察者）。
+
+addHandler() 用于注册给定类型事件的事件处理程序；
+
+fire() 用于触发一个事件；
+
+removeHandler() 用于注销某个事件类型的事件处理程序。
+
+```js
+function EventTarget(){
+    this.handlers = {};
+}
+
+EventTarget.prototype = {
+    constructor:EventTarget,
+    addHandler:function(type,handler){
+        if(typeof this.handlers[type] === "undefined"){
+            this.handlers[type] = [];
+        }
+        this.handlers[type].push(handler);
+    },
+    fire:function(event){
+        if(!event.target){
+            event.target = this;
+        }
+        if(this.handlers[event.type] instanceof Array){
+            const handlers = this.handlers[event.type];
+            handlers.forEach((handler)=>{
+                handler(event);
+            });
+        }
+    },
+    removeHandler:function(type,handler){
+        if(this.handlers[type] instanceof Array){
+            const handlers = this.handlers[type];
+            for(var i = 0,len = handlers.length; i < len; i++){
+                if(handlers[i] === handler){
+                    break;
+                }
+            }
+            handlers.splice(i,1);
+        }
+    }
+}
+//使用
+function handleMessage(event){
+    console.log(event.message);
+}
+//创建一个新对象
+var target = new EventTarget();
+//添加一个事件处理程序
+target.addHandler("message", handleMessage);
+//触发事件
+target.fire({type:"message", message:"Hi"}); //Hi
+//删除事件处理程序
+target.removeHandler("message",handleMessage);
+//再次触发事件，没有事件处理程序
+target.fire({type:"message",message: "Hi"});
+```
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[js如何自定义事件？](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F20)
+
+## 44.跨域的方法有哪些？原理是什么？
+
+知其然知其所以然，在说跨域方法之前，我们先了解下什么叫跨域，浏览器有同源策略，只有当“协议”、“域名”、“端口号”都相同时，才能称之为是同源，其中有一个不同，即是跨域。
+
+那么同源策略的作用是什么呢？同源策略限制了从同一个源加载的文档或脚本如何与来自另一个源的资源进行交互。这是一个用于隔离潜在恶意文件的重要安全机制。
+
+那么我们又为什么需要跨域呢？一是前端和服务器分开部署，接口请求需要跨域，二是我们可能会加载其它网站的页面作为iframe内嵌。
+
+> **跨域的方法有哪些？**
+
+> 常用的跨域方法
+
+1. jsonp
+
+尽管浏览器有同源策略，但是 `<script>` 标签的 src 属性不会被同源策略所约束，可以获取任意服务器上的脚本并执行。jsonp 通过插入script标签的方式来实现跨域，参数只能通过url传入，仅能支持get请求。
+
+实现原理:
+
+Step1: 创建 callback 方法
+
+Step2: 插入 script 标签
+
+Step3: 后台接受到请求，解析前端传过去的 callback 方法，返回该方法的调用，并且数据作为参数传入该方法
+
+Step4: 前端执行服务端返回的方法调用
+
+下面代码仅为说明 jsonp 原理，项目中请使用成熟的库。分别看一下前端和服务端的简单实现：
+
+```js
+//前端代码
+function jsonp({url, params, cb}) {
+    return new Promise((resolve, reject) => {
+        //创建script标签
+        let script = document.createElement('script');
+        //将回调函数挂在 window 上
+        window[cb] = function(data) {
+            resolve(data);
+            //代码执行后，删除插入的script标签
+            document.body.removeChild(script);
+        }
+        //回调函数加在请求地址上
+        params = {...params, cb} //wb=b&cb=show
+        let arrs = [];
+        for(let key in params) {
+            arrs.push(`${key}=${params[key]}`);
+        }
+        script.src = `${url}?${arrs.join('&')}`;
+        document.body.appendChild(script);
+    });
+}
+//使用
+function sayHi(data) {
+    console.log(data);
+}
+jsonp({
+    url: 'http://localhost:3000/say',
+    params: {
+        //code
+    },
+    cb: 'sayHi'
+}).then(data => {
+    console.log(data);
+});
+
+//express启动一个后台服务
+let express = require('express');
+let app = express();
+
+app.get('/say', (req, res) => {
+    let {cb} = req.query; //获取传来的callback函数名，cb是key
+    res.send(`${cb}('Hello!')`);
+});
+app.listen(3000);
+```
+
+从今天起，jsonp的原理就要了然于心啦~
+
+2. cors
+
+jsonp 只能支持 get 请求，cors 可以支持多种请求。cors 并不需要前端做什么工作。
+
+> 简单跨域请求:
+
+只要服务器设置的Access-Control-Allow-Origin Header和请求来源匹配，浏览器就允许跨域
+
+1. 请求的方法是get，head或者post。
+2. Content-Type是application/x-www-form-urlencoded, multipart/form-data 或 text/plain中的一个值，或者不设置也可以，一般默认就是application/x-www-form-urlencoded。
+3. 请求中没有自定义的HTTP头部，如x-token。(应该是这几种头部 Accept，Accept-Language，Content-Language，Last-Event-ID，Content-Type）
+
+```js
+//简单跨域请求
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'XXXX');
+});
+```
+
+> 带预检(Preflighted)的跨域请求
+
+不满于简单跨域请求的，即是带预检的跨域请求。服务端需要设置 Access-Control-Allow-Origin (允许跨域资源请求的域) 、 Access-Control-Allow-Methods (允许的请求方法) 和 Access-Control-Allow-Headers (允许的请求头)
+
+```js
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'XXX');
+    res.setHeader('Access-Control-Allow-Headers', 'XXX'); //允许返回的头
+    res.setHeader('Access-Control-Allow-Methods', 'XXX');//允许使用put方法请求接口
+    res.setHeader('Access-Control-Max-Age', 6); //预检的存活时间
+    if(req.method === "OPTIONS") {
+        res.end(); //如果method是OPTIONS，不做处理
+    }
+});
+```
+
+更多CORS的知识可以访问: [HTTP访问控制（CORS） ](https://link.juejin.im?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FHTTP%2FAccess_control_CORS)
+
+3. nginx 反向代理
+
+使用nginx反向代理实现跨域，只需要修改nginx的配置即可解决跨域问题。
+
+A网站向B网站请求某个接口时，向B网站发送一个请求，nginx根据配置文件接收这个请求，代替A网站向B网站来请求。 nginx拿到这个资源后再返回给A网站，以此来解决了跨域问题。
+
+例如nginx的端口号为 8090，需要请求的服务器端口号为 3000。（localhost:8090 请求 localhost:3000/say）
+
+nginx配置如下:
+
+```js
+server {
+    listen       8090;
+
+    server_name  localhost;
+
+    location / {
+        root   /Users/liuyan35/Test/Study/CORS/1-jsonp;
+        index  index.html index.htm;
+    }
+    location /say {
+        rewrite  ^/say/(.*)$ /$1 break;
+        proxy_pass   http://localhost:3000;
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Credentials' 'true';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    }
+    # others
+}
+```
+
+4. websocket
+
+Websocket 是 HTML5 的一个持久化的协议，它实现了浏览器与服务器的全双工通信，同时也是跨域的一种解决方案。
+
+Websocket 不受同源策略影响，只要服务器端支持，无需任何配置就支持跨域。
+
+前端页面在 8080 的端口。
+
+```js
+let socket = new WebSocket('ws://localhost:3000'); //协议是ws
+socket.onopen = function() {
+    socket.send('Hi,你好');
+}
+socket.onmessage = function(e) {
+    console.log(e.data)
+}
+```
+
+服务端 3000端口。可以看出websocket无需做跨域配置。
+
+```js
+let WebSocket = require('ws');
+let wss = new WebSocket.Server({port: 3000});
+wss.on('connection', function(ws) {
+    ws.on('message', function(data) {
+        console.log(data); //接受到页面发来的消息'Hi,你好'
+        ws.send('Hi'); //向页面发送消息
+    });
+});
+```
+
+5. postMessage
+
+postMessage 通过用作前端页面之前的跨域，如父页面与iframe页面的跨域。window.postMessage方法，允许跨窗口通信，不论这两个窗口是否同源。
+
+话说工作中两个页面之前需要通信的情况并不多，我本人工作中，仅使用过两次，一次是H5页面中发送postMessage信息，ReactNative的webview中接收此此消息，并作出相应处理。另一次是可轮播的页面，某个轮播页使用的是iframe页面，为了解决滑动的事件冲突，iframe页面中去监听手势，发送消息告诉父页面是否左滑和右滑。
+
+> 子页面向父页面发消息
+
+父页面
+
+```js
+window.addEventListener('message', (e) => {
+    this.props.movePage(e.data);
+}, false);
+```
+
+子页面(iframe):
+
+```js
+if(/*左滑*/) {
+    window.parent && window.parent.postMessage(-1, '*')
+}else if(/*右滑*/){
+    window.parent && window.parent.postMessage(1, '*')
+}
+```
+
+> 父页面向子页面发消息
+
+父页面:
+
+```js
+let iframe = document.querySelector('#iframe');
+iframe.onload = function() {
+    iframe.contentWindow.postMessage('hello', 'http://localhost:3002');
+}
+```
+
+子页面:
+
+```js
+window.addEventListener('message', function(e) {
+    console.log(e.data);
+    e.source.postMessage('Hi', e.origin); //回消息
+});
+```
+
+6. node 中间件
+
+node 中间件的跨域原理和nginx代理跨域，同源策略是浏览器的限制，服务端没有同源策略。
+
+node中间件实现跨域的原理如下:
+
+1.接受客户端请求
+
+2.将请求 转发给服务器。
+
+3.拿到服务器 响应 数据。
+
+4.将 响应 转发给客户端。
+
+> 不常用跨域方法
+
+以下三种跨域方式很少用，如有兴趣，可自行查阅相关资料。
+
+1. window.name + iframe
+2. location.hash + iframe
+3. document.domain (主域需相同)
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[跨域的方法有哪些？原理是什么？](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F21)
+
+## 45.js异步加载的方式有哪些？
+
+1. script的 defer 属性，HTML4 中新增
+2. script 的 async 属性，HTML5 中新增
+
+script标签打开defer属性，脚本就会异步加载。渲染引擎遇到这一行命令，就会开始下载外部脚本，但不会等它下载和执行，而是直接执行后面的命令。
+
+defer 和 async 的区别在于: defer要等到整个页面在内存中正常渲染结束，才会执行；
+
+async一旦下载完，渲染引擎就会中断渲染，执行这个脚本以后，再继续渲染。defer是“渲染完再执行”，async是“下载完就执行”。
+
+如果有多个 defer 脚本，会按照它们在页面出现的顺序加载。
+
+多个async脚本是不能保证加载顺序的。
+
+1. 动态插入 script 脚本
+
+```js
+function downloadJS() { 
+    varelement = document.createElement("script"); 
+    element.src = "XXX.js"; 
+    document.body.appendChild(element); 
+}
+//何时的时候，调用上述方法 
+```
+
+1. 有条件的动态创建脚本
+
+如页面 onload 之后，
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[js异步加载的方式有哪些？](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F22)
+
+## 46.下面代码a在什么情况中打印出1？
+
+```js
+//?
+if(a == 1 && a == 2 && a == 3) {
+    console.log(1);
+}
+```
+
+1.在类型转换的时候，我们知道了对象如何转换成原始数据类型。如果部署了 [Symbol.toPrimitive]，那么返回的就是[Symbol.toPrimitive]()的返回值。当然，我们也可以把此函数部署在valueOf或者是toString接口上，效果相同。
+
+```js
+//利用闭包延长作用域的特性
+let a = {
+    [Symbol.toPrimitive]: (function() {
+            let i = 1;
+            return function() {
+                return i++;
+            }
+    })()
+}
+```
+
+（1）. 比较 a == 1 时，会调用 [Symbol.toPrimitive]，此时 i 是 1，相等。 （2）. 继续比较 a == 2,调用 [Symbol.toPrimitive]，此时 i 是 2，相等。 （3）. 继续比较 a == 3,调用 [Symbol.toPrimitive]，此时 i 是 3，相等。
+
+2.利用Object.defineProperty在window/global上定义a属性，获取a属性时，会调用get.
+
+```js
+let val = 1;
+Object.defineProperty(window, 'a', {
+  get: function() {
+    return val++;
+  }
+});
+```
+
+3.利用数组的特性。
+
+```js
+var a = [1,2,3];
+a.join = a.shift;
+```
+
+数组的 `toString` 方法返回一个字符串，该字符串由数组中的每个元素的 toString() 返回值经调用 join() 方法连接（由逗号隔开）组成。
+
+因此，我们可以重新 join 方法。返回第一个元素，并将其删除。
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[下面代码a在什么情况中打印出1？](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F23)
+
+## 47.下面这段代码的输出是什么？
+
+```js
+function Foo() {
+    getName = function() {console.log(1)};
+    return this;
+}
+Foo.getName = function() {console.log(2)};
+Foo.prototype.getName = function() {console.log(3)};
+var getName = function() {console.log(4)};
+function getName() {console.log(5)};
+
+Foo.getName();
+getName();
+Foo().getName();
+getName();
+new Foo.getName();
+new Foo().getName();
+new new Foo().getName();
+```
+
+**说明：**一道经典的面试题，仅是为了帮助大家回顾一下知识点，加深理解，真实工作中，是不可能这样写代码的，否则，肯定会被打死的。
+
+1.首先预编译阶段，变量声明与函数声明提升至其对应作用域的最顶端。
+
+因此上面的代码编译后如下(函数声明的优先级先于变量声明):
+
+```js
+function Foo() {
+    getName = function() {console.log(1)};
+    return this;
+}
+function getName() {console.log(5)}; //函数优先(函数首先被提升)
+var getName;//重复声明，被忽略
+Foo.getName = function() {console.log(2)};
+Foo.prototype.getName = function() {console.log(3)};
+getName = function() {console.log(4)};
+```
+
+2.`Foo.getName()`;直接调用Foo上getName方法，输出2
+
+3.`getName()`;输出4，getName被重新赋值了
+
+4.`Foo().getName()`;执行Foo()，window的getName被重新赋值，返回this;浏览器环境中，非严格模式，this 指向 window，this.getName();输出为1.
+
+如果是严格模式，this 指向 undefined，此处会抛出错误。
+
+如果是node环境中，this 指向 global，node的全局变量并不挂在global上，因为global.getName对应的是undefined，不是一个function，会抛出错误。
+
+5.`getName()`;已经抛错的自然走不动这一步了；继续浏览器非严格模式；window.getName被重新赋过值，此时再调用，输出的是1
+
+6.`new Foo.getName()`;考察[运算符优先级](https://link.juejin.im?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FJavaScript%2FReference%2FOperators%2FOperator_Precedence)的知识，new 无参数列表，对应的优先级是18；成员访问操作符 `.` , 对应的优先级是 19。因此相当于是 `new (Foo.getName)()`;new操作符会执行构造函数中的方法，因此此处输出为 2.
+
+7.`new Foo().getName()`；new 带参数列表，对应的优先级是19，和成员访问操作符`.`优先级相同。同级运算符，按照从左到右的顺序依次计算。`new Foo()`先初始化 Foo 的实例化对象，实例上没有getName方法，因此需要原型上去找，即找到了 `Foo.prototype.getName`，输出3
+
+8.`new new Foo().getName()`; new 带参数列表，优先级19，因此相当于是 `new (new Foo()).getName()`；先初始化 Foo 的实例化对象，然后将其原型上的 getName 函数作为构造函数再次 new ，输出3
+
+因此最终结果如下:
+
+```js
+Foo.getName(); //2
+getName();//4
+Foo().getName();//1
+getName();//1
+new Foo.getName();//2
+new Foo().getName();//3
+new new Foo().getName();//3
+```
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[下面这段代码的输出是什么？](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F24)
+
+## 48.实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?
+
+::: tip 优劣
+
+1. Object.definedProperty 的作用是劫持一个对象的属性，劫持属性的getter和setter方法，在对象的属性发生变化时进行特定的操作。而 Proxy 劫持的是整个对象。
+2. Proxy 会返回一个代理对象，我们只需要操作新对象即可，而 `Object.defineProperty`  只能遍历对象属性直接修改。
+3. Object.definedProperty 不支持数组，更准确的说是不支持数组的各种API，因为如果仅仅考虑arry[i] = value 这种情况，是可以劫持的，但是这种劫持意义不大。而 Proxy 可以支持数组的各种API。
+4. 尽管 Object.defineProperty 有诸多缺陷，但是其兼容性要好于 Proxy.
+
+:::
+
+PS: Vue2.x 使用 Object.defineProperty 实现数据双向绑定，V3.0 则使用了 Proxy.
+
+```js
+//拦截器
+let obj = {};
+let temp = 'Yvette';
+Object.defineProperty(obj, 'name', {
+    get() {
+        console.log("读取成功");
+        return temp
+    },
+    set(value) {
+        console.log("设置成功");
+        temp = value;
+    }
+});
+
+obj.name = 'Chris';
+console.log(obj.name);
+```
+
+**PS:** Object.defineProperty 定义出来的属性，默认是不可枚举，不可更改，不可配置【无法delete】
+
+我们可以看到 Proxy 会劫持整个对象，读取对象中的属性或者是修改属性值，那么就会被劫持。但是有点需要注意，复杂数据类型，监控的是引用地址，而不是值，如果引用地址没有改变，那么不会触发set。
+
+```js
+let obj = {name: 'Yvette', hobbits: ['travel', 'reading'], info: {
+    age: 20,
+    job: 'engineer'
+}};
+let p = new Proxy(obj, {
+    get(target, key) { //第三个参数是 proxy， 一般不使用
+        console.log('读取成功');
+        return Reflect.get(target, key);
+    },
+    set(target, key, value) {
+        if(key === 'length') return true; //如果是数组长度的变化，返回。
+        console.log('设置成功');
+        return Reflect.set([target, key, value]);
+    }
+});
+p.name = 20; //设置成功
+p.age = 20; //设置成功; 不需要事先定义此属性
+p.hobbits.push('photography'); //读取成功;注意不会触发设置成功
+p.info.age = 18; //读取成功;不会触发设置成功
+```
+
+最后，我们再看下对于数组的劫持，Object.definedProperty 和 Proxy 的差别
+
+Object.definedProperty 可以将数组的索引作为属性进行劫持，但是仅支持直接对 arry[i] 进行操作，不支持数组的API，非常鸡肋。
+
+```js
+let arry = []
+Object.defineProperty(arry, '0', {
+    get() {
+        console.log("读取成功");
+        return temp
+    },
+    set(value) {
+        console.log("设置成功");
+        temp = value;
+    }
+});
+
+arry[0] = 10; //触发设置成功
+arry.push(10); //不能被劫持
+```
+
+Proxy 可以监听到数组的变化，支持各种API。注意数组的变化触发get和set可能不止一次，如有需要，自行根据key值决定是否要进行处理。
+
+```js
+let hobbits = ['travel', 'reading'];
+let p = new Proxy(hobbits, {
+    get(target, key) {
+        // if(key === 'length') return true; //如果是数组长度的变化，返回。
+        console.log('读取成功');
+        return Reflect.get(target, key);
+    },
+    set(target, key, value) {
+        // if(key === 'length') return true; //如果是数组长度的变化，返回。
+        console.log('设置成功');
+        return Reflect.set([target, key, value]);
+    }
+});
+p.splice(0,1) //触发get和set，可以被劫持
+p.push('photography');//触发get和set
+p.slice(1); //触发get；因为 slice 是不会修改原数组的
+```
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F25)
+
+## 49.`Object.is()` 与比较操作符 `===`、`==` 有什么区别？
+
+以下情况，Object.is认为是相等
+
+```js
+两个值都是 undefined
+两个值都是 null
+两个值都是 true 或者都是 false
+两个值是由相同个数的字符按照相同的顺序组成的字符串
+两个值指向同一个对象
+两个值都是数字并且
+都是正零 +0
+都是负零 -0
+都是 NaN
+都是除零和 NaN 外的其它同一个数字
+```
+
+Object.is() 类似于 ===，但是有一些细微差别，如下：
+
+1. NaN 和 NaN 相等
+2. -0 和 +0 不相等
+
+```js
+console.log(Object.is(NaN, NaN));//true
+console.log(NaN === NaN);//false
+console.log(Object.is(-0, +0)); //false
+console.log(-0 === +0); //true
+```
+
+Object.is 和 `==`差得远了， `==` 在类型不同时，需要进行类型转换，前文已经详细说明。
+
+如果你有更好的答案或想法，欢迎在这题目对应的github下留言：[Object.is() 与比较操作符 `===`、`==` 有什么区别?](https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FYvetteLau%2FBlog%2Fissues%2F26)
+
+
+作者：刘小夕
+
+链接：https://juejin.im/post/5cbd1e33e51d45789161d053
+
+来源：掘金著作权归作者所有。

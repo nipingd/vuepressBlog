@@ -100,6 +100,11 @@ module.exports = {
                 ['/font/CSS/CSS零散知识整理','CSS零散知识整理  '],
               ]
             },{
+              title: 'HTML',
+              children:[
+                ['/font/HTML/HTML零散知识整理','HTML零散知识整理'],
+              ]
+            },{
               title: 'vue',
               children:[
                 ['/font/vue/vue组件间通信六种方式','vue组件间通信六种方式'],
@@ -116,6 +121,7 @@ module.exports = {
               children:[
                 ['/font/其他/webpack基础知识','webpack基础知识'],
                 ['/font/其他/Nginx反向代理与负载均衡','Nginx反向代理与负载均衡'],
+                ['/font/其他/PC端与移动端开发区别','PC端与移动端开发区别'],
               ]
             }
           ],
