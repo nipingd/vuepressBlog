@@ -97,7 +97,8 @@ module.exports = {
                 ['/font/CSS/CSS技巧','CSS技巧'],
                 ['/font/CSS/BFC与清除浮动','BFC与清除浮动'],
                 ['/font/CSS/z-index','z-index'],
-                ['/font/CSS/CSS零散知识整理','CSS零散知识整理  '],
+                ['/font/CSS/CSS零散知识整理','CSS零散知识整理'],
+                ['/font/CSS/响应式布局的常用解决方案对比','响应式布局的常用解决方案对比'],
               ]
             },{
               title: 'HTML',
@@ -122,6 +123,7 @@ module.exports = {
                 ['/font/其他/webpack基础知识','webpack基础知识'],
                 ['/font/其他/Nginx反向代理与负载均衡','Nginx反向代理与负载均衡'],
                 ['/font/其他/PC端与移动端开发区别','PC端与移动端开发区别'],
+                ['/font/其他/开课吧webpack','开课吧webpack'],
               ]
             }
           ],
