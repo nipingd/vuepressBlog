@@ -79,7 +79,7 @@
 
 nginx反向代理主要通过proxy_pass来配置，将你项目的开发机地址填写到proxy_pass后面，正常的格式为proxy_pass URL即可
 
-```
+```js
 server {
     listen 80;
     location / {
@@ -96,7 +96,7 @@ server {
 
 上面写的三个指令，我们直接通过代码来一一分析
 
-```
+```js
 // 修改nginx.conf
 worker_processes 1;
 events {

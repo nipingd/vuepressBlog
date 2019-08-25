@@ -1,3 +1,5 @@
+常见的对称加密算法有[DES](https://zh.wikipedia.org/wiki/資料加密標準)、[3DES](https://zh.wikipedia.org/wiki/3DES)、[AES](https://zh.wikipedia.org/wiki/高级加密标准)、[Blowfish](https://zh.wikipedia.org/wiki/Blowfish_(密码学))、[IDEA](https://zh.wikipedia.org/wiki/國際資料加密演算法)、[RC5](https://zh.wikipedia.org/wiki/RC5)、[RC6](https://zh.wikipedia.org/wiki/RC6)。
+
 ## 一、XSS攻击
 
 [跨站脚本攻击](https://link.juejin.im?target=https%3A%2F%2Fbaike.baidu.com%2Fitem%2F%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%2F8186208)(Cross Site Scripting)，为了不和[层叠样式表](https://link.juejin.im?target=https%3A%2F%2Fbaike.baidu.com%2Fitem%2F%E5%B1%82%E5%8F%A0%E6%A0%B7%E5%BC%8F%E8%A1%A8)(Cascading Style Sheets, [CSS](https://link.juejin.im?target=https%3A%2F%2Fbaike.baidu.com%2Fitem%2FCSS%2F5457))的缩写混淆，故将跨站脚本攻击缩写为XSS。恶意攻击者往Web页面里插入恶意的Script代码，当用户浏览该页之时，嵌入其中Web里面的Script代码会被执行，从而达到恶意攻击用户的目的。
@@ -146,6 +148,7 @@ CSRF攻击条件：
 2. 验证码;
 3. One-Time Tokens(不同的表单包含一个不同的伪随机值);
 4. **Referer 验证**:Referer 指的是页面请求来源。意思是，**只接受本站的请求，服务器才做响应**；如果不是，就拦截。
+5. **尽量使用POST，限制GET**
 
 ## 三、SQL注入
 

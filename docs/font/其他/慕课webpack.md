@@ -16,6 +16,12 @@ scss则要加上sass-loader和安装node-sass
 
 要对属性加上浏览器前缀则加上postcss-loader和配置postcss.config.js文件
 
+### 自己写一个loader
+
+### :![1566699542732](../../.vuepress/public/1566699542732.png)
+
+![1566699555695](../../.vuepress/public/1566699555695.png)
+
 ## 配置项
 
 - mode:'development'(**打包出来的文件不会被压缩**),
@@ -24,7 +30,7 @@ scss则要加上sass-loader和安装node-sass
 
 - entry:配置多个入口文件只需加入多个![1566482419582](../../.vuepress/public/1566482419582.png)
 
-- output：输出多个出口文件![1566482408283](../../.vuepress/public/1566482408283.png)
+- output：输出多个出口文件,chunkFilename:'[name].chunk.js'（main.js里面引入的模块走chunkFilename）![1566482408283](../../.vuepress/public/1566482408283.png)
 
 - devtools:'source-map'（开启source-map，可以识别映射错误行号 ）
 
@@ -37,6 +43,10 @@ scss则要加上sass-loader和安装node-sass
 - plugin插件可以在webpack运行到某个时刻的时候，帮你做一些事情。
 - HtmlWebpackPlugin 会在打包结束后，自动生成一个html文件，并把打包生成的js自动引入到这个html文件中，new对象时配置template可以生成index.html的模板
 - CleanWebpackPlugin会在打包前先删除dist文件夹，然后webpack再打包：new CleanWebpackPlugin({root: path.resolve(__dirname, '../')})![1566481839807](../../.vuepress/public/1566481839807.png)
+
+### 自己写一个plugin:
+
+![1566700483873](../../.vuepress/public/1566700483873.png)
 
 ## 实现热更新的几种方式
 
@@ -101,3 +111,46 @@ SplitChunksPlugin 配置参数详解
 */\* webpackChunkName:"lodash" \*/* 
 
 ![1566569389724](../../.vuepress/public/1566569389724.png)
+
+
+
+### 打包分析工具https://github.com/webpack/analyse
+
+### Prefetch,Preloading：异步分割代码![1566612009209](../../.vuepress/public/1566612009209.png)
+
+### css代码分割：mini-css-extract-plugin
+
+## PWA
+
+配置：workbox-webpack-plugin
+
+![1566632024263](../../.vuepress/public/1566632024263.png)
+
+## eslint
+
+安装eslint,命令行输入npx eslint --init初始化eslint配置（这时使用vscode插件即可查看错误）。
+
+eslint-loader装好之后配置![1566649635396](../../.vuepress/public/1566649635396.png)![1566649723331](../../.vuepress/public/1566649723331.png)，即可在网页上查看错误。
+
+## 提升webpack打包速度
+
+::: tip 方法
+
+- 跟上技术的迭代(Npm,node,Yarn)
+- 在尽可能少的模块上应用Loader
+- Plugin尽可能精简并确保可靠
+- resolve参数合理配置
+- 使用DIIPlugin提高打包速度
+- 控制包文件大小
+- thread-loader，parallel-webpack，happypack多进程打包
+- 合理使用sourceMap
+- 结合stats分析打包结果
+- 开发环境内存编译
+- 开发环境无用插件剔除
+
+:::
+
+![1566651057295](../../.vuepress/public/1566651057295.png)
+
+![1566651421247](../../.vuepress/public/1566651421247.png)
+
