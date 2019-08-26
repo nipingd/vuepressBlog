@@ -132,12 +132,19 @@ module.exports = {
           // docs文件夹下面的bar文件夹 这是第二组侧边栏 跟第一组侧边栏没关系
           '/computer/': [
             {
-              title: '第二组',
+              title: '数据结构',
               children: [
-                ['/computer/four','demo'], // 以docs为根目录来查找文件 
+                ['/computer/数据结构/数据结构算法通识','数据结构算法通识'], // 以docs为根目录来查找文件 
               
               ]
-            }
+            },
+            {
+              title: '算法',
+              children: [
+                ['/computer/算法/递归','递归'], // 以docs为根目录来查找文件 
+              
+              ]
+            },
           ],
           '/other/': [
             // '/font/', // font文件夹的README.md 不是下拉框形式
