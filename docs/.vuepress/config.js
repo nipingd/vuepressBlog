@@ -48,6 +48,7 @@ module.exports = {
                 ['/font/JS/空对象与空数组相加问题','空对象与空数组相加问题'], 
                 ['/font/JS/JS面试题','JS面试题'], 
                 ['/font/JS/JS零散知识整理','JS零散知识整理'], 
+                ['/font/JS/前端模块化','前端模块化'], 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -100,6 +101,7 @@ module.exports = {
                 ['/font/CSS/z-index','z-index'],
                 ['/font/CSS/CSS零散知识整理','CSS零散知识整理'],
                 ['/font/CSS/响应式布局的常用解决方案对比','响应式布局的常用解决方案对比'],
+                ['/font/CSS/flex布局','flex布局'],
               ]
             },{
               title: 'HTML',
