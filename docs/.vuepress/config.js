@@ -143,7 +143,7 @@ module.exports = {
             {
               title: '算法',
               children: [
-                ['/computer/算法/递归','递归'], // 以docs为根目录来查找文件 
+                ['/computer/算法/排序','排序'], // 以docs为根目录来查找文件 
               
               ]
             },
