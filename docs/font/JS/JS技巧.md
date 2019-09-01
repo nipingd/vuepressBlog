@@ -838,3 +838,29 @@ if(!!a){
 
 “！”是逻辑与运算，并且可以与任何变量进行逻辑与将其转化为布尔值，“!!”则是逻辑与的取反运算，尤其后者在判断类型时代码简洁高效，省去了多次判断null、undefined和空字符串的冗余代码。
 
+## 25.对象字面量
+
+> 获取环境变量时必用此方法，用它一直爽，一直用它一直爽
+
+```js
+const env = "prod";
+const link = {
+    dev: "Development Address",
+    test: "Testing Address",
+    prod: "Production Address"
+}[env];
+// link => "Production Address"
+```
+
+## 26.统计数组成员个数
+
+```js
+const arr = [0, 1, 1, 2, 2, 2];
+const count = arr.reduce((t, c) => {
+    t[c] = t[c] ? ++ t[c] : 1;
+    return t;
+}, {});
+// count => { 0: 1, 1: 2, 2: 3 }
+```
+
+

@@ -913,7 +913,7 @@ OK，其中一种 Hack 办法便是使用一个很大的正 padding 和相同的
 
 下面转载自公众号：小生方勤，作者：小生方勤
 
-## 46. 每个单词的首字母大写
+## 25. 每个单词的首字母大写
 
 其实我第一次看到这个功能的时候就是使用 JS 去实现这个功能，想都没想 CSS 可以完成这个功能。马上就屁颠屁颠的写了一个方法：
 
@@ -951,7 +951,7 @@ CSS 方案如下：
 
 从这个属性我们可以知道全部大写（小写）的需求这个属性也能轻易实现。
 
-## 47. 单选高亮
+## 26. 单选高亮
 
 可能你看到“单选高亮”没反应过来，直接来张图片你就马上清楚了：
 
@@ -1034,4 +1034,124 @@ display: none
 #### invalid 伪类和 vaild 伪类
 
 - valid 伪类，匹配通过 pattern 验证的元素
+
 - invalid 伪类，匹配未通过 pattern 验证的元素
+
+- ##### 使用:valid和:invalid校验表单
+
+  - 要点：`<input>`使用伪类`:valid`和`:invalid`配合`pattern`校验表单输入的内容
+  - 场景：**表单校验**
+  - 兼容：[pattern](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dpattern)、[:valid](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3D%3Avalid)、[:invalid](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3D%3Ainvalid)
+  - 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FQemxKr)
+
+  ![1567241937041](../../.vuepress/public/1567241937041.png)
+
+以下内容转载自：
+
+作者：JowayYoung
+
+链接：https://juejin.im/post/5d4d0ec651882549594e7293
+
+来源：掘金著作权归作者所有。
+
+## 27.使用writing-mode排版竖文
+
+- 要点：通过`writing-mode`调整文本排版方向
+- 场景：**竖行文字**、**文言文**、**诗词**
+- 兼容：[writing-mode](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dwriting-mode)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FXvExJO)
+
+![1567241075041](../../.vuepress/public/1567241075041.png)
+
+## 28使用text-align-last对齐两端文本
+
+- 要点：通过`text-align-last:justify`设置文本两端对齐
+- 场景：**未知字数中文对齐**
+- 兼容：[text-align-last](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dtext-align-last)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FZgxZJa)
+
+![1567241269145](../../.vuepress/public/1567241269145.png)
+
+## 29.使用object-fit规定图像尺寸
+
+- 要点：通过`object-fit`使图像脱离`background-size`的约束，使用`<img>`来标记图像背景尺寸
+- 场景：**图片尺寸自适应**
+- 兼容：[object-fit](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dobject-fit)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FLwBKLV)
+
+![1567241496614](../../.vuepress/public/1567241496614.png)
+
+## 30.使用letter-spacing排版倒序文本
+
+- 要点：通过`letter-spacing`设置负值字体间距将文本倒序
+- 场景：**文言文**、**诗词**
+- 兼容：[letter-spacing](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dletter-spacing)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FzYOBgqB)
+
+![1567241703159](../../.vuepress/public/1567241703159.png)
+
+## 31.使用margin-left排版左重右轻列表
+
+- 要点：使用`flexbox横向布局`时，最后一个元素通过`margin-left:auto`实现向右对齐
+- 场景：**右侧带图标的导航栏**
+- 兼容：[margin](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dmargin)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FPoYpROw)
+
+![1567241742285](../../.vuepress/public/1567241742285.png)
+
+## 32.使用attr()抓取data-*
+
+- 要点：在标签上自定义属性`data-*`，通过`attr()`获取其内容赋值到`content`上
+- 场景：**提示框**
+- 兼容：[data-*](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Ddata-)、[attr()](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dattr())
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FvoRdKX)
+
+![1567241869500](../../.vuepress/public/1567241869500.png)
+
+## 33.使用pointer-events禁用事件触发
+
+- 要点：通过`pointer-events:none`禁用事件触发(默认事件、冒泡事件、鼠标事件、键盘事件等)，相当于`<button>`的`disabled`
+- 场景：**限时点击按钮**(发送验证码倒计时)、**事件冒泡禁用**(多个元素重叠且自带事件、a标签跳转)
+- 兼容：[pointer-events](https://link.juejin.im?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dpointer-events)
+- 代码：[在线演示](https://link.juejin.im?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FdxmrLj)
+
+
+![1567245608026](../../.vuepress/public/1567245608026.png)
+
+## 34.使用+或~美化选项框
+
+- 要点：`<label>`使用`+`或`~`配合`for`绑定`radio`或`checkbox`的选择行为
+- 场景：**选项框美化**、**选中项增加选中样式**
+- 兼容：[+](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3D%2B)、[~](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3D~)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FrXdbgZ)
+
+![1567251913191](../../.vuepress/public/1567251913191.png)
+
+## 35.使用:focus-within分发冒泡响应
+
+- 要点：表单控件触发`focus`和`blur`事件后往父元素进行冒泡，在父元素上通过`:focus-within`捕获该冒泡事件来设置样式
+- 场景：**登录注册弹框**、**表单校验**、[**离屏导航**](https://link.juejin.im?target=https%3A%2F%2Fcodepen.io%2Fdannievinther%2Fpen%2FNvZjvz)、[**导航切换**](https://link.juejin.im?target=https%3A%2F%2Fcodepen.io%2FChokcoco%2Fpen%2FRJEpaP)
+- 兼容：[:focus-within](https://link.juejin.im?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3D%3Afocus-within)、[:placeholder-shown](https://link.juejin.im?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3D%3Aplaceholder-shown)
+- 代码：[在线演示](https://link.juejin.im?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FBaBjaBP)
+
+
+![1567252941226](../../.vuepress/public/1567252941226.png)
+
+## 36.使用animation-delay保留动画起始帧
+
+- 要点：通过`transform-delay`或`animation-delay`设置负值时延保留动画起始帧，让动画进入页面不用等待即可运行
+- 场景：**开场动画**
+- 兼容：[transform](https://link.juejin.im?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3Dtransform)、[animation](https://link.juejin.im?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3Danimation)
+- 代码：[在线演示](https://link.juejin.im?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FWNexVoB)
+
+![1567253102904](../../.vuepress/public/1567253102904.png)
+
+## 37.使用resize拉伸分栏
+
+- 要点：通过`resize`设置横向自由拉伸来调整目标元素的宽度
+- 场景：**富文本编辑器**、**分栏阅读**
+- 兼容：[resize](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dresize)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FJjPEdWO)
+
+![1567253214622](../../.vuepress/public/1567253214622.png)
+

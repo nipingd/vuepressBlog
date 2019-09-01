@@ -164,3 +164,97 @@ element.someObject=myObj;
 ```
 
 这样就不会有垃圾回收的过程。
+
+## setTimeout、setInterval和requestAnimationFrame之间的区别
+
+这里有一篇文章讲的是requestAnimationFrame：<http://www.cnblogs.com/xiaohuochai/p/5777186.html>
+
+与setTimeout和setInterval不同，requestAnimationFrame不需要设置时间间隔，
+
+RAF采用的是系统时间间隔，不会因为前面的任务，不会影响RAF，但是如果前面的任务多的话，
+会响应setTimeout和setInterval真正运行时的时间间隔。
+
+::: tip 特点：
+（1）requestAnimationFrame会把每一帧中的所有DOM操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率。
+
+（2）在隐藏或不可见的元素中，requestAnimationFrame将不会进行重绘或回流，这当然就意味着更少的CPU、GPU和内存使用量
+
+（3）requestAnimationFrame是由浏览器专门为动画提供的API，在运行时浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了CPU开销。
+
+:::
+
+## 简单实现Node的Events模块
+
+### 参考回答：
+
+简介：观察者模式或者说订阅模式，它定义了对象间的一种一对多的关系，让多个观察者对象同时监听某一个主题对象，当一个对象发生改变时，所有依赖于它的对象都将得到通知。
+
+node中的Events模块就是通过观察者模式来实现的：
+
+```js
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+eventEmitter.on('say', function (name) {
+  console.log('Hello', name);
+})
+eventEmitter.emit('say', 'Jony yu');
+```
+
+这样，eventEmitter发出say事件，通过On接收，并且输出结果，这就是一个订阅模式的实现，下面我们来简单的实现一个Events模块的EventEmitter。
+
+(1)实现简单的Event模块的emit和on方法
+
+```js
+function Events() {
+  this.on = function (eventName, callBack) {
+    if (!this.handles) {
+      this.handles = {};
+    }
+    if (!this.handles[eventName]) {
+      this.handles[eventName] = [];
+    }
+    this.handles[eventName].push(callBack);
+  }
+  this.emit = function (eventName, obj) {
+    if (this.handles[eventName]) {
+      for (var i = 0; o < this.handles[eventName].length; i++) {
+        this.handles[eventName][i](obj);
+      }
+    }
+  }
+  return this;
+}
+```
+
+这样我们就定义了Events，现在我们可以开始来调用：
+
+```js
+var events = new Events();
+events.on('say', function (name) {
+  console.log('Hello', nama)
+});
+events.emit('say', 'Jony yu');
+```
+
+//结果就是通过emit调用之后，输出了Jony yu
+
+(2)每个对象是独立的
+
+因为是通过new的方式，每次生成的对象都是不相同的，因此：
+
+```js
+var event1 = new Events();
+var event2 = new Events();
+event1.on('say', function () {
+  console.log('Jony event1');
+});
+event2.on('say', function () {
+  console.log('Jony event2');
+})
+event1.emit('say');
+event2.emit('say');
+```
+
+//event1、event2之间的事件监听互相不影响
+
+//输出结果为'Jony event1' 'Jony event2'
