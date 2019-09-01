@@ -1155,3 +1155,18 @@ display: none
 
 ![1567253214622](../../.vuepress/public/1567253214622.png)
 
+##### 使用color改变边框颜色
+
+- 要点：`border`没有定义`border-color`时，设置`color`后，`border-color`会被定义成`color`
+- 场景：**边框颜色与文字颜色相同**
+- 兼容：[color](https://link.juejin.im?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dcolor)
+
+```css
+.elem {
+    border: 1px solid;
+    color: #f66;
+}
+```
+
+![1567342894370](../../.vuepress/public/1567342894370.png)
+

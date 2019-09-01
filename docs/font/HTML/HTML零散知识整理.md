@@ -55,6 +55,15 @@ application/json：json格式的数据
 4. 搜索引擎的爬虫依赖于标记来确定上下文和各个关键字的权重，利于 SEO。
 5. 使阅读源代码的人对网站更容易将网站分块，便于阅读维护理解。
 
+语义化是指使用恰当语义的html标签，让页面具有良好的结构与含义，比如`<p>`标签就代表段落，`<article>`代表正文内容等等。
+
+语义化的好处主要有两点：
+
+- 开发者友好：使用语义类标签增强了可读性，开发者也能够清晰地看出网页的结构，也更为便于团队的开发和维护
+- 机器友好：带有语义的文字表现力丰富，更适合搜索引擎的爬虫爬取有效信息，语义类还可以支持读屏软件，根据文章可以自动生成目录
+
+这对于简书、知乎这种富文本类的应用很重要，语义化对于其网站的内容传播有很大的帮助，但是对于功能性的web软件重要性大打折扣，比如一个按钮、Skeleton这种组件根本没有对应的语义，也不需要什么SEO。
+
 ## div+css布局与表格布局相比的优、缺点
 
 #### 优点：
@@ -120,5 +129,146 @@ src source（缩写），指向外部资源的位置，指向的内容将会应�
 
 iframe和主页面共享连接池，而浏览器对相同区域有限制所以会影响性能。
 
+## HTML5与HTML4的不同之处
+
+- 文件类型声明（<!DOCTYPE>）仅有一型：<!DOCTYPE HTML>。
+- 新的解析顺序：不再基于SGML。
+- 新的元素：section, video, progress, nav, meter, time, aside, canvas, command, datalist, details, embed, figcaption, figure, footer, header, hgroup, keygen, mark, output, rp, rt, ruby, source, summary, wbr。
+- input元素的新类型：date, email, url等等。
+- 新的属性：ping（用于a与area）, charset（用于meta）, async（用于script）。
+- 全域属性：id, tabindex, repeat。
+- 新的全域属性：contenteditable, contextmenu, draggable, dropzone, hidden, spellcheck。
+- 移除元素：acronym, applet, basefont, big, center, dir, font, frame, frameset, isindex, noframes, strike, tt
+
+## 有哪些常用的meta标签？
+
+meta标签由name和content两个属性来定义，来描述一个HTML网页文档的`元信息`，例如作者、日期和时间、网页描述、关键词、页面刷新等，除了一些http标准规定了一些name作为大家使用的共识，开发者也可以自定义name。
+
+- charset，用于描述HTML文档的编码形式
+
+```html
+ <meta charset="UTF-8" >
+```
+
+- http-equiv，顾名思义，相当于http的文件头作用,比如下面的代码就可以设置http的缓存过期日期
+
+```html
+＜meta http-equiv="expires" content="Wed, 20 Jun 2019 22:33:00 GMT"＞
+```
+
+- viewport，移动前端最熟悉不过，Web开发人员可以控制视口的大小和比例
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+```
+
+- apple-mobile-web-app-status-bar-style,开发过PWA应用的开发者应该很熟悉，为了自定义苹果工具栏的颜色。
+
+```html
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+```
+
+## 知道img的srcset的作用是什么？（追问）
+
+可以设计响应式图片，我们可以使用两个新的属性srcset 和 sizes来提供更多额外的资源图像和提示，帮助浏览器选择正确的一个资源。
+
+srcset 定义了我们允许浏览器选择的图像集，以及每个图像的大小。
+
+sizes 定义了一组媒体条件（例如屏幕宽度）并且指明当某些媒体条件为真时，什么样的图片尺寸是最佳选择。
+
+所以，有了这些属性，浏览器会：
+
+- 查看设备宽度
+- 检查 sizes 列表中哪个媒体条件是第一个为真
+- 查看给予该媒体查询的槽大小
+- 加载 srcset 列表中引用的最接近所选的槽大小的图像
+
+> srcset提供了根据屏幕条件选取图片的能力
+
+```html
+<img src="clock-demo-thumb-200.png"
+     alt="Clock"
+     srcset="clock-demo-thumb-200.png 200w,
+             clock-demo-thumb-400.png 400w"
+     sizes="(min-width: 600px) 200px, 50vw">
+```
+
+## 还有哪一个标签能起到跟srcset相似作用？（追问）
+
+`<picture>`元素通过包含零或多个 `<source>` 元素和一个 `<img>`元素来为不同的显示/设备场景提供图像版本。浏览器会选择最匹配的子 `<source>` 元素，如果没有匹配的，就选择 `<img>` 元素的 src 属性中的URL。然后，所选图像呈现在`<img>`元素占据的空间中
+
+> picture同样可以通过不同设备来匹配不同的图像资源
+
+```html
+<picture>
+    <source srcset="/media/examples/surfer-240-200.jpg"
+            media="(min-width: 800px)">
+    <img src="/media/examples/painted-hand-298-332.jpg" />
+</picture>
+```
+
+## script标签中defer和async的区别？✨
+
+- defer：浏览器指示脚本在文档被解析后执行，script被异步加载后并不会立刻执行，而是等待文档被解析完毕后执行。
+- async：同样是异步加载脚本，区别是脚本加载完毕后立即执行，这导致async属性下的脚本是乱序的，对于script有先后依赖关系的情况，并不适用。 
+
+![1567300280285](../../.vuepress/public/1567300280285.png)
+
+>蓝色线代表网络读取，红色线代表执行时间，这俩都是针对脚本的；绿色线代表 HTML 解析
+
+## 有几种前端储存的方式？✨
+
+cookies、localstorage、sessionstorage、Web SQL、IndexedDB
+
+## 这些方式的区别是什么？（追问）✨
+
+- cookies： 在HTML5标准前本地储存的主要方式，优点是兼容性好，请求头自带cookie方便，缺点是大小只有4k，自动请求头加入cookie浪费流量，每个domain限制20个cookie，使用起来麻烦需要自行封装
+- localStorage：HTML5加入的以键值对(Key-Value)为标准的方式，优点是操作方便，永久性储存（除非手动删除），大小为5M，兼容IE8+
+- sessionStorage：与localStorage基本类似，区别是sessionStorage当页面关闭后会被清理，而且与cookie、localStorage不同，他不能在所有同源窗口中共享，是会话级别的储存方式
+- Web SQL：2010年被W3C废弃的本地数据库数据存储方案，但是主流浏览器（火狐除外）都已经有了相关的实现，web sql类似于SQLite，是真正意义上的关系型数据库，用sql进行操作，当我们用JavaScript时要进行转换，较为繁琐。
+- IndexedDB： 是被正式纳入HTML5标准的数据库储存方案，它是NoSQL数据库，用键值对进行储存，可以进行快速读取操作，非常适合web场景，同时用JavaScript进行操作会非常方便。
+
+## 块级行内元素
+
+```
+常见的块元素有<h1>~<h6>、<p>、<div>、<ul>、<ol>、<li>等，其中<div>标签是最典型的块元素。
+```
+
+::: tip 块级元素的特点：
+
+（1）总是从新行开始
+
+（2）高度，行高、外边距以及内边距都可以控制。
+
+（3）宽度默认是容器的100%
+
+（4）可以容纳内联元素和其他块元素。
+
+:::
+
+```
+常见的行内元素有<a>、<strong>、<b>、<em>、<i>、<del>、<s>、<ins>、<u>、<span>等，其中<span>标签最典型的行内元素。
+```
+
+::: tip 行内元素的特点：
+
+（1）和相邻行内元素在一行上。
+
+（2）高、宽无效，但水平方向的padding和margin可以设置，垂直方向的无效。
+
+（3）默认宽度就是它本身内容的宽度。
+
+（4）行内元素只能容纳文本或则其他行内元素。（a特殊 a里面可以放块级元素 ）
+
+:::
+
+​	在行内元素中有几个特殊的标签——`<img />` 、`<input />` 、`<td>`，可以对它们设置宽高和对齐属性，也称它们为行内块元素。
+::: tip 行内块元素的特点：
+（1）和相邻行内元素（行内块）在一行上,但是之间会有空白缝隙。
+（2）默认宽度就是它本身内容的宽度。
+（3）高度，行高、外边距以及内边距都可以控制。
+
+:::
 
 
+​    

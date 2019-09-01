@@ -91,6 +91,7 @@ module.exports = {
                 ['/font/浏览器网络/前端路由','前端路由'],
                 ['/font/浏览器网络/chrome调试技巧','chrome调试技巧'],
                 ['/font/浏览器网络/网络零散知识整理','网络零散知识整理'],
+                ['/font/浏览器网络/浏览器零散知识整理','浏览器零散知识整理'],
               ]
             },{
               title: 'CSS',
@@ -126,8 +127,8 @@ module.exports = {
                 ['/font/其他/webpack基础知识','webpack基础知识'],
                 ['/font/其他/Nginx反向代理与负载均衡','Nginx反向代理与负载均衡'],
                 ['/font/其他/PC端与移动端开发区别','PC端与移动端开发区别'],
-                ['/font/其他/开课吧webpack','开课吧webpack'],
                 ['/font/其他/慕课webpack','慕课webpack'],
+                ['/font/其他/手撕代码','手撕代码'],
               ]
             }
           ],
