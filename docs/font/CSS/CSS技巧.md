@@ -1155,7 +1155,7 @@ display: none
 
 ![1567253214622](../../.vuepress/public/1567253214622.png)
 
-##### 使用color改变边框颜色
+## 38使用color改变边框颜色
 
 - 要点：`border`没有定义`border-color`时，设置`color`后，`border-color`会被定义成`color`
 - 场景：**边框颜色与文字颜色相同**
@@ -1169,4 +1169,68 @@ display: none
 ```
 
 ![1567342894370](../../.vuepress/public/1567342894370.png)
+
+## 39.使用::selection改变文本选择颜色
+
+- 要点：通过`::selection`根据主题颜色自定义文本选择颜色
+- 场景：**主题化**
+- 兼容：[::selection](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3D%3A%3Aselection)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FjONrjXX)
+
+![1567438992060](../../.vuepress/public/1567438992060.png)
+
+## 40.使用linear-gradient控制背景渐变
+
+- 要点：通过`linear-gradient`设置背景渐变色并放大背景尺寸，添加背景移动效果
+- 场景：**主题化**、**彩虹背景墙**
+- 兼容：[gradient](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dgradient)、[animation](https://link.juejin.im/?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3Danimation)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FoNvbRwN)
+
+![1567439104585](../../.vuepress/public/1567439104585.png)
+
+## 41.使用linear-gradient控制文本渐变
+
+- 要点：通过`linear-gradient`设置背景渐变色，配合`background-clip:text`对背景进行文本裁剪，添加滤镜动画
+- 场景：**主题化**、**特色标题**
+- 兼容：[gradient](https://link.juejin.im?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dgradient)、[background-clip](https://link.juejin.im?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3Dbackground-clip)、[filter](https://link.juejin.im?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dfilter)、[animation](https://link.juejin.im?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3Danimation)、[text-fill-color](https://link.juejin.im?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3Dtext-fill-color)
+- 代码：[在线演示](https://link.juejin.im?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FpozgQVo)
+
+
+![1567439178278](../../.vuepress/public/1567439178278.png)
+
+## 42.使用caret-color改变光标颜色
+
+- 要点：通过`caret-color`根据主题颜色自定义光标颜色
+- 场景：**主题化**
+- 兼容：[caret-color](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dcaret-color)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FQemxKr)
+
+![1567439402793](../../.vuepress/public/1567439402793.png)
+
+## 43.使用:scrollbar改变滚动条样式
+
+- 要点：通过`scrollbar`的`scrollbar-track`和`scrollbar-thumb`等属性来自定义滚动条样式
+- 场景：**主题化**、**页面滚动**
+- 兼容：[:scrollbar](https://link.juejin.im/?target=https%3A%2F%2Fwww.caniuse.com%2F%23search%3Dscrollbar)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FExYPMog)
+
+![1567439472265](../../.vuepress/public/1567439472265.png)
+
+## 44.使用filter模拟Instagram滤镜
+
+- 要点：通过`filter`的滤镜组合起来模拟`Instagram滤镜`
+- 场景：**图片滤镜**
+- 兼容：[filter](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dfilter)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcodepen.io%2FJowayYoung%2Fpen%2FNWKbVNQ)、[css-gram](https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Funa%2FCSSgram%2Fblob%2Fmaster%2FREADME-CN.md)
+
+![1567439508180](../../.vuepress/public/1567439508180.png)
+
+### Figure Skill
+
+## 45.:heart:使用div描绘各种图形
+
+- 要点：`<div>`配合其伪元素(`::before`、`::after`)通过`clip`、`transform`等方式绘制各种图形
+- 场景：各种图形容器
+- 兼容：[clip](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dclip)、[transform](https://link.juejin.im/?target=https%3A%2F%2Fcaniuse.com%2F%23search%3Dtransform)
+- 代码：[在线演示](https://link.juejin.im/?target=https%3A%2F%2Fcss-tricks.com%2Fthe-shapes-of-css%2F)
 
