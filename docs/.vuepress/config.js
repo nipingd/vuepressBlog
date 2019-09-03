@@ -92,6 +92,8 @@ module.exports = {
                 ['/font/浏览器网络/chrome调试技巧','chrome调试技巧'],
                 ['/font/浏览器网络/网络零散知识整理','网络零散知识整理'],
                 ['/font/浏览器网络/浏览器零散知识整理','浏览器零散知识整理'],
+                ['/font/浏览器网络/HTTP面试题','HTTP面试题'],
+                ['/font/浏览器网络/TCP面试题','TCP面试题'],
               ]
             },{
               title: 'CSS',
@@ -129,6 +131,8 @@ module.exports = {
                 ['/font/其他/PC端与移动端开发区别','PC端与移动端开发区别'],
                 ['/font/其他/慕课webpack','慕课webpack'],
                 ['/font/其他/手撕代码','手撕代码'],
+                ['/font/其他/实现一个Event','实现一个Event'],
+                ['/font/其他/实现深克隆','实现深克隆'],
               ]
             }
           ],
@@ -145,6 +149,7 @@ module.exports = {
               title: '算法',
               children: [
                 ['/computer/算法/排序','排序'], // 以docs为根目录来查找文件 
+                ['/computer/算法/字符串','字符串'], // 以docs为根目录来查找文件 
               
               ]
             },
