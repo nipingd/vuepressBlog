@@ -285,6 +285,14 @@ JSON.parse(window.localStorage.getItem("subscribeList"));    // string -> array
 - `$attrs`：包含了父作用域中不被 prop 所识别 (且获取) 的特性绑定 (class 和 style 除外)。当一个组件没有声明任何 prop 时，这里会包含所有父作用域的绑定 (class 和 style 除外)，并且可以通过 v-bind="$attrs" 传入内部组件。通常配合 interitAttrs 选项一起使用。
 - `$listeners`：包含了父作用域中的 (不含 .native 修饰器的) v-on 事件监听器。它可以通过 v-on="$listeners" 传入内部组件
 
-接下来我们看个跨级通信的例子：
+## 总结
 
-<https://mp.weixin.qq.com/s?__biz=MzAxODE2MjM1MA==&mid=2651556445&idx=1&sn=dee936663d7125cf8528b1315a5a93ba&chksm=80255d9cb752d48a3229d28bf69c2d47e561b7b8bbc67d0993c0a19f3038aff94bcd28df9daa&mpshare=1&scene=1&srcid=&key=49a6b6e526a2abaeeb7c2705ab4612b5c9d2c27ea4f1ceb28036690344fae86dcbb9a8ec939d70c7c94b5fdc6d8aebd770bc40c8bd2d025cfa05d1507fec4ec64ba4b1f483ec18f6f940119509f1e3d5&ascene=1&uin=MTM1NzkzOTQ4MA%3D%3D&devicetype=Windows+10&version=62060739&lang=zh_CN&pass_ticket=AXuHfj4%2FO0PJUOt1A0EsaYw688VHA6Sa94%2BF0rEwMG6AIzgSPqIIWPnHyPmKfe%2B3>
+常见使用场景可以分为三类：
+
+- 父子通信： 父向子传递数据是通过 props，子向父是通过 events（ `$emit`）；通过父链 / 子链也可以通信（ `$parent` / `$children`）；ref 也可以访问组件实例；provide / inject API； `$attrs/$listeners`
+- 兄弟通信： Bus；Vuex
+- 跨级通信： Bus；Vuex；provide / inject API、 `$attrs/$listeners`
+
+转载自：<https://mp.weixin.qq.com/s?__biz=MzAxODE2MjM1MA==&mid=2651556445&idx=1&sn=dee936663d7125cf8528b1315a5a93ba&chksm=80255d9cb752d48a3229d28bf69c2d47e561b7b8bbc67d0993c0a19f3038aff94bcd28df9daa&mpshare=1&scene=1&srcid=&key=49a6b6e526a2abaeeb7c2705ab4612b5c9d2c27ea4f1ceb28036690344fae86dcbb9a8ec939d70c7c94b5fdc6d8aebd770bc40c8bd2d025cfa05d1507fec4ec64ba4b1f483ec18f6f940119509f1e3d5&ascene=1&uin=MTM1NzkzOTQ4MA%3D%3D&devicetype=Windows+10&version=62060739&lang=zh_CN&pass_ticket=AXuHfj4%2FO0PJUOt1A0EsaYw688VHA6Sa94%2BF0rEwMG6AIzgSPqIIWPnHyPmKfe%2B3>
+
+讲得比较全的另一篇文章:<https://juejin.im/post/5d267dcdf265da1b957081a3>

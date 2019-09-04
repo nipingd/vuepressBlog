@@ -117,6 +117,7 @@ module.exports = {
                 ['/font/vue/vue组件间通信六种方式','vue组件间通信六种方式'],
                 ['/font/vue/vue开发技巧','vue开发技巧'],
                 ['/font/vue/slot与slot-scope','slot与slot-scope'],
+                ['/font/vue/vue面试题','vue面试题'],
               ]
             },{
               title: 'node',
