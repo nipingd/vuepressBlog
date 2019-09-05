@@ -49,6 +49,7 @@ module.exports = {
                 ['/font/JS/JS面试题','JS面试题'], 
                 ['/font/JS/JS零散知识整理','JS零散知识整理'], 
                 ['/font/JS/前端模块化','前端模块化'], 
+                ['/font/JS/JS操作DOM常用API总结','JS操作DOM常用API总结'], 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -118,6 +119,7 @@ module.exports = {
                 ['/font/vue/vue开发技巧','vue开发技巧'],
                 ['/font/vue/slot与slot-scope','slot与slot-scope'],
                 ['/font/vue/vue面试题','vue面试题'],
+                ['/font/vue/vue核心之虚拟DOM','vue核心之虚拟DOM'],
               ]
             },{
               title: 'node',
