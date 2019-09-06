@@ -264,3 +264,659 @@ DocumentFragment是所有节点中唯一一个没有对应标记的类型，它�
 
 :::
 
+## 5 页面修改型API
+
+前面我们提到节点创建型API，它们只是创建节点，并没有真正修改到页面内容，而是要调用·appendChild·来将其添加到文档树中。我在这里将这类会修改到页面内容归为一类。
+ 修改页面内容的api主要包括：`appendChild`，`insertBefore`，`removeChild`，`replaceChild`。
+
+### 5.1 appendChild
+
+`appendChild`我们在前面已经用到多次，就是**将指定的节点添加到调用该方法的节点的子元素的末尾**。
+
+**语法**
+
+```js
+  parent.appendChild(child);
+```
+
+child节点将会作为parent节点的最后一个子节点。
+ `appendChild`这个方法很简单，但是还有有一点需要注意：如果**被添加的节点是一个页面中存在的节点，则执行后这个节点将会添加到指定位置，其原本所在的位置将移除该节点**，也就是说不会同时存在两个该节点在页面上，相当于把这个节点移动到另一个地方。
+ 如果child绑定了事件，被移动时，它依然绑定着该事件。
+
+例子：
+
+```js
+<body>
+  <div id="child">
+    要被添加的节点
+  </div>
+  <br/>
+  <br/>
+  <br/>
+  <div id="parent">
+    要移动的位置
+  </div>		
+  <input id="btnMove" type="button" value="移动节点" />
+</body>
+<script>
+  document.getElementById("btnMove").onclick = function(){
+	  var child = document.getElementById("child");
+ 	  document.getElementById("parent").appendChild(child);
+  } 
+</script>
+```
+
+运行结果：
+
+![1567732799981](../../.vuepress/public/1567732799981.png)
+
+### 5.2 insertBefore
+
+`insertBefore`**用来添加一个节点到一个参照节点之前**
+
+**语法**
+
+```js
+  parentNode.insertBefore(newNode,refNode);
+```
+
+:star:**`parentNode`表示新节点被添加后的父节点 `newNode`表示要添加的节点 `refNode`表示参照节点，新节点会添加到这个节点之前**
+
+例子：
+
+```js
+<body>
+  <div id="parent">
+    父节点
+    <div id="child">				
+        子元素
+    </div>
+  </div>
+  <input type="button" id="insertNode" value="插入节点" />
+</body>
+<script>
+  var parent = document.getElementById("parent");
+  var child = document.getElementById("child");
+  document.getElementById("insertNode").onclick = function(){
+  	var newNode = document.createElement("div");
+  	newNode.textContent = "新节点"
+  	parent.insertBefore(newNode,child);
+  }
+</script>
+```
+
+运行结果：
+
+
+![1567733010710](../../.vuepress/public/1567733010710.png)
+
+::: tip 关于第二个参数参照节点还有几个注意的地方：
+（1）**refNode是必传的**，如果不传该参数会报错
+
+（2）如果**refNode是undefined或null，则insertBefore会将节点添加到子元素的末尾**
+
+:::
+
+### 5.3 [removeChild]()
+
+**删除指定的子节点并返回**
+
+**语法**
+
+```js
+  var deletedChild = parent.removeChild(node);
+```
+
+:star:`deletedChild`**指向被删除节点的引用**，它等于`node`，被删除的节点仍然**存在于内存中**，可以对其进行下一步操作。
+ 注意：如果被删除的节点不是其子节点，则程序将会报错。我们可以通过下面的方式来确保可以删除：
+
+```js
+if(node.parentNode){
+    node.parentNode.removeChild(node);
+}
+```
+
+运行结果：
+
+
+![1567733185797](../../.vuepress/public/1567733185797.png)
+
+通过节点自己获取节点的父节点，然后将自身删除
+
+### 5.4 replaceChild
+
+`replaceChild`用于**使用一个节点替换另一个节点**
+
+**语法**
+
+```js
+  parent.replaceChild(newChild,oldChild);
+```
+
+:star:`newChild`是替换的节点，**可以是新的节点，也可以是页面上的节点**，如果是页面上的节点，则其将被转移到新的位置, `oldChild`是被替换的节点
+
+例子：
+
+```js
+<body>
+  <div id="parent">
+    父节点
+    <div id="child">				
+        子元素
+    </div>
+  </div>
+  <input type="button" id="insertNode" value="替换节点" />
+</body>
+<script>
+  var parent = document.getElementById("parent");
+  var child = document.getElementById("child");
+  document.getElementById("insertNode").onclick = function(){
+  	var newNode = document.createElement("div");
+  	newNode.textContent = "新节点"
+  	parent.replaceChild(newNode,child)
+  }
+```
+
+运行结果：
+
+![1567733354765](../../.vuepress/public/1567733354765.png)
+
+### 5.5 页面修改型API总结
+
+页面修改型API主要是这四个接口，要注意几个特点：
+
+ （1）:star:不管是新增还是替换节点，**如果新增或替换的节点是原本存在页面上的，则其原来位置的节点将被移除**，也就是说同一个节点不能存在于页面的多个位置。
+
+ （2）:star:**节点本身绑定的事件不会消失，会一直保留着。**
+
+## 6 节点查询型API
+
+### 6.1 document.getElementById
+
+这个接口很简单，**根据元素id返回元素，返回值是Element类型，如果不存在该元素，则返回null**
+
+**语法**
+
+```js
+  var element = document.getElementById(id);
+```
+
+::: tip 使用这个接口有几点要注意：
+
+ （1）元素的**Id是大小写敏感的**，一定要写对元素的id
+
+ （2）HTML文档中**可能存在多个id相同的元素，则返回第一个元素**
+
+ （3）**只从文档中进行搜索元素**，如果创建了一个元素并指定id，但并没有添加到文档中，则这个元素是不会被查找到的
+
+:::
+
+例子：
+
+```js
+<body>
+  <p id="para1">Some text here</p>
+  <button onclick="changeColor('blue');">blue</button>
+  <button onclick="changeColor('red');">red</button>
+</body>
+<script>
+  function changeColor(newColor) {
+    var elem = document.getElementById("para1");
+    elem.style.color = newColor;
+  }
+</script>
+```
+
+运行结果：
+
+![1567733565664](../../.vuepress/public/1567733565664.png)
+
+### 6.2 document.getElementsByTagName
+
+:star:返回一个包括所有**给定标签名称的元素的HTML集合HTMLCollection**。 整个文件结构都会被搜索，包括根节点。返回的 HTML集合是**动态的**, 意味着它可以**自动更新自己来保持和 DOM 树的同步**而不用再次调用`document.getElementsByTagName()`
+
+**语法**
+
+```js
+  var elements = document.getElementsByTagName(name);
+```
+
+::: tip
+
+（1）如果要对HTMLCollection集合进行循环操作，**最好将其长度缓存起来**，因为每次循环都会去计算长度，暂时缓存起来可以提高效率
+
+ （2）**如果没有存在指定的标签，该接口返回的不是null，而是一个空的HTMLCollection**
+
+ （3）`name`是一个**代表元素的名称的字符串**。**特殊字符 "*" 代表了所有元素。**
+
+:::
+
+例子：
+
+```js
+<body>
+  <div>div1</div>
+  <div>div2</div>	
+  <input type="button" value="显示数量" id="btnShowCount"/>
+  <input type="button" value="新增div" id="btnAddDiv"/>	
+</body>
+<script>
+  var divList = document.getElementsByTagName("div");
+  document.getElementById("btnAddDiv").onclick = function(){
+  	var div = document.createElement("div");
+  	div.textContent ="div" + (divList.length+1);
+  	document.body.appendChild(div);
+  }
+  document.getElementById("btnShowCount").onclick = function(){
+    alert(divList.length);
+  }
+</script>
+```
+
+这段代码中有两个按钮，一个按钮是显示HTMLCollection元素的个数，另一个按钮可以新增一个div标签到文档中。前面提到HTMLCollcetion元素是即时的表示**该集合是随时变化的**，也就是是文档中有几个div，它会随时进行变化，当我们新增一个div后，再访问HTMLCollection时，就会包含这个新增的div。
+
+运行结果：
+
+![1567733722341](../../.vuepress/public/1567733722341.png)
+
+### 6.3 document.getElementsByName
+
+`getElementsByName`主要是通过**指定的`name`属性来获取元素**，它返回一个**即时的NodeList对象**
+
+**语法**
+
+```js
+  var elements = document.getElementsByName(name) 
+```
+
+::: tip 使用这个接口主要要注意几点：
+
+ （1）返回对象是一个即时的NodeList，它是**随时变化**的
+
+ （2）在HTML元素中，**并不是所有元素都有`name`属性**，比如`div`是没有`name`属性的，**但是如果强制设置`div`的`name`属性，它也是可以被查找到的**
+
+ （3）在IE中，如果`id`设置成某个值，然后传入`getElementsByName`的参数值和id值一样，则这个元素是会被找到的，所以**最好不要设置同样的值给`id`和`name`**
+
+:::
+
+例子：
+
+```js
+<script type="text/javascript">
+  function getElements()
+   {
+   var x=document.getElementsByName("myInput");
+   alert(x.length);
+   }
+</script>
+<body>
+  <input name="myInput" type="text" size="20" /><br />
+  <input name="myInput" type="text" size="20" /><br />
+  <input name="myInput" type="text" size="20" /><br />
+  <br />
+  <input type="button" onclick="getElements()" value="How many elements named 'myInput'?" />
+</body>
+```
+
+运行结果：
+
+![1567734155692](../../.vuepress/public/1567734155692.png)
+
+### 6.4 document.getElementsByClassName
+
+这个API是根据**元素的class返回一个即时的HTMLCollection**
+
+**语法**
+
+```js
+  var elements = document.getElementsByClassName(names); // or:
+  var elements = rootElement.getElementsByClassName(names);
+```
+
+- `elements`是一个**实时集合**，包含了找到的所有元素
+- `names`是**一个字符串，表示要匹配的类名列表；类名通过空格分隔**
+- `getElementsByClassName`**可以在任何元素上调用**，不仅仅是`document`。**调用这个方法的元素将作为本次查找的根元素**
+
+这个接口有下面几点要注意：
+
+ （1）返回结果是一个即时的HTMLCollection，会随时根据文档结构变化
+
+ （2）IE9以下浏览器不支持
+
+ （3）如果要获取2个以上`classname`，可传入多个`classname`，每个用空格相隔，例如
+
+```js
+  var elements = document.getElementsByClassName("test1 test2");
+```
+
+例子：
+
+- 获取所有`class`为 'test' 的元素
+
+```js
+  var elements = document.getElementsByClassName('test');
+```
+
+- 获取所有`class`同时包括 'red' 和 'test' 的元素
+
+```js
+  var elements = document.getElementsByClassName('red test');
+```
+
+- 在`id`为'main'的元素的子节点中，获取所有`class`为'test'的元素
+
+```js
+  var elements = document.getElementById('main').getElementsByClassName('test');
+```
+
+- 我们还可以对任意的HTMLCollection 使用`Array.prototype`的方法，调用时传递HTMLCollection 作为方法的参数。这里我们将查找到所有`class`为'test'的`div`元素:
+
+```js
+  var testElements = document.getElementsByClassName('test');
+  var testDivs = Array.prototype.filter.call(testElements, function(testElement){
+    return testElement.nodeName === 'DIV';;
+  });
+```
+
+### 6.5 document.querySelector和document.querySelectorAll
+
+这两个API很相似，通过[css选择器](https://link.juejin.im?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FLearn%2FCSS%2FIntroduction_to_CSS%2FSelectors)来查找元素，注意选择器要符合CSS选择器的规则
+
+- **6.5.1 document.querySelector**
+
+document.querySelector`返回第一个匹配的元素，如果没有匹配的元素，则返回`**null**
+
+**语法**
+
+```js
+  var element = document.querySelector(selectors);
+```
+
+注意，由于返回的是**第一个匹配**的元素，**这个api使用的深度优先搜索来获取元素。**
+
+例子：
+
+```js
+<body>
+  <div>
+    <div>
+      <span class="test">第三级的span</span>	
+    </div>
+  </div>
+  <div class="test">			
+    同级的第二个div
+  </div>
+  <input type="button" id="btnGet" value="获取test元素" />
+</body>
+<script>
+  document.getElementById("btnGet").addEventListener("click",function(){
+    var element = document.querySelector(".test");
+    alert(element.textContent);
+  })
+</script>
+```
+
+两个`class`都包含“test”的元素，一个在文档树的前面，但是它在第三级，另一个在文档树的后面，但它在第一级，通过`querySelector`获取元素时，它通过深度优先搜索，拿到文档树前面的第三级的元素。 运行结果：
+
+![1567734616180](../../.vuepress/public/1567734616180.png)
+
+- **6.5.2 document.querySelectorAll** 返回的是**所有匹配的元素，而且可以匹配多个选择符**
+
+**语法**
+
+```js
+  var elementList = document.querySelectorAll(selectors);
+```
+
+- `elementList`是一个:yum:**静态**的`NodeList`类型的对象
+- `selectors`是一个**由逗号连接的包含一个或多个CSS选择器的字符串**
+- 如果`selectors`参数中:star:**包含CSS伪元素,则返回一个空的`elementList`**
+
+例子：
+
+```js
+  var matches = document.querySelectorAll("div.note, div.alert");
+```
+
+返回一个文档中所有的`class`为`"note"`或者`"alert"`的`div`元素
+
+```js
+<body>
+  <div class="test">
+    class为test
+  </div>
+  <div id="test">
+    id为test
+  </div>
+  <input id="btnShow" type="button" value="显示内容" />
+</body>
+<script>
+  document.getElementById("btnShow").addEventListener("click",function(){
+	var elements = document.querySelectorAll("#test,.test");	
+	for(var i = 0,length = elements.length;i<length;i++){
+		alert(elements[i].textContent);
+	}	
+  })
+</script>
+```
+
+这段代码通过`querySelectorAll`，使用id选择器和class选择器选择了两个元素，并依次输出其内容。
+
+::: tip 要注意两点：
+
+ （1）querySelectorAll也是**通过深度优先搜索**，搜索的元素顺序和选择器的顺序无关
+
+ （2）返回的是一个**非即时**的NodeList，也就是说**结果不会随着文档树的变化而变化**
+
+ 兼容性问题：`querySelector`和`querySelectorAll`在ie8以下的浏览器不支持。
+
+:::
+
+运行结果：
+
+![1567734678757](../../.vuepress/public/1567734678757.png)
+
+## 7 节点关系型API
+
+在html文档中的每个节点之间的关系都可以看成是家谱关系，包含父子关系，兄弟关系等等
+
+### 7.1 父关系型API
+
+#### 7.1.1 parentNode
+
+每个节点都有一个parentNode属性，它表示**元素的父节点**。Element的父节点可能是Element，Document或DocumentFragment
+
+#### 7.1.2 parentElement
+
+返回元素的父元素节点，与parentNode的区别在于，**其父节点必须是一个Element**，如果不是，则返回null
+
+### 7.2 子关系型APPI
+
+#### 7.2.1 childNodes
+
+返回一个**即时的NodeList，表示元素的子节点列表**，子节点可能会包含文本节点，注释节点等
+
+#### 7.2.2 children
+
+**一个即时的HTMLCollection，子节点都是Element**，IE9以下浏览器不支持 `children`属性为只读属性，对象类型为HTMLCollection，你可以使用`elementNodeReference.children[1].nodeName`来获取某个子元素的标签名称
+
+#### 7.2.3 firstChild
+
+只读属性返回树中节点的**第一个子节点，如果节点是无子节点，则返回 null**
+
+#### 7.2.4 lastChild
+
+**返回当前节点的最后一个子节点**。如果父节点为一个元素节点，则子节点通常为一个元素节点，或一个文本节点，或一个注释节点。如果没有子节点，则返回`null`
+
+#### 7.2.5 hasChildNodes
+
+返回一个布尔值,表明当前节点**是否包含有子节点.**
+
+### 7.3 兄弟关系型API
+
+#### 7.3.1 previousSibling
+
+返回**当前节点的前一个兄弟节点,没有则返回`null`**
+ Gecko内核的浏览器会在源代码中标签内部有空白符的地方插入一个文本结点到文档中.因此,使用诸如`Node.firstChild`和`Node.previousSibling`之类的方法可能会引用到一个空白符文本节点, 而不是使用者所预期得到的节点
+
+#### 7.3.2 previousElementSibling
+
+`previousElementSibling`返回**当前元素在其父元素的子元素节点中的前一个元素节点,如果该元素已经是第一个元素节点,则返回`null`,该属性是只读的**。注意IE9以下浏览器不支持
+
+#### 7.3.3 nextSibling
+
+`Node.nextSibling`是一个只读属性，**返回其父节点的`childNodes`列表中紧跟在其后面的节点**，如果指定的节点为最后一个节点，则返回`null`
+ Gecko内核的浏览器会在源代码中标签内部有空白符的地方插入一个文本结点到文档中.因此,使用诸如`Node.firstChild`和`Node.previousSibling`之类的方法可能会引用到一个空白符文本节点, 而不是使用者所预期得到的节点
+
+#### 7.3.4 nextElementSibling
+
+`nextElementSibling`返回**当前元素在其父元素的子元素节点中的后一个元素节点,如果该元素已经是最后一个元素节点,则返回`null`,该属性是只读的**。注意IE9以下浏览器不支持
+
+## 8 元素属性型API
+
+### 8.1 setAttribute
+
+**设置指定元素上的一个属性值**。**如果属性已经存在，则更新该值**; 否则将添加一个新的属性用指定的名称和值
+
+**语法**
+
+```js
+  element.setAttribute(name, value);
+```
+
+其中`name`是特性名，`value`是特性值。如果元素不包含该特性，则会创建该特性并赋值。
+
+例子：
+
+```js
+<body>
+  <div id="div1">ABC</div>
+</body>
+<script>  
+  let div1 = document.getElementById("div1"); 
+  div1.setAttribute("align", "center");
+</script>
+```
+
+运行结果：
+
+![1567736209205](../../.vuepress/public/1567736209205.png)
+
+如果元素本身包含指定的特性名为属性，则可以世界访问属性进行赋值，比如下面两条代码是等价的：
+
+```js
+  element.setAttribute("id","test");
+  element.id = "test";
+```
+
+### 8.2 [getAttribute](https://link.juejin.im?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FElement%2FgetAttribute)
+
+`getAttribute()`**返回元素上一个指定的属性值**。**如果指定的属性不存在，则返回`null`或`""`（空字符**串）
+
+**语法**
+
+```js
+  let attribute = element.getAttribute(attributeName);  
+```
+
+`attribute`是一个包含`attributeName`属性值的字符串。`attributeName`是你想要获取的属性值的属性名称
+
+例子：
+
+```js
+<body>
+  <div id="div1">ABC</div>
+</body>
+<script>  
+  let div1 = document.getElementById("div1");
+  let align = div1.getAttribute("align");
+  alert(align);
+</script>  
+```
+
+运行结果：
+
+![1567736277887](../../.vuepress/public/1567736277887.png)
+
+### 8.3 removeAttribute
+
+`removeAttribute()`从**指定的元素中删除一个属性**
+
+**语法**
+
+```js
+  element.removeAttribute(attrName)
+```
+
+`attrName`是一个字符串，将要从元素中删除的属性名
+
+例子：
+
+```js
+<body>
+  <div id="div1" style="color:red" width="200px">ABC
+   </div>
+</body>
+<script>  
+  let div = document.getElementById("div1")
+  div.removeAttribute("style");
+</script>
+```
+
+在运行之前`div`有个`style="color:red"`的属性，在运行之后这个属性就被删除了
+
+运行结果：
+
+![1567736320501](../../.vuepress/public/1567736320501.png)
+
+## 9 元素样式型API
+
+### 9.1 [window.getComputedStyle](https://link.juejin.im?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FWindow%2FgetComputedStyle)
+
+`Window.getComputedStyle()`方法**给出应用活动样式表后的元素的所有CSS属性的值**，**并解析这些值可能包含的任何基本计算** 假设某个元素并未设置高度而是通过其内容将其高度撑开，这时候要获取它的高度就要用到`getComputedStyle
+
+
+**语法**
+
+```js
+  var style = window.getComputedStyle(element[, pseudoElt]);
+```
+
+`element`是要获取的元素，`pseudoElt`指定一个伪元素进行匹配。
+ 返回的`style`是一个CSSStyleDeclaration对象。
+ 通过`style`可以访问到元素计算后的样式
+
+![1567736878145](../../.vuepress/public/1567736878145.png)
+
+### 9.2 [getBoundingClientRect](https://link.juejin.im?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FElement%2FgetBoundingClientRect)
+
+`getBoundingClientRect`用来返回元素的大小以及相对于浏览器可视窗口的位置
+
+**语法**
+
+```js
+  var clientRect = element.getBoundingClientRect();
+```
+
+`clientRect`**是一个DOMRect对象，包含left，top，right，bottom，它是相对于可视窗口的距离，滚动位置发生改变时**，它们的值是会发生变化的。除了IE9以下浏览器，还包含元素的height和width等数据
+
+### 9.3 直接修改元素的样式
+
+例子：
+
+```js
+  elem.style.color = 'red';
+  elem.style.setProperty('font-size', '16px');
+  elem.style.removeProperty('color');
+```
+
+### 9.4 动态添加样式规则
+
+例子：
+
+```js
+  var style = document.createElement('style');
+  style.innerHTML = 'body{color:red} #top:hover{background-color: red;color: white;}';
+  document.head.appendChild(style););
+```
+

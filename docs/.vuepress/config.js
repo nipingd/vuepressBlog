@@ -127,12 +127,17 @@ module.exports = {
                 ['/font/node/node知识','node知识'],
               ]
             },{
+              title: 'webpack',
+              children:[
+                ['/font/webpack/慕课webpack','慕课webpack'],
+                ['/font/webpack/webpack基础知识','webpack基础知识'],
+                ['/font/webpack/webpack面试题','webpack面试题'],
+              ]
+            },{
               title: '其他',
               children:[
-                ['/font/其他/webpack基础知识','webpack基础知识'],
                 ['/font/其他/Nginx反向代理与负载均衡','Nginx反向代理与负载均衡'],
                 ['/font/其他/PC端与移动端开发区别','PC端与移动端开发区别'],
-                ['/font/其他/慕课webpack','慕课webpack'],
                 ['/font/其他/手撕代码','手撕代码'],
                 ['/font/其他/实现一个Event','实现一个Event'],
                 ['/font/其他/实现深克隆','实现深克隆'],
