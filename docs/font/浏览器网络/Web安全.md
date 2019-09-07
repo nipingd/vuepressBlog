@@ -118,9 +118,11 @@ xss输入也可能是html代码段，如果使网页不停的刷新，代码为�
 
 1. 对输入、URL参数等（如：`<>`、`/` 、`&`、`'`、`"` ）进行转义、**过滤**，仅接受指定长度范围内并符合我们期望格式的的内容提交，阻止或者忽略除此外的其他任何数据；
 2. 输出数据之前对潜在的威胁的字符进行**编码**、转义；
-3. XSS 一般利用js脚步读取用户浏览器中的Cookie，而如果在服务器端对 Cookie 设置了HttpOnly 属性，那么js脚本就不能读取到cookie，但是浏览器还是能够正常使用cookie。
-4. 设置黑、白名单；
-5. [Content Security Policy](https://link.juejin.im?target=http%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2016%2F09%2Fcsp.html) 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成，开发者只需提供配置。
+3. 转义HTML(效果不怎样)
+4. XSS 一般利用js脚步读取用户浏览器中的Cookie，而如果在服务器端对 Cookie 设置了HttpOnly 属性，那么js脚本就不能读取到cookie，但是浏览器还是能够正常使用cookie。
+5. 设置黑、白名单；
+6. [Content Security Policy](https://link.juejin.im?target=http%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2016%2F09%2Fcsp.html) 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成，开发者只需提供配置。
+7. 验证码
 
 ## 二、CSRF攻击
 

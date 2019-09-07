@@ -1728,7 +1728,7 @@ fn2作用域链 = [fn2作用域, fn1作用域，全局作用域]
 1. 事件第一次触发时，`timer` 是 `null`，调用 `later()`，若 `immediate` 为`true`，那么立即调用 `func.apply(this, params)`；如果 `immediate` 为 `false`，那么过 `wait` 之后，调用 `func.apply(this, params)`
 2. 事件第二次触发时，如果 `timer` 已经重置为 `null`(即 `setTimeout` 的倒计时结束)，那么流程与第一次触发时一样，若 `timer` 不为 `null`(即 setTimeout 的倒计时未结束)，那么清空定时器，重新开始计时。
 
-```
+```js
 function debounce(func, wait, immediate = true) {
     let timeout, result;
     // 延迟执行函数
@@ -2134,7 +2134,7 @@ ES6 规定，默认的 `Iterator` 接口部署在数据结构的 `Symbol.iterato
 - 可以使用 `for ... of` 进行循环
 - 通过被 `Array.from` 转换为数组
 
-::: tip
+:::
 
 ```js
 let arry = [1, 2, 3, 4];
