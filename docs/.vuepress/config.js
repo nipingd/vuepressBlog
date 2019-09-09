@@ -171,6 +171,7 @@ module.exports = {
               title: '小程序',
               children: [
                 ['/other/小程序学习笔记','小程序'], // 以docs为根目录来查找文件 
+                ['/other/校招面试题','校招面试题'], // 以docs为根目录来查找文件 
               ]
             },
           ],
