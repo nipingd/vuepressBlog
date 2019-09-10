@@ -159,8 +159,9 @@ module.exports = {
             {
               title: '算法',
               children: [
-                ['/computer/算法/排序','排序'], // 以docs为根目录来查找文件 
-                ['/computer/算法/字符串','字符串'], // 以docs为根目录来查找文件 
+                ['/computer/算法/排序','排序'], 
+                ['/computer/算法/字符串','字符串'],  
+                ['/computer/算法/leetcode题','leetcode题'], 
               
               ]
             },
