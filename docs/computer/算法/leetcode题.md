@@ -77,6 +77,14 @@ var removeDuplicates = function(nums) {
 
 ​				<https://leetcode-cn.com/problems/longest-turbulent-subarray/>
 
+## [无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+
+https://github.com/azl397985856/leetcode/blob/master/problems/3.longestSubstringWithoutRepeatingCharacters.md
+
+## [最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/5.longest-palindromic-substring.md>
+
 ## [合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/88.merge-sorted-array.md>
@@ -238,4 +246,44 @@ var containsNearbyDuplicate = function(nums, k) {
 ```
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/219.contains-duplicate-ii.md>
+
+## [ 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/226.invert-binary-tree.md>
+
+## [丑数](https://leetcode-cn.com/problems/ugly-number/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/263.ugly-number.md>
+
+## [移动零](https://leetcode-cn.com/problems/move-zeroes/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/283.move-zeroes.md>
+
+## [4的幂](https://leetcode-cn.com/problems/power-of-four/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/342.power-of-four.md>
+
+## [两个数组的交集](https://leetcode-cn.com/problems/intersection-of-two-arrays/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/349.intersection-of-two-arrays.md>
+
+## [路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/437.path-sum-iii.md>
+
+## [两整数之和](https://leetcode-cn.com/problems/sum-of-two-integers/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/371.sum-of-two-integers.md>
+
+## [分糖果](https://leetcode-cn.com/problems/distribute-candies/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/575.distribute-candies.md>
+
+## [两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/2.addTwoNumbers.md>
+
+## [盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/11.container-with-most-water.md>
 
