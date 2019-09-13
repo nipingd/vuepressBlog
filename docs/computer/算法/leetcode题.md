@@ -287,3 +287,7 @@ var containsNearbyDuplicate = function(nums, k) {
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/11.container-with-most-water.md>
 
+## [三数之和](https://leetcode-cn.com/problems/3sum/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/15.3-sum.md>
+

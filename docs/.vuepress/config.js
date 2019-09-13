@@ -127,6 +127,7 @@ module.exports = {
               title: 'node',
               children:[
                 ['/font/node/node知识','node知识'],
+                ['/font/node/工程化之npm','工程化之npm'],
               ]
             },{
               title: 'webpack',
@@ -162,6 +163,13 @@ module.exports = {
                 ['/computer/算法/排序','排序'], 
                 ['/computer/算法/字符串','字符串'],  
                 ['/computer/算法/leetcode题','leetcode题'], 
+              
+              ]
+            },
+            {
+              title: 'linux',
+              children: [
+                ['/computer/linux/linux','linux'], 
               
               ]
             },
