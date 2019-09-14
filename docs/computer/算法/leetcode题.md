@@ -291,3 +291,19 @@ var containsNearbyDuplicate = function(nums, k) {
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/15.3-sum.md>
 
+## [删除链表的倒数第N个节点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/19.removeNthNodeFromEndofList.md>
+
+## [两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/24.swapNodesInPairs.md>
+
+## [两数相除](https://leetcode-cn.com/problems/divide-two-integers/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/29.divide-two-integers.md>
+
+## [下一个排列](https://leetcode-cn.com/problems/next-permutation/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/31.next-permutation.md>
+

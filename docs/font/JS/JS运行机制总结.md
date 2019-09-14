@@ -585,3 +585,15 @@ setInterval(replaceThing, 1000);
 - 点击左上角的录制按钮。
 - 在页面上进行各种操作，模拟用户的使用情况。
 - 一段时间后，点击对话框的 stop 按钮，面板上就会显示这段时间的内存占用情况。
+
+很多人不知道的是，重绘和回流其实和 Event loop 有关。
+
+1. 当 Event loop 执行完 Microtasks 后，会判断 document 是否需要更新。因为浏览器是 60Hz 的刷新率，每 16ms 才会更新一次。
+2. 然后判断是否有 `resize` 或者 `scroll` ，有的话会去触发事件，所以 `resize` 和 `scroll` 事件也是至少 16ms 才会触发一次，并且自带节流功能。
+3. 判断是否触发了 media query
+4. 更新动画并且发送事件
+5. 判断是否有全屏操作事件
+6. 执行 `requestAnimationFrame` 回调
+7. 执行 `IntersectionObserver` 回调，该方法用于判断元素是否可见，可以用于懒加载上，但是兼容性不好
+8. 更新界面
+9. 以上就是一帧中可能会做的事情。如果在一帧中有空闲时间，就会去执行 `requestIdleCallback` 回调。
