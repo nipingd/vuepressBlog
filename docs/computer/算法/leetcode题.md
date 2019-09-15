@@ -307,3 +307,10 @@ var containsNearbyDuplicate = function(nums, k) {
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/31.next-permutation.md>
 
+## [搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/33.search-in-rotated-sorted-array.md>
+
+## [组合总和](https://leetcode-cn.com/problems/combination-sum/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/39.combination-sum.md>
