@@ -147,3 +147,30 @@ webpack的热更新又称热替换（Hot Module Replacement），缩写为HMR。
 - 每个页面都有公共的代码，可以将这些代码抽离出来，避免重复的加载。比如，每个页面都引用了同一套css样式表
 - 随着业务的不断扩展，页面可能会不断的追加，所以一定要让入口的配置足够灵活，避免每次添加新页面还需要修改构建配置
 
+## webpack 打包优化发布策略
+
+> webpack 优化还是很有必要的
+
+- 开发配置文件：`webpack.dev.conf.js`
+- 发布配置文件：`webpack.prod.conf.js`
+- 使用 url-loader 减少网站中图片资源的请求数量
+  - 小图片直接 base64 内置到模板中
+  - 大图片拷贝到结果目录中
+  - 把图片资源分离到特定的目录中
+- 使用 `clean-webpack-plugin` 清除 `dist` 目录
+- 分离第三方包（解决 js 文件体积过大的问题）
+  - 多入口
+  - `webpack.optimize.CommonsChunkPlugin()`
+- 压缩 html
+  - 减小文件体积，提高加载速度
+- 压缩 JavaScript
+  - 减小文件体积，提高加载速度
+  - `webpack.optimize.UglifyJsPlugin()`
+  - `webpack.optimize.DedupePlugin()` 配置插件环境变量
+  - 把 JavaScript 分离到指定的目录中
+- 抽离 CSS 样式文件
+  - 为了让浏览器尽快的优先加载样式，也是为了解决js 文件体积过大的问题
+  - 把 css 分离到指定的目录结构中
+  - extract-text-webpack-plugin
+- 压缩抽取出来的 CSS 文件：https://github.com/webpack-contrib/css-loader#minimize
+  - 压缩 CSS 也是为了减小文件题解，提高响应速度
