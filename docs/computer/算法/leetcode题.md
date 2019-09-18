@@ -251,6 +251,10 @@ var containsNearbyDuplicate = function(nums, k) {
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/226.invert-binary-tree.md>
 
+## [二叉树的完全性检验](https://leetcode-cn.com/problems/check-completeness-of-a-binary-tree/)
+
+<https://lucifer.ren/fe-interview/#/./topics/algorthimn/isCompleteBinaryTree>
+
 ## [丑数](https://leetcode-cn.com/problems/ugly-number/)
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/263.ugly-number.md>
@@ -299,6 +303,10 @@ var containsNearbyDuplicate = function(nums, k) {
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/24.swapNodesInPairs.md>
 
+## [环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
+
+<https://lucifer.ren/fe-interview/#/./topics/algorthimn/linkedListCycled>
+
 ## [两数相除](https://leetcode-cn.com/problems/divide-two-integers/)
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/29.divide-two-integers.md>
@@ -314,3 +322,43 @@ var containsNearbyDuplicate = function(nums, k) {
 ## [组合总和](https://leetcode-cn.com/problems/combination-sum/)
 
 <https://github.com/azl397985856/leetcode/blob/master/problems/39.combination-sum.md>
+
+## [组合总和 II](https://leetcode-cn.com/problems/combination-sum-ii/)
+
+https://github.com/azl397985856/leetcode/blob/master/problems/40.combination-sum-ii.md
+
+## [全排列](https://leetcode-cn.com/problems/permutations/)
+
+```js
+//JS实现全排列
+function permutate(str) {
+  var result = [];
+  if (str.length > 1) {
+    var left = str[0];
+    var rest = str.slice(1, str.length);
+    var preResult = permutate(rest);
+    for (var i = 0; i < preResult.length; i++) {
+      for (var j = 0; j < preResult[i].length+1; j++) {
+        var tmp = preResult[i].slice(0, j) + left + preResult[i].slice(j, preResult[i].length);
+        result.push(tmp);
+      }
+    }
+  } else if (str.length == 1) {
+    return [str];
+  }
+  return result;
+}
+
+console.log(permutate('adb'))
+```
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/46.permutations.md>
+
+## [全排列 II](https://leetcode-cn.com/problems/permutations-ii/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/47.permutations-ii.md>
+
+## [旋转图像](https://leetcode-cn.com/problems/rotate-image/)
+
+<https://github.com/azl397985856/leetcode/blob/master/problems/48.rotate-image.md>
+

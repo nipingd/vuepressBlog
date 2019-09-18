@@ -15,6 +15,14 @@
 - CONNECT: HTTP/1.1协议中预留给能够将连接改为管道方式的代理服务器
 - TRACE: 回显服务器收到的请求，主要用于测试或诊断
 
+## Methods 分类
+- Safe Methods
+  对资源的访问权限是 read-only 的请求 method，被归类为 safe methods，例如 GET, HEAD, OPTIONS, TRACE。
+- Idempotent Methods
+  多次请求与一次请求所得到的结果相同，被归类为 idempotent method，例如 PUT, DELETE 和 safe methods。
+- Cacheable Methods
+  应答允许缓存的methods，例如 GET, HEAD, POST (大多数实现只支持GET 和 HEAD）。
+
 ## GET和POST有什么区别？
 
 - 数据传输方式不同：GET请求通过URL传输数据，而POST的数据通过请求体传输。
