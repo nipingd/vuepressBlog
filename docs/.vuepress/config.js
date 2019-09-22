@@ -96,6 +96,7 @@ module.exports = {
                 ['/font/浏览器网络/HTTP面试题','HTTP面试题'],
                 ['/font/浏览器网络/TCP面试题','TCP面试题'],
                 ['/font/浏览器网络/前端安全面试题','前端安全面试题'],
+                ['/font/浏览器网络/浏览器面试题','浏览器面试题'],
               ]
             },{
               title: 'CSS',
@@ -113,6 +114,7 @@ module.exports = {
               title: 'HTML',
               children:[
                 ['/font/HTML/HTML零散知识整理','HTML零散知识整理'],
+                ['/font/HTML/canvas','canvas'],
               ]
             },{
               title: 'vue',

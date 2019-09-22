@@ -121,13 +121,9 @@ src source（缩写），指向外部资源的位置，指向的内容将会应�
 
 **提示**：可以将提示文字放在<iframe></iframe>之间，来提示某些不支持iframe的浏览器
 
-**缺点**：
+**优点**： 1. 便于修改，模拟分离，像一些信息管理系统会用到。 2. 但现在基本不推荐使用。除非特殊需要，一般不推荐使用。
 
-会阻塞主页面的onload事件
-
-搜索引擎无法解读这种页面，不利于SEO
-
-iframe和主页面共享连接池，而浏览器对相同区域有限制所以会影响性能。
+**缺点** ：1. iframe的创建比一般的DOM元素慢了1-2个数量级 2. iframe标签会阻塞页面的的加载，如果页面的onload事件不能及时触发，会让用户觉得网页加载很慢，用户体验不好，在Safari和Chrome中可以通过js动态设置iframe的src属性来避免阻塞。 3. iframe对于SEO不友好，替换方案一般就是动态语言的Incude机制和ajax动态填充内容等。
 
 ## HTML5与HTML4的不同之处
 
@@ -270,5 +266,5 @@ cookies、localstorage、sessionstorage、Web SQL、IndexedDB
 
 :::
 
+![1569048621331](../../.vuepress/public/1569048621331.png)
 
-​    
