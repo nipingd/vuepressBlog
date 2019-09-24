@@ -392,3 +392,55 @@ ES6在变量的声明和定义方面增加了**let、const声明变量**，有�
 法二：ES6 Set去重；Array.from(new Set(array))
 
 法三：Object 键值对去重；把数组的值存成 Object 的 key 值，比如 Object[value1] = true，在判断另一个值的时候，如果 Object[value2]存在的话，就说明该值是重复的。
+
+# 类数组和数组
+
+### *什么是类数组对象 ArrayLike*
+
+- 拥有**length属性**，其它属性（索引）为非负整数(对象中的索引会被当做字符串来处理，这里你可以当做是个非负整数串来理解)
+- 不具有数组所具有的方法
+
+```js
+伪数组，就是像数组一样有 length 属性，也有 0、1、2、3 等属性的对象，看起来就像数组一样，但不是数组，比如
+var fakeArray = {
+    length: 3,
+    "0": "first",
+    "1": "second",
+    "2": "third"
+};
+ 
+for (var i = 0; i < fakeArray.length; i++) {
+    console.log(fakeArray[i]);
+}
+```
+
+常见的: **arguments**，**DOM 对象列表**（比如通过 document.getElementsByTags 得到的列表），jQuery 对象（比如 $("div")）。
+
+### 类数组转化数组的方法
+
+#### 1.slice
+
+```js
+最经典的方法，使用Array的slice方法，此方法如果不传参数的话会返回原数组的一个拷贝，因此可以用此方法转换类数组到数组；
+var arr = Array.prototype.slice.call(arguments);
+//等同于
+var arr = [].slice.call(arguments)
+```
+
+#### 2.Array.from()
+
+是ES6中的方法，用于将类数组转换为数组。
+
+```js
+var arr = Array.from(arguments);
+```
+
+**只要有length属性的对象，都可以应用此方法转换成数组。**
+
+#### 3.扩展运算符
+
+ES6中的扩展运算符`...`也能将某些数据结构转换成数组，这种数据结构必须有遍历器接口。
+
+```js
+var args = [...arguments];
+```
