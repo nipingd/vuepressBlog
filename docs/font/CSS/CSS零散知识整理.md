@@ -1165,3 +1165,38 @@ translate()是transform的一个值。改变transform或opacity不会触发浏�
 
 其实上文已经表达清楚两者区别了，**伪类是通过在元素选择器上加入伪类改变元素状态，而伪元素通过对元素的操作进行对元素的改变。**
 
+## css禁用鼠标事件
+
+```css
+.disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
+}
+```
+
+## css禁止用户选择（文本）
+
+```css
+body{
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+```
+
+## 开启硬件加速
+
+```
+//目前，像Chrome/Filefox/Safari/IE9+以及最新版本Opera都支持硬件加速，当检测到某个DOM元素应用了某些CSS规则时就会自动开启，从而解决页面闪白，保证动画流畅。
+.css {
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
+```
+

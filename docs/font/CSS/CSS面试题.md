@@ -278,7 +278,7 @@
     float: left;
     width: 100px;
     height: 300px;
-    margin-left: -100%;
+    margin-left: -100%;/*在main前显示，左边距设置为main的宽度也就是负的100%*/
     position: relative;
     left: -120px;
     background-color: blue;
@@ -288,7 +288,7 @@
     float: left;
     width: 200px;
     height: 300px;
-    margin-left: -200px;
+    margin-left: -200px;/*在mian后显示，左边距设置为负的自己的宽度*/
     position: relative;
     right: -220px;
     background-color: green;
@@ -302,6 +302,8 @@
 ```
 
 > 圣杯布局和双飞翼布局解决问题的方案在前一半是相同的，也就是三栏全部float浮动，但左右两栏加上负margin让其跟中间栏div并排，以形成三栏布局。
+
+详细的圣杯布局与双飞翼布局请跳转<https://www.cnblogs.com/imwtr/p/4441741.html>查看
 
 ## 除了`screen`，你还能说出一个 @media 属性的例子吗？
 

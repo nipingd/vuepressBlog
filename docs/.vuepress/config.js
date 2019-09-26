@@ -86,6 +86,7 @@ module.exports = {
                 ['/font/浏览器网络/Web安全','Web安全'],
                 ['/font/浏览器网络/Cookie、Session和Web Storage、token','Cookie、Session和Web Storage、token'],
                 ['/font/浏览器网络/跨域实现','跨域实现'],
+                ['/font/浏览器网络/CORS通信详解','CORS通信详解'],
                 ['/font/浏览器网络/浏览器缓存','浏览器缓存'],
                 ['/font/浏览器网络/页面性能优化','页面性能优化'],
                 ['/font/浏览器网络/网络基础','网络基础'],
@@ -97,6 +98,7 @@ module.exports = {
                 ['/font/浏览器网络/TCP面试题','TCP面试题'],
                 ['/font/浏览器网络/前端安全面试题','前端安全面试题'],
                 ['/font/浏览器网络/浏览器面试题','浏览器面试题'],
+                ['/font/浏览器网络/Web Workers','Web Workers'],
               ]
             },{
               title: 'CSS',
@@ -179,9 +181,9 @@ module.exports = {
           '/other/': [
             // '/font/', // font文件夹的README.md 不是下拉框形式
             {
-              title: '小程序',
+              title: '零散的',
               children: [
-                ['/other/小程序学习笔记','小程序'], // 以docs为根目录来查找文件 
+                ['/other/小程序学习笔记','小程序学习笔记'], // 以docs为根目录来查找文件 
                 ['/other/校招面试题','校招面试题'], // 以docs为根目录来查找文件 
               ]
             },

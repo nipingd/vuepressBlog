@@ -81,7 +81,7 @@ ctx.stroke();//描边
   
 - **ctx.textBaseline** = 'middle'：垂直对齐的方式
   - baseline(默认),top,bottom,middle
-   
+  
 - 绘制
    - **ctx.strokeText(text,x,y);**
    - **ctx.fillText(text,x,y);**
@@ -111,3 +111,21 @@ ctx.stroke();//描边
 ## 模式
 
 ![1569120853451](../../.vuepress/public/1569120853451.png)
+
+## 与SVG的区别
+
+:::tip 区别
+
+- 从图像类别区分，Canvas是**基于像素**的位图，而SVG却是**基于矢量**图形。可以简单的把两者的区别看成photoshop与illustrator的区别。
+- 从结构上说，Canvas**没有图层的概念**，所有的修改整个画布都要重新渲染，而SVG**则可以对单独的标签进行修改**。 
+- 从操作对象上说，Canvas是**基于HTML canvas标签**，通过宿主提供的Javascript API对整个画布进行操作的，而SVG则是**基于XML元素的。**
+- 从功能上讲，SVG发布日期较早，所以功能相对Canvas比较完善。 
+- 关于动画，Canvas更适合做**基于位图的动画**，而SVG则**适合图表的展示。** 
+- 从搜索引擎角度分析，由于**svg是有大量标签组成，所以可以通过给标签添加属性，便于爬虫搜索**。
+:::
+
+区别转载自：作者：徐小夕
+
+链接：https://juejin.im/post/5d8989296fb9a06b1f147070
+
+来源：掘金著作权归作者所有。
