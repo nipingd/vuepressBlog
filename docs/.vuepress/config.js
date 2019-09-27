@@ -9,6 +9,7 @@ module.exports = {
       lineNumbers: true // 代码块显示行号
     },
     themeConfig: {
+      lastUpdated: '上次更新时间',
       nav:[ // 导航栏配置
         {text: 'HOME', link: '/' },
         {text: '前端', link: '/font/' },
