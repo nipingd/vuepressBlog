@@ -140,6 +140,7 @@ module.exports = {
                 ['/font/webpack/慕课webpack','慕课webpack'],
                 ['/font/webpack/webpack基础知识','webpack基础知识'],
                 ['/font/webpack/webpack面试题','webpack面试题'],
+                ['/font/webpack/webpack高级配置与优化','webpack高级配置与优化'],
               ]
             },{
               title: '其他',

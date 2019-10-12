@@ -929,11 +929,11 @@ BFC包含创建该上下文元素的所有子元素，但不包括创建了新BF
 
 ![1565832814230](../../.vuepress/public/1565832814230.png)
 
-# 19.:star:层叠规则
+## 19.:star:层叠规则
 
 层叠规则是指当网页中的元素发生层叠时侯的遵循的规则。
 
-## 层叠上下文
+### 层叠上下文
 
 层叠上下文好像是一个结界，层叠上下文内的元素如果跟层叠上下文外的元素发生层叠，则比较该层叠上下文和外部元素的层叠上下文的层叠水平高低。
 
@@ -959,7 +959,7 @@ BFC包含创建该上下文元素的所有子元素，但不包括创建了新BF
 
 ![1565833406750](../../.vuepress/public/1565833406750.png)
 
-## CSS3新增层叠上下文
+### CSS3新增层叠上下文
 
 CSS3带来了很多新属性，其中很不惹人注意的一点就是增加了很多会自动创建层叠上下文的属性：
 
@@ -980,7 +980,7 @@ CSS3带来了很多新属性，其中很不惹人注意的一点就是增加了�
 
 ![1565833781833](../../.vuepress/public/1565833781833.png)
 
-# 20.:star:弹性布局
+## 20.:star:弹性布局
 
 弹性布局是指`display: flex`或`display: inline-flex`的布局。注意，设为弹性布局以后，子元素的`float、clear、vertical-align`属性都会失效。参见阮一峰大佬的 [Flex 布局教程](https://link.juejin.im/?target=http%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2015%2F07%2Fflex-grammar.html)。
 
@@ -988,14 +988,14 @@ CSS3带来了很多新属性，其中很不惹人注意的一点就是增加了�
 
 ![1565833944165](../../.vuepress/public/1565833944165.png)
 
-# 21.:star:网格布局
+## 21.:star:网格布局
 
 网格布局（Grid）是最强大的 CSS 布局方案。注意，设为网格布局以后，容器子元素（项目）的`float、display: inline-block、display: table-cell、vertical-align和column-*等`设置都将失效。参见阮一峰大佬的[CSS Grid 网格布局教程](https://link.juejin.im?target=http%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2019%2F03%2Fgrid-layout-tutorial.html)。
 
 
 ![1565834048450](../../.vuepress/public/1565834048450.png)
 
-# 22.:star:文本控制
+## 22.:star:文本控制
 
 以下css属性为文本相关。
 
@@ -1056,7 +1056,7 @@ CSS3带来了很多新属性，其中很不惹人注意的一点就是增加了�
 
 好吧本例结束了，没想到解释起来这么复杂。好好理解此例加深对`vertical-align`和`line-height`的理解。
 
-# 23.:star:元素的显示与隐藏
+## 23.:star:元素的显示与隐藏
 
 元素的显示隐藏方法很多，不同方法的在不同的场景下页面效果不一，对页面的性能也有不同的影响。
 
@@ -1147,13 +1147,13 @@ div.active{
 
 > 拓展阅读：[深入理解CSS Media媒体查询](https://www.cnblogs.com/xiaohuochai/p/5848612.html)
 
-## 为什么有时候人们用translate来改变位置而不是定位？
+## 26.为什么有时候人们用translate来改变位置而不是定位？
 
 translate()是transform的一个值。改变transform或opacity不会触发浏览器重新布局（reflow）或重绘（repaint），只会触发复合（compositions）。而改变绝对定位会触发重新布局，进而触发重绘和复合。transform使浏览器为元素创建一个 GPU 图层，但改变绝对定位会使用到 CPU。 因此translate()更高效，可以缩短平滑动画的绘制时间。
 
 而translate改变位置时，元素依然会占据其原始空间，绝对定位就不会发生这种情况。
 
-## 伪类和伪元素的区别是什么？
+## 27.伪类和伪元素的区别是什么？
 
 ### 是什么？
 
@@ -1165,7 +1165,7 @@ translate()是transform的一个值。改变transform或opacity不会触发浏�
 
 其实上文已经表达清楚两者区别了，**伪类是通过在元素选择器上加入伪类改变元素状态，而伪元素通过对元素的操作进行对元素的改变。**
 
-## css禁用鼠标事件
+## 28.css禁用鼠标事件
 
 ```css
 .disabled {
@@ -1175,7 +1175,7 @@ translate()是transform的一个值。改变transform或opacity不会触发浏�
 }
 ```
 
-## css禁止用户选择（文本）
+## 29.css禁止用户选择（文本）
 
 ```css
 body{
@@ -1188,9 +1188,9 @@ user-select: none;
 }
 ```
 
-## 开启硬件加速
+## 30.开启硬件加速
 
-```
+```css
 //目前，像Chrome/Filefox/Safari/IE9+以及最新版本Opera都支持硬件加速，当检测到某个DOM元素应用了某些CSS规则时就会自动开启，从而解决页面闪白，保证动画流畅。
 .css {
     -webkit-transform: translate3d(0,0,0);
@@ -1200,3 +1200,16 @@ user-select: none;
 }
 ```
 
+- **块级元素**和**display为block的元素**不是一个概念，li元素的默认display值为list-item，table元素则为table，但是他们都是块级元素，符合基本特征。
+
+- 实现文字少的时候居中显示，文字超过一行居左显示，核心代码如下:
+
+```css
+.box {
+  text-align: center;
+}
+.content {
+  display: inline-block;
+  text-align: left;
+}
+```
