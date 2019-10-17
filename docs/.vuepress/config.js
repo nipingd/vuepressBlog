@@ -14,7 +14,6 @@ module.exports = {
         {text: 'HOME', link: '/' },
         {text: '前端', link: '/font/' },
         {text: '计算机', link: '/computer/' },
-        // {text: '面试', link: '/font/' },
         {text: '个人学习笔记', link: '/other/'},
         {text: '关于我', 
          items: [
@@ -51,6 +50,7 @@ module.exports = {
                 ['/font/JS/JS零散知识整理','JS零散知识整理'], 
                 ['/font/JS/前端模块化','前端模块化'], 
                 ['/font/JS/JS操作DOM常用API总结','JS操作DOM常用API总结'], 
+                ['/font/JS/JS工具函数大全','JS工具函数大全'], 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
