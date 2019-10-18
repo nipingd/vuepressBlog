@@ -455,12 +455,621 @@ img {
 
 ![1569157112587](../../.vuepress/public/1569157112587.png)
 
-## 去除inline-block元素间间距的方法
+## 去除inline-block元素间间距的方法(据说在新版chrome已解决)
 
+
+- ![1571383814804](../../.vuepress/public/1571383814804.png)
 - 移除空格
 - 使用margin负值
 - 使用font-size:0
 - letter-spacing
 - word-spacing
 
+### 产生空白的原因
+
+元素被当成行内元素排版的时候，元素之间的空白符（空格、回车换行等）都会被浏览器处理，根据CSS中white-space属性的处理方式（默认是normal，合并多余空白），原来`HTML代码中的回车换行被转成一个空白符`，在字体不为0的情况下，空白符占据一定宽度，所以inline-block的元素之间就出现了空隙。
+
 更详细的介绍请看:[去除inline-block元素间间距的N种方法](https://link.zhihu.com/?target=https%3A//www.zhangxinxu.com/wordpress/2012/04/inline-block-space-remove-%E5%8E%BB%E9%99%A4%E9%97%B4%E8%B7%9D/)
+
+以下面试题来自：
+作者：神三元
+链接：https://juejin.im/post/5da282015188257d2a1c9e1d
+来源：掘金著作权归作者所有。
+
+## 一、让一个元素水平垂直居中，到底有多少种方案？
+
+![1571383248536](../../.vuepress/public/1571383248536.png)
+
+### 水平居中
+
+- 对于`行内元素`: text-align: center;
+- 对于确定宽度的块级元素：
+
+1. width和margin实现。margin: 0 auto;
+2. 绝对定位和margin-left: -width/2, 前提是父元素position: relative
+
+- 对于宽度未知的块级元素
+
+1. table标签配合margin左右auto实现水平居中。使用table标签（或直接将块级元素设值为display:table），再通过给该标签添加左右margin为auto。
+2. inline-block实现水平居中方法。display：inline-block和text-align:center实现水平居中。
+3. 绝对定位+transform，translateX可以移动本身元素的50%。
+4. flex布局使用justify-content:center
+
+### 垂直居中
+
+1. 利用`line-height`实现居中，这种方法适合纯文字类
+2. 通过设置父容器`相对定位`，子级设置`绝对定位`，标签通过margin实现自适应居中
+3. 弹性布局`flex`:父级设置display: flex; 子级设置margin为auto实现自适应居中
+4. 父级设置相对定位，子级设置绝对定位，并且通过位移`transform`实现
+5. `table`布局，父级通过转换成表格形式，然后子级设置`vertical-align`实现。（需要注意的是：vertical-align: middle使用的前提条件是内联元素以及display值为table-cell的元素）。
+
+## 二、浮动布局的优点？有什么缺点？清除浮动有哪些方式？
+
+> 浮动布局简介:当元素浮动以后可以向左或向右移动，直到它的外边缘碰到包含它的框或者另外一个浮动元素的边框为止。元素浮动以后会脱离正常的文档流，所以文档的普通流中的框就变现的好像浮动元素不存在一样。
+
+### 优点
+
+这样做的优点就是在图文混排的时候可以很好的使文字环绕在图片周围。另外当元素浮动了起来之后，它有着块级元素的一些性质例如可以设置宽高等，但它与inline-block还是有一些区别的，第一个就是关于横向排序的时候，float可以设置方向而inline-block方向是固定的；还有一个就是inline-block在使用时有时会有空白间隙的问题
+
+### 缺点
+
+最明显的缺点就是浮动元素一旦脱离了文档流，就无法撑起父元素，会造成父级元素高度塌陷。
+
+### 清除浮动的方式
+
+请跳转[BFC与清除浮动](/font/CSS/BFC与清除浮动.html)一文
+
+## 四、布局题：div垂直居中，左右10px，高度始终为宽度一半
+
+> 问题描述: 实现一个div垂直居中, 其距离屏幕左右两边各10px, 其高度始终是宽度的50%。同时div中有一个文字A，文字需要水平垂直居中。
+
+### 思路一：利用height:0; padding-bottom: 50%;
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+      *{
+        margin: 0;
+        padding: 0;
+      }
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+      .outer_wrapper {
+        margin: 0 10px;
+        height: 100%;
+        /* flex布局让块垂直居中 */
+        display: flex;
+        align-items: center;
+      }
+      .inner_wrapper{
+        background: red;
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 50%;
+      }
+      .box{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer_wrapper">
+      <div class="inner_wrapper">
+        <div class="box">A</div>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+强调两点:
+
+1. padding-bottom究竟是相对于谁的？
+
+答案是相对于`父元素的width值`。
+
+那么对于这个out_wrapper的用意就很好理解了。 CSS呈流式布局，div默认宽度填满，即100%大小，给out_wrapper设置margin: 0 10px;相当于让左右分别减少了10px。
+
+1. 父元素相对定位，那绝对定位下的子元素宽高若设为百分比，是相对谁而言的？
+
+相对于父元素的(content + padding)值, 注意不含border
+
+> 延伸：如果子元素不是绝对定位，那宽高设为百分比是相对于父元素的宽高，标准盒模型下是content, IE盒模型是content+padding+border。
+
+### 思路二: 利用calc和vw
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+
+      .wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .box {
+        margin-left: 10px;
+        /* vw是视口的宽度， 1vw代表1%的视口宽度 */
+        width: calc(100vw - 20px);
+        /* 宽度的一半 */
+        height: calc(50vw - 10px);
+        position: absolute;
+        background: red;
+        /* 下面两行让块垂直居中 */
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="box">A</div>
+    </div>
+  </body>
+</html>
+```
+
+## 六、CSS如何进行圣杯布局
+
+圣杯布局如图:
+
+![1571384505920](../../.vuepress/public/1571384505920.png)
+
+而且要做到左右宽度固定，中间宽度自适应。
+
+### 1.利用flex布局
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .header,.footer{
+        height:40px;
+        width:100%;
+        background:red;
+    }
+    .container{
+        display: flex;
+    }
+    .middle{
+        flex: 1;
+        background:yellow;
+    }
+    .left{
+        width:200px;
+        background:pink;
+    }
+    .right{
+        background: aqua;
+        width:300px;
+    }
+	</style>
+</head>
+<body>
+    <div class="header">这里是头部</div>
+    <div class="container">
+        <div class="left">左边</div>
+        <div class="middle">中间部分</div>
+        <div class="right">右边</div>
+    </div>
+    <div class="footer">这里是底部</div>
+</body>
+</html>
+```
+
+### 2.float布局(全部float:left)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .header,
+    .footer {
+      height: 40px;
+      width: 100%;
+      background: red;
+    }
+
+    .footer {
+      clear: both;
+    }
+
+    .container {
+      padding-left: 200px;
+      padding-right: 250px;
+    }
+
+    .container div {
+      position: relative;
+      float: left;
+    }
+
+    .middle {
+      width: 100%;
+      background: yellow;
+    }
+
+    .left {
+      width: 200px;
+      background: pink;
+      margin-left: -100%;
+      left: -200px;
+    }
+
+    .right {
+      width: 250px;
+      background: aqua;
+      margin-left: -250px;
+      left: 250px; 
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">这里是头部</div>
+  <div class="container">
+    <div class="middle">中间部分</div>
+    <div class="left">左边</div>
+    <div class="right">右边</div>
+  </div>
+  <div class="footer">这里是底部</div>
+</body>
+
+</html>
+```
+
+这种float布局是最难理解的，主要是浮动后的负margin操作，这里重点强调一下。
+
+设置负margin和left值之前是这样子:
+
+![1571384540398](../../.vuepress/public/1571384540398.png)
+
+左边的盒子设置margin-left: -100%是将盒子拉上去，效果:
+
+```css
+.left{
+  /* ... */
+  margin-left: -100%;
+}
+```
+
+![1571384554011](../../.vuepress/public/1571384554011.png)
+
+然后向左移动200px来填充空下来的padding-left部分
+
+```css
+.left{
+  /* ... */
+  margin-left: -100%;
+  left: -200px;
+}
+```
+
+效果呈现:
+
+![1571384567185](../../.vuepress/public/1571384567185.png)
+
+右边的盒子设置margin-left: -250px后，盒子在该行所占空间为0，因此直接到上面的middle块中,效果:
+
+```css
+.right{
+  /* ... */
+  margin-left: -250px;
+}
+```
+
+![1571384580206](../../.vuepress/public/1571384580206.png)
+
+然后向右移动250px, 填充父容器的padding-right部分:
+
+```css
+.right{
+  /* ... */
+  margin-left: -250px;
+  left: 250px;
+}
+```
+
+现在就达到最后的效果了:
+
+![1571384593016](../../.vuepress/public/1571384593016.png)
+
+### 3.float布局(左边float: left, 右边float: right)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .header,
+    .footer {
+      height: 40px;
+      width: 100%;
+      background: red;
+    }
+    .container{
+      overflow: hidden;
+    }
+
+    .middle {
+      background: yellow;
+    }
+
+    .left {
+      float: left;
+      width: 200px;
+      background: pink;
+    }
+
+    .right {
+      float: right;
+      width: 250px;
+      background: aqua;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">这里是头部</div>
+  <div class="container">
+    <div class="left">左边</div>
+    <div class="right">右边</div>
+    <div class="middle">中间部分</div>
+  </div>
+  <div class="footer">这里是底部</div>
+</body>
+
+</html>
+```
+
+### 4. 绝对定位
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .header,
+    .footer {
+      height: 40px;
+      width: 100%;
+      background: red;
+    }
+    .container{
+      min-height: 1.2em;
+      position: relative;
+    }
+
+    .container>div {
+      position: absolute;
+    }
+
+    .middle {
+      left: 200px;
+      right: 250px;
+      background: yellow;
+    }
+
+    .left {
+      left: 0;
+      width: 200px;
+      background: pink;
+    }
+
+    .right {
+      right: 0;
+      width: 250px;
+      background: aqua;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">这里是头部</div>
+  <div class="container">
+    <div class="left">左边</div>
+    <div class="right">右边</div>
+    <div class="middle">中间部分</div>
+  </div>
+  <div class="footer">这里是底部</div>
+</body>
+
+</html>
+```
+
+### 5.grid布局
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body{
+        display: grid;
+    }
+    #header{
+        background: red;
+        grid-row:1;
+        grid-column:1/5;
+    }
+        
+    #left{
+        grid-row:2;
+        grid-column:1/2;
+        background: orange;
+    }
+    #right{
+        grid-row:2;
+        grid-column:4/5;
+        background: cadetblue;
+    }
+    #middle{
+        grid-row:2;
+        grid-column:2/4;
+        background: rebeccapurple
+    }
+    #footer{
+        background: gold;
+        grid-row:3;
+        grid-column:1/5;
+    }
+  </style>
+</head>
+
+<body>
+    <div id="header">header</div>
+    <div id="left">left</div>
+    <div id="middle">middle</div>
+    <div id="right">right</div>     
+    <div id="footer">footer</footer></div>
+       
+</body>
+
+</html>
+   
+```
+
+看看grid布局，其实也挺简单的吧，里面的参数应该不言而喻了。
+
+另外说一点，到2019年为止，grid现在绝大多数浏览器已经可以兼容了，可以着手使用了
+
+ 当然，还有table布局，年代比较久远了，而且对SEO不友好，知道就可以，这里就不浪费篇幅了。 
+
+## 七、CSS如何实现双飞翼布局？
+
+![1571384656470](../../.vuepress/public/1571384656470.png)
+
+有了圣杯布局的铺垫，双飞翼布局也就问题不大啦。这里采用经典的float布局来完成。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+        min-width: 600px;
+    }
+    .left {
+        float: left;
+        width: 200px;
+        height: 400px;
+        background: red;
+        margin-left: -100%;
+    }
+    .center {
+        float: left;
+        width: 100%;
+        height: 500px;
+        background: yellow;
+    }
+    .center .inner {
+        margin: 0 200px; 
+    }
+    .right {
+        float: left;
+        width: 200px;
+        height: 400px;
+        background: blue;
+        margin-left: -200px;
+    }
+  </style>
+</head>
+
+<body>
+  <article class="container">
+    <div class="center">
+        <div class="inner">双飞翼布局</div>
+    </div>
+    <div class="left"></div>
+    <div class="right"></div>
+</article>
+</body>
+
+</html>
+```
+
