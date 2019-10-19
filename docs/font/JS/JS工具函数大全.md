@@ -241,3 +241,42 @@ const once = fn => {
     }
 };
 ```
+
+### 8.`flattenObject`：以键的路径扁平化对象
+
+使用递归。
+
+1. 利用`Object.keys(obj)`联合`Array.prototype.reduce()`，以每片叶子节点转换为扁平的路径节点。
+2. 如果键的值是一个对象，则函数使用调用适当的自身`prefix`以创建路径`Object.assign()`。
+3. 否则，它将适当的前缀键值对添加到累加器对象。
+4. `prefix`除非您希望每个键都有一个前缀，否则应始终省略第二个参数。
+
+```js
+const flattenObject = (obj, prefix = '') => Object.keys(obj).reduce((acc, k) => {
+  const pre = prefix.length ? prefix + '.' : '';
+  if (typeof obj[k] === 'object') Object.assign(acc, flattenObject(obj[k], pre + k));
+  else acc[pre + k] = obj[k];
+  return acc;
+}, {});
+flattenObject({ a: { b: { c: 1 }}, d: 1}); // { 'a.b.c': 1, d: 1 }
+```
+
+### 9. `unflattenObject`：以键的路径展开对象
+
+与上面的相反，展开对象。
+
+```js
+const unflattenObject = obj => Object.keys(obj).reduce((acc, k) => {
+  if (k.indexOf('.') !== -1) {
+    const keys = k.split('.');
+    Object.assign(acc, JSON.parse('{' + keys.map((v, i) => (i !== keys.length - 1 ? `"${v}":{` : `"${v}":`)).join('') + obj[k] + '}'.repeat(keys.length)));
+  } else acc[k] = obj[k];
+  return acc;
+}, {});
+unflattenObject({
+  'a.b.c': 1,
+  d: 1
+}); // { a: { b: { c: 1 } }, d: 1 }
+```
+
+这个的用途，在做`Tree`组件或复杂表单时取值非常舒服。
