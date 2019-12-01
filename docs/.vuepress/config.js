@@ -100,6 +100,7 @@ module.exports = {
                 ['/font/浏览器网络/前端安全面试题','前端安全面试题'],
                 ['/font/浏览器网络/浏览器面试题','浏览器面试题'],
                 ['/font/浏览器网络/Web Workers','Web Workers'],
+                ['/font/浏览器网络/图片优化技巧','图片优化技巧'],
               ]
             },{
               title: 'CSS',
