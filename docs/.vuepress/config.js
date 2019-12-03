@@ -51,6 +51,7 @@ module.exports = {
                 ['/font/JS/前端模块化','前端模块化'], 
                 ['/font/JS/JS操作DOM常用API总结','JS操作DOM常用API总结'], 
                 ['/font/JS/JS工具函数大全','JS工具函数大全'], 
+                ['/font/JS/内存泄漏','内存泄漏'], 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -79,6 +80,11 @@ module.exports = {
                 ['/font/ES6/Module','Module'],
                 ['/font/ES6/编程风格','编程风格'],
                 ['/font/ES6/读懂规格','读懂规格'],
+              ]
+            },{
+              title: 'Typescript',
+              children:[
+                ['/font/typescript/ts的基础知识整理','ts的基础知识整理'],
               ]
             },{
               title: '浏览器网络',
