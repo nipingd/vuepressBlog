@@ -920,3 +920,128 @@ document.querySelector`返回第一个匹配的元素，如果没有匹配的元
   document.head.appendChild(style););
 ```
 
+## 10.补充
+
+以下文章来源于劉凯里 ，作者kyrieliu
+
+### 10.1添加 DOM 元素
+
+以前用document.createElement(元素名)，再用插入型api插入，极为麻烦。现在有**insertAdjacentHTML**
+
+![image-20191204162536147](../../.vuepress/public/image-20191204162536147.png)
+
+这个方法允许你将任何有效的 HTML 字符串插入到一个 DOM 元素的四个位置，这四个位置由方法的第一个参数指定，分别是：
+
+- 'beforebegin': 元素之前
+- 'afterbegin': 元素内，位于现存的第一个子元素之前
+- 'beforeend': 元素内，位于现存的最后一个子元素之后
+- 'afterend': 元素之后
+
+![image-20191204162635341](../../.vuepress/public/image-20191204162635341.png)
+
+它还有两个好兄弟，让开发者可以快速地插入 HTML 元素和字符串：
+
+![image-20191204162655492](../../.vuepress/public/image-20191204162655492.png)
+
+:star:insertAdjacentElement 也可以用来对已存在的元素进行移动，换句话说：**当传入该方法的是已存在于文档中的元素时，该元素仅仅只会被移动（而不是复制并移动）。**
+
+### 10.2替换 DOM 元素
+
+以前用replaceChild需要拿到两个元素之外还需要拿到他们的父元素，而如今，开发者们可以使用 **replaceWith** 就可以完成两个元素之间的替换了：
+
+![image-20191204163036735](../../.vuepress/public/image-20191204163036735.png)
+
+从用法上来说，要比前者清爽一些。
+
+::: tip 需要注意的是：
+1. 如果传入的 newElement 已经存在于文档中，那么方法的执行结果将是 newElement 被移动并替换掉 oldElement
+2. 如果传入的 newElement 是一个字符串，那么它将作为一个 TextNode 替换掉原有的元素
+:::
+
+### 10.3移除 DOM 元素
+
+和替换元素的老方法相同，移除元素的老方法同样需要获取到目标元素的直接父元素：（removeChild）
+
+现在可以用remove()方法简单移除
+
+![image-20191204163234757](../../.vuepress/public/image-20191204163234757.png)
+
+### 10.4用 HTML 字符串创建 DOM 元素
+
+细心的你一定发现了，上文提到的 insertAdjacent 方法允许开发者直接将一段 HTML 插入到文档当中，如果我们此刻只想生成一个 DOM 元素以备将来使用呢？
+
+**DOMParser** 对象的 **parseFromString** 方法即可满足这样的需求。该方法可以实现将一串 HTML 或 XML 字符串转化为一个完整的 DOM 文档，也就是说，当我们需要获得预期的 DOM 元素时，需要从方法返回的 DOM 文档中获取这个元素：
+
+![image-20191204164126378](../../.vuepress/public/image-20191204164126378.png)
+
+### 10.5检查 DOM
+
+标准的 DOM API 为开发者们提供了很多便利的方法去检查 DOM 。比如，**matches 方法**可以判断出一个元素是否匹配一个确定的选择器：
+
+![image-20191204164229751](../../.vuepress/public/image-20191204164229751.png)
+
+**contains 方法可以检测出一个元素是否包含另一个元素（或者：一个元素是否是另一个元素的子元素）：**
+
+![image-20191204164256205](../../.vuepress/public/image-20191204164256205.png)
+
+### 10.6判断两个元素的位置关系
+
+compareDocumentPosition 是一个强大的 API ，它可以快速判断出两个 DOM 元素的位置关系，诸如：先于、跟随、是否包含。它返回一个整数，代表了两个元素之间的关系。
+
+![image-20191204170003447](../../.vuepress/public/image-20191204170003447.png)
+
+![image-20191204165932671](../../.vuepress/public/image-20191204165932671.png)
+
+返回值定义如下：
+
+- 1: 两个元素不在同一个文档内
+- 2: otherElement 在 element 之前
+- 4: otherElement 在 element 之后
+- 8: otherElement 包含 element
+- 16: otherElement 被 element 所包含
+
+那么问题来了，为什么上面例子中第一行的结果是20、第二行的结果是10呢？
+
+因为 h1 同时满足“被 container 所包含(16)” 和 “在 container 之后”，所以语句的执行结果是 16+4=20，同理可推出第二条语句的结果是 8+2=10。
+
+### 10.7DOM 观察者: Mutation Observer
+
+在处理用户交互的时候，当前页面的 DOM 元素通常会发生很多变化，而有些场景需要开发者们监听这些变化并在触发后执行相应的操作。MutationObserver 是浏览器提供的一个专门用来监听 DOM 变化的接口，它强大到几乎可以观测到一个元素的所有变化，可观测的对象包括：文本的改变、子节点的添加和移除和任何元素属性的变化。
+
+如同往常一样，如果想构造任何一个对象，那就 new 它的构造函数：
+
+![image-20191204201147075](../../.vuepress/public/image-20191204201147075.png)
+
+传入构造函数的是一个回调函数，它会在被监听的 DOM 元素发生改变时执行，它的两个参数分别是：包含本次所有变更的列表 MutationRecords 和 observer 本身。其中，MutationRecords 的每一条都是一个变更记录，它是一个普通的对象，包含如下常用属性：
+
+- type: 变更的类型，attributes / characterData / childList
+- target: 发生变更的 DOM 元素
+- addedNodes: 新增子元素组成的 NodeList
+- removedNodes: 已移除子元素组成的的 NodeList
+- attributeName: 值发生改变的属性名，如果不是属性变更，则返回 null
+- previousSibling: 被添加或移除的子元素之前的兄弟节点
+- nextSibling: 被添加或移除的子元素之后的兄弟节点
+
+根据目前的信息，可以写一个 callback 函数了：
+
+![image-20191204201202250](../../.vuepress/public/image-20191204201202250.png)
+
+至此，我们有了一个 DOM 观察者 observer，也有了一个完整可用的 DOM 变化后的回调函数 callback，就差一个需要被观测的 DOM 元素了：
+
+![image-20191204201218545](../../.vuepress/public/image-20191204201218545.png)
+
+在上面的代码中，我们通过调用观察者对象的 observe 方法，对 id 为 target 的 DOM 元素进行了观测（第一个参数就是需要观测的目标元素），而第二个元素，我们传入了一个**配置对象**：开启对属性的观测 / 只观测 class 属性 / 属性变化时传递属性旧值 / 开启对子元素列表的观测。
+
+配置对象支持如下字段：
+
+- attributes: Boolean，是否监听元素属性的变化
+- attributeFilter: String[]，需要监听的特定属性名称组成的数组
+- attributeOldValue: Boolean，当监听元素的属性发生变化时，是否记录并传递属性的上一个值
+- characterData: Boolean，是否监听目标元素或子元素树中节点所包含的字符数据的变化
+- characterDataOldValue: Boolean，字符数据发生变化时，是否记录并传递其上一个值
+- childList: Boolean，是否监听目标元素添加或删除子元素
+- subtree: Boolean，是否扩展监视范围到目标元素下的整个子树的所有元素
+
+当不再监听目标元素的变化时，调用 observer 的 disconnect 方法即可，如果需要的话，可以先调用 observer 的 takeRecords 方法从 observer 的通知队列中删除所有待处理的通知，并将它们返回到一个由 MutationRecord 对象组成的数组当中：
+
+![image-20191204201245531](../../.vuepress/public/image-20191204201245531.png)
