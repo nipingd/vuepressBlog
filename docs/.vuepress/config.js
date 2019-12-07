@@ -82,7 +82,7 @@ module.exports = {
                 ['/font/ES6/读懂规格','读懂规格'],
               ]
             },{
-              title: 'Typescript',
+              title: 'typescript',
               children:[
                 ['/font/typescript/ts的基础知识整理','ts的基础知识整理'],
               ]
