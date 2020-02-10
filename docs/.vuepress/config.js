@@ -140,6 +140,7 @@ module.exports = {
               children:[
                 ['/font/node/node知识','node知识'],
                 ['/font/node/工程化之npm','工程化之npm'],
+                ['/font/node/package.json整理','package.json整理'],
               ]
             },{
               title: 'webpack',
