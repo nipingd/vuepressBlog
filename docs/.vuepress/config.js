@@ -4,7 +4,7 @@ module.exports = {
     head: [ // 注入到当前页面的 JS <head> 中的标签
       ['link', { rel: 'icon', href: '/logo.jpg' }], // 增加一个自定义的 favicon(网页标签的图标)
     ],
-    base: '/', // 这是部署到github相关的配置
+    base: '/nipingd/', // 这是部署到github相关的配置
     markdown: {
       lineNumbers: true // 代码块显示行号
     },
@@ -52,6 +52,7 @@ module.exports = {
                 ['/font/JS/JS操作DOM常用API总结','JS操作DOM常用API总结'], 
                 ['/font/JS/JS工具函数大全','JS工具函数大全'], 
                 ['/font/JS/内存泄漏','内存泄漏'], 
+                ['/font/JS/JS设计模式','JS设计模式'], 
                  // 以docs为根目录来查找文件 
                  // 以docs为根目录来查找文件 
                 // 上面地址查找的是：docs>font>JS>test.md 文件
@@ -194,7 +195,8 @@ module.exports = {
             {
               title: '零散的',
               children: [
-                ['/other/小程序学习笔记','小程序学习笔记'], // 以docs为根目录来查找文件 
+                ['/other/小程序/小程序学习笔记','小程序学习笔记'], // 以docs为根目录来查找文件 
+                ['/other/小程序/小程序云开发','小程序云开发'], // 以docs为根目录来查找文件 
                 ['/other/校招面试题','校招面试题'], // 以docs为根目录来查找文件 
               ]
             },
