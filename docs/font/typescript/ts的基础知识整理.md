@@ -1,6 +1,6 @@
 ## 1.vscode配置自动编译ts文件
 
-先npm install -g typescript安装ts，在tsc index.ts编译成js文件
+先npm install -g typescript tslint安装ts，在tsc index.ts编译成js文件,tslint检查语法错误
 
 ::: tip 过程
 
@@ -44,7 +44,10 @@ flag=false;  //正确
   let arr2: Array<number> = [1 ,3 ,4]
 
 // 定义数组的方式3
-  let arr33: any[] = [123, false, 'eee']
+  let arr3: any[] = [123, false, 'eee']
+
+// 定义数组的方式4(联合类型):只要是string或number类型都可以
+  let arr4: (string | number)[] = [1, '2', 0x123]
 ```
 
 ```typescript
@@ -60,7 +63,7 @@ flag=false;  //正确
 
   enum Color {blue,red,'orange'};
   var c:Color=Color.red;
-  console.log(c);   //1  如果标识符没有赋值 它的值就是下标
+  console.log(c);   //1  如果标识符没有赋值 它的值就是下标-
 ```
 
 ```typescript
@@ -99,12 +102,27 @@ flag=false;  //正确
   let nu: null
   nu = null
 
-  // 例子
-  let err: never
-  // err = 123 // error
-  err = (() => {
-    throw new Error('error')
-  })()
+  // 两个情况never
+const errorFunc = (message:string):never => {
+  //抛出错误
+  throw new Error(message)
+}
+const infiniteFunc = ():never => {
+  //死循环
+  while(true){}
+}
+```
+
+```typescript
+// 类型断言(类似于类型转换，把一个类型强行转换为自己的类型)
+//两种方式：1. <string>target 2. target as string（jsx用的是这个）
+const getLength = (target: string | number): number => {
+  if ((<string>target).length || (target as string).length === 0) {
+    return (<string>target).length
+  } else {
+    return target.toString().length
+  }
+}
 ```
 
 ## 3.函数
@@ -998,3 +1016,7 @@ console.log( http.apiUrl);//xxxxx
 - 如果有多个同样的装饰器，它会先执行后面的
 
 :::
+
+## 9.声明合并
+
+![image-20200421142535823](../../.vuepress/public/image-20200421142535823.png)
